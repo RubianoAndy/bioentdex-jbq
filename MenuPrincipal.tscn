@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cvqo7i4r3yyux"]
 
 [ext_resource type="Script" uid="uid://8b0mqlutge6t" path="res://menu_principal.gd" id="1_0oe1n"]
-[ext_resource type="Texture2D" path="res://Gemini_Generated_Image_7sjxlu7sjxlu7sjx.jpg" id="2_fondo"]
+[ext_resource type="Texture2D" path="res://ui/fondos/fondo_inicio.jpg" id="2_fondo"]
 [ext_resource type="Shader" path="res://ui/nubes.gdshader" id="3_nub"]
 
 [sub_resource type="FastNoiseLite" id="RuidoNubes"]

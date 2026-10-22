@@ -85,12 +85,13 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 │   └── herramientas/           generar_mascara.py (genera el mapa desde cero)
 ├── fauna/                    Aparición de insectos y animales NPC en el mapa
 ├── captura/                  Vista de captura con cámara / realidad aumentada
-├── ui/                       Tema visual, ficha de especie, insignia del jugador, íconos y nubes
+├── ui/                       Tema visual, ficha de especie, insignia del jugador, íconos, nubes y
+│                               fondos/fondo_inicio.jpg (fondo de la pantalla de inicio)
 ├── animales/npc/             Ilustraciones de los animales NPC y de los organismos Plus
 ├── dataset/
 │   ├── insectos/<id>/          Imágenes de cada insecto para la cámara (ilustraciones de prueba)
 │   ├── fondos/                 Fondos simulados de la cámara (agua, pradera, bosque)
-│   └── insectos reales/        74 fotografías reales organizadas por orden/familia (aún no se usan)
+│   └── insectos reales/        143 fotografías reales organizadas por orden/familia (aún no se usan)
 ├── guia/
 │   ├── Guia.pdf                La guía original
 │   └── paginas/                Las 121 páginas en imagen (lo que muestra la app)
@@ -157,10 +158,8 @@ Todo se guarda en el dispositivo, en la carpeta de usuario de Godot (`user://`; 
 
 ### Archivos antiguos sin uso
 
-Estos archivos son de las primeras versiones y ya no los usa ninguna escena; se pueden borrar:
-`contenedor_mapa.gd`, `lienzo_mapa.gd`, `nubes.png`, `pngtree-watercolor-humming-bird-png-image_14906044.png`
-(tiene marca de agua) y las imágenes `Gemini_Generated_Image_*.jpg`, excepto
-`Gemini_Generated_Image_7sjxlu7sjxlu7sjx.jpg`, que es el fondo de la pantalla de inicio.
+`contenedor_mapa.gd` y `lienzo_mapa.gd` son de las primeras versiones del mapa y ya no los usa ninguna escena;
+se pueden borrar.
 
 ## Créditos
 
