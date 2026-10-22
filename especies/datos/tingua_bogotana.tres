@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 2
+id = "tingua_bogotana"
+nombre_comun = "Tingua bogotana"
+nombre_cientifico = "Rallus semiplumbeus"
+tipo = 0
+estado_conservacion = 3
+descripcion = "Ave endémica de los humedales del altiplano cundiboyacense. Vive escondida entre juncos y eneas, y usa su pico largo y rojizo para buscar invertebrados en el lodo."
+consejo_macro = "Es muy esquiva: quédate quieto en el borde del juncal al amanecer y usa un teleobjetivo en lugar de acercarte."

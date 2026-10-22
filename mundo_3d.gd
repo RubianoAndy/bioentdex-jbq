@@ -31,7 +31,8 @@ func _process(delta: float) -> void:
 		caminar(dir * velocidad_caminata * delta)
 
 func _input(event: InputEvent) -> void:
-	# Arrastrar el dedo (o el mouse) en la dirección en la que quieres caminar
+	# Arrastrar el dedo (o el mouse) en la dirección en la que quieres caminar.
+	# En PC el mouse llega como toque gracias a "Emular táctil desde mouse" (project.godot).
 	if event is InputEventScreenDrag:
 		caminar(event.relative * sensibilidad_arrastre)
 

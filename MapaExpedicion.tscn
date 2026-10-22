@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://bdq2ubgct0s0j" path="res://Gemini_Generated_Image_e0zvwre0zvwre0zv.jpg" id="3_16l7u"]
 [ext_resource type="Texture2D" uid="uid://ch1bqqwrsbv12" path="res://pngtree-watercolor-humming-bird-png-image_14906044.png" id="3_efl8j"]
 [ext_resource type="Texture2D" uid="uid://ces4rhnr750o7" path="res://nubes.png" id="4_rs8th"]
+[ext_resource type="Script" path="res://especie_en_mapa.gd" id="5_espm"]
+[ext_resource type="Resource" path="res://especies/datos/colibri_chillon.tres" id="6_coli"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_w0vpx"]
 size = Vector2(80, 80)
@@ -134,6 +136,8 @@ offset_right = 371.0
 offset_bottom = 384.0
 texture = ExtResource("3_efl8j")
 expand_mode = 1
+script = ExtResource("5_espm")
+especie = ExtResource("6_coli")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="LienzoMapa/CapaPaisaje" unique_id=22434280]
 libraries/ = SubResource("AnimationLibrary_roqfa")

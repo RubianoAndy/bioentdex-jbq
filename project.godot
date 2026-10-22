@@ -15,12 +15,20 @@ run/main_scene="uid://cvqo7i4r3yyux"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+RegistroEspecies="*res://especies/registro_especies.gd"
+
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
 
 [physics]
 

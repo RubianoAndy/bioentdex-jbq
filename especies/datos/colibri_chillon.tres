@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+[ext_resource type="Texture2D" uid="uid://ch1bqqwrsbv12" path="res://pngtree-watercolor-humming-bird-png-image_14906044.png" id="2_img"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 1
+id = "colibri_chillon"
+nombre_comun = "Colibrí chillón"
+nombre_cientifico = "Colibri coruscans"
+tipo = 0
+estado_conservacion = 0
+descripcion = "Colibrí verde brillante con plumas violeta en las mejillas y el pecho. Es muy territorial y ruidoso, de ahí su nombre. Se alimenta del néctar de las flores y de pequeños insectos."
+imagen = ExtResource("2_img")
+consejo_macro = "Espera cerca de flores con néctar: siempre vuelve a las mismas. Usa una velocidad de obturación alta (1/2000 s o más) para congelar el aleteo."

@@ -1,0 +1,138 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://bioentdex.gd" id="1_bio"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_detalle"]
+bg_color = Color(0.08, 0.16, 0.13, 0.97)
+
+[node name="Bioentdex" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bio")
+
+[node name="Fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.11, 0.2, 0.17, 1)
+
+[node name="Margen" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margen"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Encabezado" type="HBoxContainer" parent="Margen/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BtnVolver" type="Button" parent="Margen/VBox/Encabezado"]
+custom_minimum_size = Vector2(140, 56)
+layout_mode = 2
+text = "← Menú"
+
+[node name="Titulo" type="Label" parent="Margen/VBox/Encabezado"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "Bioentdex"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Contador" type="Label" parent="Margen/VBox/Encabezado"]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0 / 0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Margen/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Cuadricula" type="GridContainer" parent="Margen/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 3
+
+[node name="Detalle" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_detalle")
+
+[node name="Margen" type="MarginContainer" parent="Detalle"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="Detalle/Margen"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Imagen" type="TextureRect" parent="Detalle/Margen/VBox"]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Nombre" type="Label" parent="Detalle/Margen/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Cientifico" type="Label" parent="Detalle/Margen/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.85, 0.78, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Datos" type="Label" parent="Detalle/Margen/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Detalle/Margen/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Descripcion" type="Label" parent="Detalle/Margen/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
+
+[node name="BtnCerrar" type="Button" parent="Detalle/Margen/VBox"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "Cerrar"

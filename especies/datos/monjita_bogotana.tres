@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 3
+id = "monjita_bogotana"
+nombre_comun = "Monjita bogotana"
+nombre_cientifico = "Chrysomus icterocephalus bogotensis"
+tipo = 0
+estado_conservacion = 0
+descripcion = "El macho es negro con una capucha amarillo intenso. Anida entre los juncos y eneas del humedal, y esta subespecie solo vive en el altiplano."
+consejo_macro = "Busca a los machos cuando cantan en lo alto de los juncos. Enfoca el ojo y deja que el amarillo resalte contra el fondo verde."
