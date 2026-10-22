@@ -2,7 +2,40 @@
 
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
-[ext_resource type="Resource" path="res://especies/datos/junco.tres" id="3_junco"]
+[ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
+[ext_resource type="Resource" path="res://especies/datos/junco.tres" id="4_junco"]
+[ext_resource type="Resource" path="res://especies/datos/copeton.tres" id="5_copeton"]
+[ext_resource type="Resource" path="res://especies/datos/mariposa_blanca.tres" id="6_mariposa_blanca"]
+
+[sub_resource type="Resource" id="m1"]
+script = ExtResource("3_mis")
+id = "monolitos_1"
+tipo = 0
+enunciado = "¿Qué pueblo indígena habitó los humedales de la sabana de Bogotá?"
+opciones = PackedStringArray("Los muiscas", "Los mayas", "Los incas")
+correcta = 0
+especie_id = ""
+explicacion = "Los muiscas vivían en la sabana y aprovechaban los humedales para cultivar, pescar y tejer."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "monolitos_2"
+tipo = 0
+enunciado = "¿Para qué usaban los muiscas el junco?"
+opciones = PackedStringArray("Para tejer esteras y canastos", "Para construir carreteras", "Para hacer vidrio")
+correcta = 0
+especie_id = "junco"
+explicacion = "Los tallos largos del junco se secan y se tejen."
+
+[sub_resource type="Resource" id="m3"]
+script = ExtResource("3_mis")
+id = "monolitos_3"
+tipo = 2
+enunciado = "Toma una foto de los monolitos."
+opciones = PackedStringArray()
+correcta = 0
+especie_id = ""
+explicacion = "Cuidar el patrimonio también es cuidar el humedal."
 
 [resource]
 script = ExtResource("1_zona")
@@ -12,4 +45,5 @@ descripcion = "Piedras que recuerdan a los muiscas, quienes habitaron estos hume
 color = Color(0.7, 0.7, 0.7, 1)
 posicion = Vector2(3.9, -18.2)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_junco")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_junco"), ExtResource("5_copeton"), ExtResource("6_mariposa_blanca")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

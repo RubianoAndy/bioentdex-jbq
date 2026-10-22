@@ -1,6 +1,8 @@
 extends Node3D
 ## Colibrí NPC: vuela por todo el humedal con vuelos rápidos y pausas flotando.
-## Al tocarlo se registra en la Bioentdex y sale volando.
+## Es un NPC (no se captura): al tocarlo se abre su ficha y sale volando.
+
+signal tocado(especie: Especie)
 
 @export var especie: Especie
 @export var velocidad := 9.0
@@ -19,6 +21,10 @@ var _tiempo := 0.0
 
 func _ready() -> void:
 	position.y = altura
+	var textura := especie.imagen_mapa()
+	if textura:
+		sprite.texture = textura
+		sprite.pixel_size = 1.2 / textura.get_width()
 	_elegir_objetivo()
 
 
@@ -42,8 +48,7 @@ func _process(delta: float) -> void:
 
 
 func al_tocar(_quien: Node3D) -> void:
-	if especie:
-		RegistroEspecies.descubrir(especie.id)
+	tocado.emit(especie)
 	# Se asusta y sale volando lejos
 	_espera = 0.0
 	_elegir_objetivo(false)

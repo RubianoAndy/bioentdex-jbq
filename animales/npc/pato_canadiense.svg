@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- water -->
+  <ellipse cx="250" cy="400" rx="220" ry="34" fill="#6fa9c2"/>
+  <ellipse cx="250" cy="394" rx="165" ry="18" fill="#9cc9da" stroke="none"/>
+  <!-- tail -->
+  <path d="M100,300 L40,280 L52,312 L104,336Z" fill="#2a2a2a"/>
+  <!-- body -->
+  <path d="M74,322 C82,268 150,236 240,236 C320,236 362,262 372,304 C380,350 340,386 260,392 L150,392 C104,390 72,362 74,322Z" fill="#a8784c"/>
+  <!-- speckles -->
+  <g fill="#5e3f24" stroke="none">
+    <ellipse cx="300" cy="330" rx="7" ry="5"/><ellipse cx="325" cy="314" rx="7" ry="5"/><ellipse cx="340" cy="340" rx="7" ry="5"/>
+    <ellipse cx="280" cy="355" rx="7" ry="5"/><ellipse cx="310" cy="360" rx="7" ry="5"/><ellipse cx="250" cy="340" rx="7" ry="5"/>
+    <ellipse cx="220" cy="360" rx="7" ry="5"/><ellipse cx="190" cy="340" rx="7" ry="5"/><ellipse cx="160" cy="360" rx="7" ry="5"/>
+    <ellipse cx="350" cy="295" rx="6" ry="4"/><ellipse cx="240" cy="372" rx="7" ry="5"/><ellipse cx="200" cy="375" rx="7" ry="5"/>
+    <ellipse cx="130" cy="350" rx="6" ry="4"/><ellipse cx="270" cy="318" rx="6" ry="4"/><ellipse cx="335" cy="368" rx="6" ry="4"/>
+  </g>
+  <!-- white flank patch -->
+  <ellipse cx="112" cy="332" rx="18" ry="24" fill="#ffffff" stroke-width="6"/>
+  <path d="M74,322 C82,268 150,236 240,236 C320,236 362,262 372,304 C380,350 340,386 260,392 L150,392 C104,390 72,362 74,322Z" fill="none"/>
+  <!-- wing -->
+  <path d="M120,276 C180,246 270,244 326,268 C304,302 214,314 134,304 C116,298 112,284 120,276Z" fill="#7a5a3a"/>
+  <path d="M176,264 C218,250 270,250 306,266 C276,280 220,284 182,280Z" fill="#8ec3e6" stroke-width="5"/>
+  <path d="M190,288 L264,284 L246,300 L196,302Z" fill="#2f7a52" stroke-width="5"/>
+  <path d="M130,290 C140,280 160,276 176,278 M126,300 L180,294" fill="none" stroke="#3e2a18" stroke-width="6"/>
+  <!-- neck + head -->
+  <path d="M290,262 C284,220 294,176 330,160 C370,144 410,166 412,200 C414,232 390,248 372,272Z" fill="#5d7192"/>
+  <path d="M320,176 C340,160 370,156 392,166 C376,166 350,170 328,186Z" fill="#7c7ab0" stroke="none"/>
+  <path d="M300,250 C300,220 306,196 320,182" fill="none" stroke="#4a5a76" stroke-width="7"/>
+  <!-- white crescent -->
+  <path d="M396,170 C382,186 382,216 398,236 C392,214 392,190 404,174Z" fill="#ffffff" stroke-width="5"/>
+  <!-- eye -->
+  <circle cx="372" cy="192" r="7" fill="#1d2a22" stroke="none"/>
+  <circle cx="370" cy="190" r="2.5" fill="#ffffff" stroke="none"/>
+  <!-- bill -->
+  <path d="M406,192 C430,192 456,202 472,214 C464,226 440,226 408,222Z" fill="#2b2f33"/>
+  <path d="M414,202 C436,204 452,210 462,216" fill="none" stroke="#58606a" stroke-width="4"/>
+  <path d="M40,420 C70,430 100,432 130,428 M370,424 C400,428 430,424 455,416" fill="none" stroke="#ffffff" stroke-width="6"/>
+</g>
+</svg>

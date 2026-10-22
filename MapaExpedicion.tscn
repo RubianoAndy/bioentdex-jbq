@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://467h6c4qhhvi" path="res://mundo_3d.gd" id="2_0crfa"]
 [ext_resource type="Texture2D" path="res://mapa/mascara_humedal.png" id="3_masc"]
 [ext_resource type="Script" path="res://mapa/vegetacion.gd" id="7_veg"]
-[ext_resource type="Texture2D" uid="uid://ces4rhnr750o7" path="res://nubes.png" id="4_rs8th"]
+[ext_resource type="Shader" path="res://ui/nubes.gdshader" id="8_nub"]
+[ext_resource type="Script" path="res://fauna/aparicion_fauna.gd" id="9_fau"]
 [ext_resource type="PackedScene" path="res://Explorador.tscn" id="5_expl"]
 [ext_resource type="PackedScene" path="res://Colibri.tscn" id="6_coli"]
 
@@ -21,44 +22,22 @@ fog_enabled = true
 fog_light_color = Color(0.66, 0.71, 0.74, 1)
 fog_density = 0.008
 
-[sub_resource type="Animation" id="Animation_6i2eu"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("NubeMovible:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(44, 47)]
-}
+[sub_resource type="FastNoiseLite" id="RuidoNubes"]
+frequency = 0.006
+fractal_octaves = 5
 
-[sub_resource type="Animation" id="Animation_bv7o7"]
-resource_name = "mover_nubes"
-length = 30.0
-loop_mode = 1
-step = 15.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("NubeMovible:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 29.98, 30),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(16, 65), Vector2(439, 48), Vector2(44, 47)]
-}
+[sub_resource type="NoiseTexture2D" id="TexturaNubes"]
+seamless = true
+noise = SubResource("RuidoNubes")
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_roqfa"]
-_data = {
-&"RESET": SubResource("Animation_6i2eu"),
-&"mover_nubes": SubResource("Animation_bv7o7")
-}
+[sub_resource type="ShaderMaterial" id="MaterialNubes"]
+shader = ExtResource("8_nub")
+shader_parameter/ruido = SubResource("TexturaNubes")
+shader_parameter/velocidad = 0.006
+shader_parameter/cobertura = 0.55
+shader_parameter/opacidad = 0.6
+shader_parameter/escala = Vector2(0.8, 0.5)
+shader_parameter/limite_inferior = 0.2
 
 [node name="MapaExpedicion" type="Control" unique_id=1948884146]
 clip_contents = true
@@ -107,20 +86,14 @@ script = ExtResource("7_veg")
 
 [node name="Explorador" parent="SubViewportContainer/SubViewport/Mundo3D" instance=ExtResource("5_expl")]
 
+[node name="Fauna" type="Node3D" parent="SubViewportContainer/SubViewport/Mundo3D"]
+script = ExtResource("9_fau")
+
 [node name="Colibri" parent="SubViewportContainer/SubViewport/Mundo3D" instance=ExtResource("6_coli")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.2, 40)
 
-[node name="LienzoMapa" type="Control" parent="." unique_id=291822060]
-custom_minimum_size = Vector2(2880, 1280)
-clip_contents = true
-anchors_preset = 0
-offset_right = 2880.0
-offset_bottom = 1280.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
-mouse_filter = 2
-
-[node name="CapaPaisaje" type="Control" parent="LienzoMapa" unique_id=1676380272]
+[node name="Nubes" type="ColorRect" parent="."]
+material = SubResource("MaterialNubes")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -129,24 +102,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="NubeMovible" type="TextureRect" parent="LienzoMapa/CapaPaisaje" unique_id=348440584]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 44.0
-offset_top = -593.0
-offset_right = 194.00317
-offset_bottom = -472.99805
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("4_rs8th")
-expand_mode = 1
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="LienzoMapa/CapaPaisaje" unique_id=22434280]
-libraries/ = SubResource("AnimationLibrary_roqfa")
-autoplay = &"mover_nubes"
-
 [node name="BtnRegresar" type="Button" parent="." unique_id=84325627]
 layout_mode = 1
 offset_left = 16.0
@@ -154,6 +109,27 @@ offset_top = 16.0
 offset_right = 196.0
 offset_bottom = 72.0
 text = "← Menú"
+
+[node name="BotonesDerecha" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -380.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 72.0
+grow_horizontal = 0
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="BtnBioentdex" type="Button" parent="BotonesDerecha"]
+layout_mode = 2
+text = "Bioentdex"
+
+[node name="BtnExplorador" type="Button" parent="BotonesDerecha"]
+layout_mode = 2
+text = "Explorador"
 
 [node name="PanelZona" type="PanelContainer" parent="."]
 visible = false

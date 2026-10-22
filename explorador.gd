@@ -18,6 +18,30 @@ var _amplitud_paso := 0.0
 @onready var hombro_der: Node3D = $Modelo/HombroDer
 
 
+func _ready() -> void:
+	aplicar_perfil()
+
+
+## Colores y sombrero elegidos en "Personalizar explorador".
+func aplicar_perfil() -> void:
+	_pintar(["CaderaIzq/Pierna", "CaderaDer/Pierna"], Perfil.PANTALONES[Perfil.pantalon])
+	_pintar(["Torso", "HombroIzq/Brazo", "HombroDer/Brazo"], Perfil.CAMISAS[Perfil.camisa])
+	_pintar(["Cabeza"], Perfil.PIELES[Perfil.piel])
+	_pintar(["Mochila"], Perfil.MOCHILAS[Perfil.mochila])
+	_pintar(["AlaSombrero", "CopaSombrero", "GorraCopa", "GorraVisera"], Perfil.COLORES_SOMBRERO[Perfil.color_sombrero])
+	for pieza in ["AlaSombrero", "CopaSombrero"]:
+		modelo.get_node(pieza).visible = Perfil.sombrero == 0
+	for pieza in ["GorraCopa", "GorraVisera"]:
+		modelo.get_node(pieza).visible = Perfil.sombrero == 1
+
+
+func _pintar(piezas: Array, color: Color) -> void:
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = color
+	for pieza in piezas:
+		(modelo.get_node(pieza) as MeshInstance3D).material_override = mat
+
+
 func ir_a(punto: Vector3) -> void:
 	var destino := Vector2(punto.x, punto.z)
 	if terreno:

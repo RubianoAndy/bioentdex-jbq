@@ -2,8 +2,41 @@
 
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
-[ext_resource type="Resource" path="res://especies/datos/monjita_bogotana.tres" id="3_monjita_bogotana"]
-[ext_resource type="Resource" path="res://especies/datos/pato_canadiense.tres" id="4_pato_canadiense"]
+[ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
+[ext_resource type="Resource" path="res://especies/datos/monjita_bogotana.tres" id="4_monjita_bogotana"]
+[ext_resource type="Resource" path="res://especies/datos/pato_canadiense.tres" id="5_pato_canadiense"]
+[ext_resource type="Resource" path="res://especies/datos/garza_blanca.tres" id="6_garza_blanca"]
+[ext_resource type="Resource" path="res://especies/datos/libelula.tres" id="7_libelula"]
+
+[sub_resource type="Resource" id="m1"]
+script = ExtResource("3_mis")
+id = "avistamiento_aves_1"
+tipo = 0
+enunciado = "¿Cuál es la mejor forma de observar aves?"
+opciones = PackedStringArray("Acercarse corriendo", "En silencio, con binoculares y a distancia", "Lanzándoles comida")
+correcta = 1
+especie_id = ""
+explicacion = "Si no las asustas, se comportan de forma natural y puedes verlas mucho más tiempo."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "avistamiento_aves_2"
+tipo = 1
+enunciado = "Este pato viaja miles de kilómetros. ¿Cuál es?"
+opciones = PackedStringArray("Pato canadiense", "Tingua de pico rojo", "Copetón")
+correcta = 0
+especie_id = "pato_canadiense"
+explicacion = "El pato canadiense llega desde Norteamérica entre septiembre y abril."
+
+[sub_resource type="Resource" id="m3"]
+script = ExtResource("3_mis")
+id = "avistamiento_aves_3"
+tipo = 1
+enunciado = "¿Qué ave es esta?"
+opciones = PackedStringArray("Mirla patiamarilla", "Monjita bogotana", "Colibrí chillón")
+correcta = 1
+especie_id = "monjita_bogotana"
+explicacion = "El macho de la monjita bogotana es negro con una capucha amarilla."
 
 [resource]
 script = ExtResource("1_zona")
@@ -13,4 +46,5 @@ descripcion = "Desde el mirador de madera se observan las aves sin molestarlas. 
 color = Color(0.6, 0.4, 0.9, 1)
 posicion = Vector2(27.4, -34.4)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_monjita_bogotana"), ExtResource("4_pato_canadiense")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_monjita_bogotana"), ExtResource("5_pato_canadiense"), ExtResource("6_garza_blanca"), ExtResource("7_libelula")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

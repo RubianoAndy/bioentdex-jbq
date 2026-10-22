@@ -23,7 +23,7 @@ func _ready() -> void:
 	var por_descubrir := 0
 	for especie in RegistroEspecies.especies:
 		if RegistroEspecies.esta_descubierta(especie.id):
-			_agregar_ficha(especie.nombre_comun, especie.consejo_macro, especie.imagen)
+			_agregar_ficha(especie.nombre_comun, especie.consejo_macro, especie.obtener_imagen())
 		else:
 			por_descubrir += 1
 	if por_descubrir > 0:

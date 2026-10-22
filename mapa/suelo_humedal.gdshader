@@ -130,5 +130,9 @@ void fragment() {
 			mix(float(es_agua(k01)), float(es_agua(k11)), f.x), f.y);
 	color = mix(color, vec3(0.26, 0.22, 0.15) * (0.85 + 0.3 * ng), 4.0 * agua * (1.0 - agua) * 0.7);
 
+	// Sombras de nubes que pasan despacio sobre el humedal
+	float nube = texture(ruido, pos * 0.012 + vec2(TIME * 0.004, TIME * 0.0025)).r;
+	color *= 1.0 - 0.2 * smoothstep(0.5, 0.68, nube);
+
 	ALBEDO = pow(color, vec3(2.2));   // los colores de arriba están en sRGB
 }

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- soil mound back -->
+  <path d="M36,436 C70,364 170,344 256,346 C344,348 444,370 476,436 C482,458 462,470 432,470 L80,470 C50,470 30,456 36,436Z" fill="#3e2a1e"/>
+  <path d="M90,400 C150,370 230,362 300,364" fill="none" stroke="#5a4030" stroke-width="12"/>
+  <!-- worm -->
+  <path d="M130,420 C120,330 250,350 262,266 C272,196 176,196 196,128 C212,76 300,74 336,118 C356,142 360,172 384,180" fill="none" stroke-width="60"/>
+  <path d="M130,420 C120,330 250,350 262,266 C272,196 176,196 196,128 C212,76 300,74 336,118 C356,142 360,172 384,180" fill="none" stroke="#a8325a" stroke-width="44"/>
+  <path d="M130,420 C120,330 250,350 262,266 C272,196 176,196 196,128 C212,76 300,74 336,118 C356,142 360,172 384,180" fill="none" stroke="#e08a86" stroke-width="44" stroke-dasharray="4 10" stroke-linecap="butt"/>
+  <path d="M130,420 C120,330 250,350 262,266 C272,196 176,196 196,128 C212,76 300,74 336,118 C356,142 360,172 384,180" fill="none" stroke="#7a1f3c" stroke-width="44" stroke-dasharray="2 12" stroke-dashoffset="7" stroke-linecap="butt"/>
+  <!-- clitellum -->
+  <path d="M286,90 C306,96 322,106 334,118" fill="none" stroke="#e8a070" stroke-width="46" stroke-linecap="butt"/>
+  <!-- highlight -->
+  <path d="M122,410 C116,340 234,348 248,268 M184,150 C188,108 230,82 272,86 M338,104 C352,124 360,150 380,160" fill="none" stroke="#f2b4c4" stroke-width="7" transform="translate(-8,-8)"/>
+  <!-- head tip -->
+  <circle cx="392" cy="180" r="4" fill="#5a1530" stroke="none"/>
+  <!-- soil front lump covering tail -->
+  <path d="M60,452 C80,400 160,392 210,420 C232,434 236,456 222,470 L80,472 C60,472 54,462 60,452Z" fill="#4a3324"/>
+  <g fill="#6b4c36" stroke="none">
+    <circle cx="110" cy="440" r="7"/><circle cx="160" cy="430" r="5"/><circle cx="190" cy="452" r="6"/>
+    <circle cx="330" cy="420" r="6"/><circle cx="390" cy="438" r="8"/><circle cx="430" cy="420" r="5"/><circle cx="280" cy="448" r="6"/>
+  </g>
+  <ellipse cx="350" cy="452" rx="16" ry="10" fill="#8a7a6a" stroke-width="5"/>
+</g>
+</svg>

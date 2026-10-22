@@ -42,6 +42,7 @@ func _ready() -> void:
 	$Vegetacion.generar(terreno, Expedicion.zonas)
 	DecoracionZonas.decorar(self, Expedicion.zonas, terreno)
 	explorador.terreno = terreno
+	$Fauna.configurar(terreno, explorador, Expedicion.zonas)
 
 	colibri.limites = Rect2(-tamano / 2.0, tamano).grow(-1.0)
 	colibri.explorador = explorador

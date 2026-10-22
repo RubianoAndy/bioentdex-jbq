@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 RegistroEspecies="*res://especies/registro_especies.gd"
 Expedicion="*res://zonas/expedicion.gd"
+Perfil="*res://perfil.gd"
 
 [display]
 
@@ -26,6 +27,10 @@ window/size/viewport_width=720
 window/size/viewport_height=1280
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
+
+[gui]
+
+theme/custom="res://ui/tema.tres"
 
 [input_devices]
 

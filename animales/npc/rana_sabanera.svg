@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g transform="translate(0,-22)" stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- far front hand -->
+  <path d="M420,345 C430,370 432,395 430,418" fill="none" stroke-width="20"/>
+  <path d="M420,345 C430,370 432,395 430,418" fill="none" stroke="#3f8227" stroke-width="10"/>
+  <circle cx="446" cy="424" r="9" fill="#7cc24c"/>
+  <circle cx="424" cy="430" r="9" fill="#7cc24c"/>
+  <!-- body -->
+  <path d="M80,360 C70,290 130,225 230,205 C300,192 350,170 405,185 C460,200 482,262 462,308 C442,350 392,368 332,374 L150,390 C105,393 83,385 80,360Z" fill="#62b23a" stroke="none"/>
+  <!-- belly -->
+  <path d="M120,385 C210,362 330,350 450,328 C430,356 390,370 332,375 L150,390 C135,391 125,389 120,385Z" fill="#e9efc4" stroke="none"/>
+  <!-- back highlight -->
+  <path d="M150,262 C200,225 280,210 330,205 C300,222 230,240 170,275Z" fill="#a8dc6c" stroke="none"/>
+  <!-- lateral stripe -->
+  <path d="M466,262 C432,248 400,244 370,250 C300,262 200,300 100,338 C104,350 112,356 124,354 C220,322 310,288 375,277 C405,272 437,274 462,284Z" fill="#7a5530" stroke="none"/>
+  <path d="M124,362 C220,330 312,298 378,288 C408,284 435,286 456,292" fill="none" stroke="#f1f4d2" stroke-width="6"/>
+  <!-- body outline -->
+  <path d="M80,360 C70,290 130,225 230,205 C300,192 350,170 405,185 C460,200 482,262 462,308 C442,350 392,368 332,374 L150,390 C105,393 83,385 80,360Z" fill="none"/>
+  <!-- mouth -->
+  <path d="M465,298 C440,312 410,316 382,312" fill="none" stroke-width="6"/>
+  <circle cx="452" cy="236" r="4" fill="#1d2a22" stroke="none"/>
+  <!-- eye -->
+  <circle cx="380" cy="198" r="44" fill="#e8b422"/>
+  <circle cx="380" cy="198" r="30" fill="#f6cf4a" stroke="none"/>
+  <ellipse cx="384" cy="200" rx="20" ry="11" fill="#1d2a22" stroke="none"/>
+  <circle cx="366" cy="184" r="8" fill="#ffffff" stroke="none"/>
+  <path d="M334,192 C338,160 362,148 384,148 C406,148 422,160 426,190 C412,178 396,172 380,172 C364,172 348,178 334,192Z" fill="#62b23a"/>
+  <!-- hind thigh -->
+  <path d="M100,368 C75,320 115,268 188,272 C250,276 272,328 246,366 C224,396 128,404 100,368Z" fill="#55a332"/>
+  <path d="M130,320 C150,295 190,288 220,298" fill="none" stroke="#9fd468" stroke-width="8"/>
+  <path d="M150,330 L170,350 M195,325 L210,345" fill="none" stroke="#6b4a2b" stroke-width="7"/>
+  <!-- hind foot -->
+  <path d="M130,388 C190,412 260,420 312,410 C324,408 330,424 318,430 C270,444 186,442 130,420Z" fill="#4e9a2e"/>
+  <path d="M312,418 L348,404 M314,420 L354,426 M308,424 L340,448" fill="none" stroke-width="20"/>
+  <path d="M312,418 L348,404 M314,420 L354,426 M308,424 L340,448" fill="none" stroke="#5fae36" stroke-width="9"/>
+  <circle cx="352" cy="402" r="10" fill="#8fd060"/>
+  <circle cx="359" cy="427" r="10" fill="#8fd060"/>
+  <circle cx="343" cy="452" r="10" fill="#8fd060"/>
+  <!-- near front leg -->
+  <path d="M342,326 C366,326 388,348 388,380 L390,418 L368,420 L362,386 C358,366 346,356 338,346Z" fill="#5fae36"/>
+  <path d="M376,420 L352,440 M380,422 L384,452 M382,420 L412,440" fill="none" stroke-width="18"/>
+  <path d="M376,420 L352,440 M380,422 L384,452 M382,420 L412,440" fill="none" stroke="#5fae36" stroke-width="8"/>
+  <circle cx="348" cy="444" r="9" fill="#8fd060"/>
+  <circle cx="385" cy="457" r="9" fill="#8fd060"/>
+  <circle cx="416" cy="443" r="9" fill="#8fd060"/>
+</g>
+</svg>

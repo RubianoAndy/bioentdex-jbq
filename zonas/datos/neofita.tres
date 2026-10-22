@@ -2,15 +2,48 @@
 
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
-[ext_resource type="Resource" path="res://especies/datos/kikuyo.tres" id="3_kikuyo"]
-[ext_resource type="Resource" path="res://especies/datos/buchon_de_agua.tres" id="4_buchon_de_agua"]
+[ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
+[ext_resource type="Resource" path="res://especies/datos/kikuyo.tres" id="4_kikuyo"]
+[ext_resource type="Resource" path="res://especies/datos/buchon_de_agua.tres" id="5_buchon_de_agua"]
+[ext_resource type="Resource" path="res://especies/datos/abejorro.tres" id="6_abejorro"]
+
+[sub_resource type="Resource" id="m1"]
+script = ExtResource("3_mis")
+id = "neofita_1"
+tipo = 0
+enunciado = "¿Qué es una especie invasora?"
+opciones = PackedStringArray("Una especie nativa muy común", "Una especie que llegó de otro lugar y desplaza a las nativas", "Una especie en peligro")
+correcta = 1
+especie_id = ""
+explicacion = "El kikuyo y el buchón llegaron de otros continentes y compiten con las plantas nativas."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "neofita_2"
+tipo = 0
+enunciado = "¿Qué pasa si el buchón cubre todo el espejo de agua?"
+opciones = PackedStringArray("El agua recibe menos luz y oxígeno", "El humedal queda más limpio", "Llegan más peces")
+correcta = 0
+especie_id = "buchon_de_agua"
+explicacion = "El buchón bloquea la luz y, al descomponerse, consume el oxígeno del agua."
+
+[sub_resource type="Resource" id="m3"]
+script = ExtResource("3_mis")
+id = "neofita_3"
+tipo = 2
+enunciado = "Toma una foto del kikuyo que invade la orilla."
+opciones = PackedStringArray()
+correcta = 0
+especie_id = "kikuyo"
+explicacion = "El kikuyo seca las orillas y no deja crecer a las plantas nativas."
 
 [resource]
 script = ExtResource("1_zona")
 id = "neofita"
 nombre = "Zona Neófita"
-descripcion = "Aquí dominan plantas que llegaron de otros lugares, como el kikuyo y el buchón. Crecen tan rápido que desplazan a las plantas nativas."
+descripcion = "Aquí dominan plantas que llegaron de otros lugares, como el kikuyo y el buchón. Crecen tan rápido que desplazan a las nativas."
 color = Color(0.85, 0.75, 0.2, 1)
 posicion = Vector2(-21.8, 35.7)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_kikuyo"), ExtResource("4_buchon_de_agua")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_kikuyo"), ExtResource("5_buchon_de_agua"), ExtResource("6_abejorro")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- water -->
+  <ellipse cx="250" cy="402" rx="215" ry="34" fill="#6fa9c2"/>
+  <ellipse cx="250" cy="396" rx="160" ry="18" fill="#9cc9da" stroke="none"/>
+  <!-- tail -->
+  <path d="M100,302 L48,240 C60,226 84,230 98,244 L140,280Z" fill="#2b3138"/>
+  <path d="M52,248 C66,266 82,284 100,300 L84,308 C72,292 60,272 52,248Z" fill="#ffffff" stroke-width="6"/>
+  <!-- body -->
+  <path d="M70,330 C80,280 140,250 220,245 C300,240 350,260 370,300 C380,340 350,385 270,396 L140,396 C100,393 70,370 70,330Z" fill="#3e4650"/>
+  <path d="M90,360 C130,385 220,392 300,384" fill="none" stroke="#2a3038" stroke-width="10" stroke-linecap="round"/>
+  <!-- wing (olive-brown back) -->
+  <path d="M112,284 C162,254 262,248 326,272 C298,310 206,322 128,312 C110,304 104,292 112,284Z" fill="#5c5242"/>
+  <path d="M150,284 C200,270 250,268 300,276 M140,300 C190,292 240,292 290,292" fill="none" stroke="#7d715c" stroke-width="6"/>
+  <!-- white flank line -->
+  <path d="M130,334 C200,326 270,322 338,308" fill="none" stroke-width="20"/>
+  <path d="M130,334 C200,326 270,322 338,308" fill="none" stroke="#ffffff" stroke-width="9"/>
+  <!-- neck + head -->
+  <path d="M296,268 C296,214 306,172 338,150 C370,132 408,146 412,176 C414,202 392,218 384,244 C378,262 372,282 368,302 C340,290 316,280 296,268Z" fill="#3e4650"/>
+  <path d="M322,200 C326,180 338,166 356,160" fill="none" stroke="#5f6a76" stroke-width="7"/>
+  <!-- red frontal shield -->
+  <path d="M388,140 C402,136 414,148 418,164 L424,176 L400,184 C390,170 384,152 388,140Z" fill="#d62b2b"/>
+  <!-- bill red with yellow tip -->
+  <path d="M408,166 L442,174 L442,190 L410,196Z" fill="#d62b2b"/>
+  <path d="M442,174 L470,183 L442,190Z" fill="#f5d000"/>
+  <path d="M412,181 L462,184" fill="none" stroke-width="4"/>
+  <!-- eye -->
+  <circle cx="382" cy="168" r="10" fill="#c0302a" stroke-width="5"/>
+  <circle cx="383" cy="168" r="4" fill="#1d2a22" stroke="none"/>
+  <circle cx="380" cy="165" r="2" fill="#ffffff" stroke="none"/>
+  <!-- ripples -->
+  <path d="M40,420 C70,430 100,432 130,428 M370,426 C400,430 430,426 455,418" fill="none" stroke="#ffffff" stroke-width="6"/>
+</g>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- twig -->
+  <path d="M30,428 C150,416 300,414 490,424 L488,446 C300,438 150,440 32,450Z" fill="#7a5638"/>
+  <path d="M380,420 L430,380" fill="none" stroke-width="16"/>
+  <path d="M380,420 L430,380" fill="none" stroke="#7a5638" stroke-width="7"/>
+  <!-- tail -->
+  <path d="M160,346 L60,404 L82,430 L186,378Z" fill="#6e4f34"/>
+  <path d="M80,412 L170,360" fill="none" stroke="#9a7650" stroke-width="5"/>
+  <!-- legs -->
+  <path d="M250,390 L246,430 M282,392 L290,430" fill="none" stroke-width="16"/>
+  <path d="M250,390 L246,430 M282,392 L290,430" fill="none" stroke="#c99a84" stroke-width="7"/>
+  <!-- body -->
+  <path d="M138,330 C146,258 218,218 292,222 C352,226 384,268 380,320 C376,370 324,402 262,404 C210,406 162,384 148,360Z" fill="#d9d2c4"/>
+  <path d="M240,390 C300,392 350,368 366,330" fill="none" stroke="#c0b6a4" stroke-width="12"/>
+  <!-- back/wing -->
+  <path d="M146,282 C190,240 270,230 316,262 C318,312 270,350 196,352 C166,350 140,334 146,282Z" fill="#a0754a"/>
+  <path d="M176,270 L196,282 M210,256 L230,272 M246,252 L262,268 M176,300 L200,312 M220,290 L240,306 M260,284 L276,300 M200,326 L222,336 M244,318 L262,330" fill="none" stroke="#3e2a18" stroke-width="8"/>
+  <path d="M168,316 C210,312 256,302 300,284 M174,334 C214,330 256,320 290,304" fill="none" stroke="#f4eee0" stroke-width="6"/>
+  <!-- rufous collar -->
+  <path d="M262,232 C296,222 330,236 348,262 C346,286 336,302 322,316 C298,292 280,264 262,232Z" fill="#c0652a"/>
+  <!-- black breast spot -->
+  <path d="M330,300 C346,296 360,304 362,318 C350,326 336,322 326,312Z" fill="#1d2a22"/>
+  <!-- crest -->
+  <path d="M300,174 L280,134 L310,154 L314,126 L338,152Z" fill="#9aa0a3"/>
+  <path d="M292,154 L302,164 M314,134 L318,152" fill="none" stroke="#1d2a22" stroke-width="6"/>
+  <!-- head -->
+  <path d="M290,218 C282,172 308,144 346,142 C384,140 410,168 408,202 C406,232 382,252 352,256 C322,258 296,244 290,218Z" fill="#9aa0a3"/>
+  <!-- white throat -->
+  <path d="M352,256 C374,252 394,240 404,220 C392,222 374,228 360,236 C352,242 350,250 352,256Z" fill="#ffffff" stroke="none"/>
+  <!-- head stripes -->
+  <path d="M296,184 C320,166 352,160 384,164" fill="none" stroke="#1d2a22" stroke-width="12"/>
+  <path d="M298,214 C320,206 340,200 360,198" fill="none" stroke="#1d2a22" stroke-width="9"/>
+  <path d="M290,218 C282,172 308,144 346,142 C384,140 410,168 408,202 C406,232 382,252 352,256 C322,258 296,244 290,218Z" fill="none"/>
+  <!-- eye -->
+  <circle cx="372" cy="190" r="9" fill="#1d2a22" stroke="none"/>
+  <circle cx="369" cy="187" r="3" fill="#ffffff" stroke="none"/>
+  <!-- bill -->
+  <path d="M400,186 L444,200 L402,214Z" fill="#5a5f66"/>
+  <path d="M404,200 L436,200" fill="none" stroke-width="4"/>
+</g>
+</svg>

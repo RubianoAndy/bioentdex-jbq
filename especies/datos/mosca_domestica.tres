@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 25
+id = "mosca_domestica"
+nombre_comun = "Mosca doméstica"
+nombre_cientifico = "Musca domestica"
+familia = "Muscidae"
+orden = "Diptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Mosca gris de ojos rojos que vive cerca de las personas."
+importancia = "Recicla materia en descomposición, pero con la basura se multiplica y transmite enfermedades."
+consejo_macro = "Usa velocidad alta: es de los insectos que más rápido reaccionan."
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(12, 6)
+tamano_en_mapa = 0.7

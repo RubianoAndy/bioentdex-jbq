@@ -1,0 +1,134 @@
+[gd_resource type="Theme" format=3]
+
+[sub_resource type="StyleBoxFlat" id="Boton"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0.16, 0.42, 0.3, 0.96)
+border_width_bottom = 5
+border_color = Color(0.08, 0.24, 0.17, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="BotonEncima"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0.21, 0.52, 0.37, 0.98)
+border_width_bottom = 5
+border_color = Color(0.08, 0.24, 0.17, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.25)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[sub_resource type="StyleBoxFlat" id="BotonPresionado"]
+content_margin_left = 20.0
+content_margin_top = 13.0
+content_margin_right = 20.0
+content_margin_bottom = 7.0
+bg_color = Color(0.11, 0.33, 0.23, 1)
+border_width_top = 3
+border_color = Color(0.06, 0.18, 0.12, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="BotonDesactivado"]
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0.16, 0.24, 0.21, 0.7)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxEmpty" id="Vacio"]
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+content_margin_left = 20.0
+content_margin_top = 18.0
+content_margin_right = 20.0
+content_margin_bottom = 18.0
+bg_color = Color(0.08, 0.17, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.84, 0.3, 0.35)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="Campo"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.05, 0.11, 0.09, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.55, 0.42, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="Pestana"]
+content_margin_left = 24.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+bg_color = Color(0.08, 0.17, 0.14, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+
+[sub_resource type="StyleBoxFlat" id="PestanaElegida"]
+content_margin_left = 24.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+bg_color = Color(0.16, 0.42, 0.3, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+
+[resource]
+default_font_size = 24
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 0.9, 0.6, 1)
+Button/colors/font_disabled_color = Color(1, 1, 1, 0.55)
+Button/font_sizes/font_size = 26
+Button/styles/disabled = SubResource("BotonDesactivado")
+Button/styles/focus = SubResource("Vacio")
+Button/styles/hover = SubResource("BotonEncima")
+Button/styles/normal = SubResource("Boton")
+Button/styles/pressed = SubResource("BotonPresionado")
+Label/colors/font_color = Color(0.96, 0.97, 0.95, 1)
+LineEdit/font_sizes/font_size = 26
+LineEdit/styles/focus = SubResource("Campo")
+LineEdit/styles/normal = SubResource("Campo")
+PanelContainer/styles/panel = SubResource("Panel")
+TabContainer/font_sizes/font_size = 24
+TabContainer/styles/panel = SubResource("Vacio")
+TabContainer/styles/tab_hovered = SubResource("Pestana")
+TabContainer/styles/tab_selected = SubResource("PestanaElegida")
+TabContainer/styles/tab_unselected = SubResource("Pestana")

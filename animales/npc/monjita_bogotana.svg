@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- reed stem -->
+  <path d="M150,500 C158,350 166,200 178,16 L198,16 C186,200 178,350 172,500Z" fill="#a9b85c"/>
+  <path d="M168,480 C174,340 180,200 188,40" fill="none" stroke="#cdd88a" stroke-width="5"/>
+  <path d="M164,330 C120,290 90,230 70,150 C100,210 140,270 168,300Z" fill="#8ea347"/>
+  <!-- tail -->
+  <path d="M208,372 L150,476 L186,486 L250,384Z" fill="#1f2026"/>
+  <path d="M190,420 L172,470" fill="none" stroke="#454a56" stroke-width="5"/>
+  <!-- body -->
+  <path d="M206,200 C252,174 334,190 362,246 C382,298 356,366 296,388 C258,402 226,392 212,364 C192,320 184,240 206,200Z" fill="#1f2026"/>
+  <path d="M330,300 C334,330 322,354 300,368" fill="none" stroke="#454a56" stroke-width="7"/>
+  <!-- wing -->
+  <path d="M214,238 C258,232 294,270 296,322 C294,358 268,376 238,372 C220,334 210,284 214,238Z" fill="#17181d"/>
+  <path d="M232,262 C258,270 276,296 282,330 M226,300 C246,312 260,334 262,360" fill="none" stroke="#4d5462" stroke-width="5"/>
+  <!-- legs gripping stem -->
+  <path d="M250,384 L196,394 M262,380 L198,414" fill="none" stroke-width="16"/>
+  <path d="M250,384 L196,394 M262,380 L198,414" fill="none" stroke="#3a3a3a" stroke-width="7"/>
+  <!-- yellow hood -->
+  <path d="M262,176 C266,118 324,92 368,112 C406,128 414,176 398,212 C382,246 360,262 336,276 C312,262 286,240 270,214Z" fill="#ffd21f"/>
+  <path d="M290,240 C310,256 326,266 338,272 C352,262 366,250 376,236 C350,250 320,252 290,240Z" fill="#e8b000" stroke="none"/>
+  <path d="M300,128 C320,112 346,108 366,116" fill="none" stroke="#fff08a" stroke-width="8"/>
+  <!-- black mask/lores -->
+  <path d="M408,156 C392,146 364,142 344,152 C336,168 346,184 364,186 C382,188 398,180 410,176Z" fill="#1d2a22"/>
+  <circle cx="366" cy="164" r="4" fill="#ffffff" stroke="none"/>
+  <!-- bill -->
+  <path d="M398,152 L458,170 L400,186Z" fill="#1f2026"/>
+  <path d="M404,160 L440,168" fill="none" stroke="#5a6070" stroke-width="4"/>
+</g>
+</svg>

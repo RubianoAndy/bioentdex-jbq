@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 22
+id = "mariquita"
+nombre_comun = "Mariquita"
+nombre_cientifico = "Cycloneda sanguinea"
+familia = "Coccinellidae"
+orden = "Coleoptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Escarabajo pequeño, rojo y sin puntos en las alas."
+importancia = "Controla pulgones y otras plagas de forma natural."
+consejo_macro = "Fotografíala desde su altura, sobre una hoja."
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(3, 2)
+tamano_en_mapa = 0.7

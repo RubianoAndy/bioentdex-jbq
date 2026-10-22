@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 21
+id = "caballito_del_diablo"
+nombre_comun = "Caballito del diablo"
+nombre_cientifico = "Ischnura sp."
+familia = "Coenagrionidae"
+orden = "Odonata"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Insecto delgado y azul que pliega las alas sobre el cuerpo."
+importancia = "Caza insectos pequeños y, como la libélula, indica agua limpia."
+consejo_macro = "Acércate muy despacio por un lado y enfoca los ojos."
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(1, 11)
+tamano_en_mapa = 0.8

@@ -2,9 +2,42 @@
 
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
-[ext_resource type="Resource" path="res://especies/datos/tingua_pico_rojo.tres" id="3_tingua_pico_rojo"]
-[ext_resource type="Resource" path="res://especies/datos/garza_blanca.tres" id="4_garza_blanca"]
-[ext_resource type="Resource" path="res://especies/datos/lenteja_de_agua.tres" id="5_lenteja_de_agua"]
+[ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
+[ext_resource type="Resource" path="res://especies/datos/tingua_pico_rojo.tres" id="4_tingua_pico_rojo"]
+[ext_resource type="Resource" path="res://especies/datos/garza_blanca.tres" id="5_garza_blanca"]
+[ext_resource type="Resource" path="res://especies/datos/lenteja_de_agua.tres" id="6_lenteja_de_agua"]
+[ext_resource type="Resource" path="res://especies/datos/patinador.tres" id="7_patinador"]
+[ext_resource type="Resource" path="res://especies/datos/libelula.tres" id="8_libelula"]
+
+[sub_resource type="Resource" id="m1"]
+script = ExtResource("3_mis")
+id = "agua_abierta_1"
+tipo = 0
+enunciado = "¿Por qué el agua de un humedal se ve oscura y verdosa?"
+opciones = PackedStringArray("Porque siempre está sucia", "Por la materia orgánica y las algas que viven en ella", "Porque refleja los edificios")
+correcta = 1
+especie_id = ""
+explicacion = "El color viene de la materia orgánica y de microalgas. Es normal, aunque un exceso de algas indica contaminación."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "agua_abierta_2"
+tipo = 1
+enunciado = "¿Qué ave es esta?"
+opciones = PackedStringArray("Tingua de pico rojo", "Garza blanca", "Pato canadiense")
+correcta = 0
+especie_id = "tingua_pico_rojo"
+explicacion = "Se reconoce por el escudo rojo de la frente y el pico de punta amarilla."
+
+[sub_resource type="Resource" id="m3"]
+script = ExtResource("3_mis")
+id = "agua_abierta_3"
+tipo = 2
+enunciado = "Toma una foto del espejo de agua. ¿Ves la lenteja de agua flotando?"
+opciones = PackedStringArray()
+correcta = 0
+especie_id = "lenteja_de_agua"
+explicacion = "La lenteja de agua forma un tapete verde que alimenta a patos y tinguas."
 
 [resource]
 script = ExtResource("1_zona")
@@ -14,4 +47,5 @@ descripcion = "El espejo de agua del humedal, sin plantas encima. Aquí nadan y 
 color = Color(0.2, 0.5, 0.95, 1)
 posicion = Vector2(2.5, 5.3)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_tingua_pico_rojo"), ExtResource("4_garza_blanca"), ExtResource("5_lenteja_de_agua")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_tingua_pico_rojo"), ExtResource("5_garza_blanca"), ExtResource("6_lenteja_de_agua"), ExtResource("7_patinador"), ExtResource("8_libelula")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

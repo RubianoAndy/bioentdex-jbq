@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 20
+id = "libelula"
+nombre_comun = "Libélula"
+nombre_cientifico = "Rhionaeschna marchali"
+familia = "Aeshnidae"
+orden = "Odonata"
+tipo = 1
+estado_conservacion = 0
+descripcion = "Libélula grande y azul que patrulla sobre el agua."
+importancia = "Sus larvas solo viven en agua limpia: indica la salud del humedal. Además caza mosquitos."
+consejo_macro = "Espera a que se pose en un tallo: suele volver al mismo sitio."
+horario = 1
+movimiento = 4
+suelos_habitat = PackedInt32Array(1, 9)
+tamano_en_mapa = 0.9

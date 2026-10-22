@@ -34,7 +34,7 @@ theme_override_constants/margin_bottom = 24
 
 [node name="VBox" type="VBoxContainer" parent="Margen"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 14
 
 [node name="Encabezado" type="HBoxContainer" parent="Margen/VBox"]
 layout_mode = 2
@@ -48,26 +48,24 @@ text = "← Mapa"
 [node name="Titulo" type="Label" parent="Margen/VBox/Encabezado"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="Descripcion" type="Label" parent="Margen/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Escenario" type="Control" parent="Margen/VBox"]
-clip_contents = true
+[node name="Scroll" type="ScrollContainer" parent="Margen/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="Pista" type="Label" parent="Margen/VBox"]
+[node name="Contenido" type="VBoxContainer" parent="Margen/VBox/Scroll"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.7)
-theme_override_font_sizes/font_size = 22
-text = "Toca los ? para descubrir las especies de esta zona"
-horizontal_alignment = 1
-autowrap_mode = 3
+size_flags_horizontal = 3
+theme_override_constants/separation = 12

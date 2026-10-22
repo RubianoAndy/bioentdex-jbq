@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- far leg -->
+  <path d="M260,360 L252,420 L246,462 M246,462 L206,468 M246,462 L280,474" fill="none" stroke-width="20"/>
+  <path d="M260,360 L252,420 L246,462 M246,462 L206,468 M246,462 L280,474" fill="none" stroke="#e0941a" stroke-width="10"/>
+  <!-- tail -->
+  <path d="M140,316 L40,382 L68,412 L172,356Z" fill="#2e251d"/>
+  <path d="M62,392 L150,338" fill="none" stroke="#4a3d31" stroke-width="5"/>
+  <!-- body -->
+  <path d="M106,300 C118,228 198,186 282,192 C344,196 386,238 386,290 C386,342 342,372 282,376 C220,380 158,362 128,340 C112,328 104,314 106,300Z" fill="#4a3f36"/>
+  <path d="M250,360 C300,362 350,340 366,300" fill="none" stroke="#5f5247" stroke-width="12"/>
+  <!-- wing -->
+  <path d="M146,262 C206,226 290,236 322,276 C300,320 220,336 158,322 C138,312 136,276 146,262Z" fill="#372d24"/>
+  <path d="M170,270 C210,256 256,256 296,276 M162,292 C210,282 254,284 290,296 M172,312 C210,308 244,308 276,312" fill="none" stroke="#6b5b4b" stroke-width="5"/>
+  <!-- head -->
+  <path d="M296,214 C294,164 326,132 364,132 C402,132 424,164 422,196 C420,228 398,248 368,252Z" fill="#4a3f36"/>
+  <path d="M330,150 C346,140 368,138 386,144" fill="none" stroke="#6b5b4b" stroke-width="7"/>
+  <!-- bill -->
+  <path d="M410,174 C436,176 458,184 476,196 C458,204 434,208 412,208Z" fill="#f2a516"/>
+  <path d="M414,192 L468,197" fill="none" stroke-width="4"/>
+  <!-- eye -->
+  <circle cx="380" cy="180" r="15" fill="#f2a516" stroke-width="5"/>
+  <circle cx="380" cy="180" r="8" fill="#1d2a22" stroke="none"/>
+  <circle cx="377" cy="177" r="3" fill="#ffffff" stroke="none"/>
+  <!-- near leg -->
+  <path d="M300,362 L306,422 L316,466 M316,466 L276,474 M316,466 L358,470 M316,466 L320,490" fill="none" stroke-width="22"/>
+  <path d="M300,362 L306,422 L316,466 M316,466 L276,474 M316,466 L358,470 M316,466 L320,490" fill="none" stroke="#f2a516" stroke-width="11"/>
+</g>
+</svg>

@@ -1,72 +1,201 @@
 extends Control
-## Interior de una zona: aparecen las especies que viven ahí. Toca los "?" para descubrirlas.
+## Interior de una zona: sus misiones (preguntas, identificar especies, tomar fotos) y sus especies.
+## Las respuestas y las fotos se guardan en la base de datos de la Bioentdex.
 
-const TAMANO_ESPECIE := Vector2(180, 210)
-
-@onready var escenario: Control = $Margen/VBox/Escenario
+const CAPTURA := preload("res://captura/CapturaAR.tscn")
+const NOMBRES_TIPO := ["Pregunta", "¿Quién es?", "Foto"]
+## Fondo simulado de la cámara para las misiones de foto de cada zona
+const FONDOS := {
+	"agua_abierta": "agua", "transicion": "agua", "avistamiento_aves": "agua",
+	"ronda_hidrica": "bosque", "materia_organica": "bosque", "corredor_ambiental": "bosque",
+}
 
 var zona: Zona
+
+@onready var contenido: VBoxContainer = $Margen/VBox/Scroll/Contenido
 
 
 func _ready() -> void:
 	# Si se abre la escena sola desde el editor (F6), se usa la primera zona
 	zona = Expedicion.zona_actual if Expedicion.zona_actual else Expedicion.zonas[0]
-	$Fondo.color = zona.color.darkened(0.65)
+	$Fondo.color = zona.color.darkened(0.7)
 	$Margen/VBox/Encabezado/Titulo.text = zona.nombre
 	$Margen/VBox/Descripcion.text = zona.descripcion
 	$Margen/VBox/Encabezado/BtnVolver.pressed.connect(Expedicion.volver_al_mapa)
 	RegistroEspecies.especie_descubierta.connect(_on_especie_descubierta)
-
-	await get_tree().process_frame   # esperar a que el escenario tenga su tamaño final
-	_colocar_especies()
+	_construir()
 
 
-func _colocar_especies() -> void:
-	# Cada especie va en una franja horizontal distinta, en una posición al azar
-	var franja := escenario.size.y / maxi(1, zona.especies.size())
-	for i in zona.especies.size():
-		var especie := zona.especies[i]
-		var boton := Button.new()
-		boton.custom_minimum_size = TAMANO_ESPECIE
-		boton.size = TAMANO_ESPECIE
-		boton.pivot_offset = TAMANO_ESPECIE / 2.0
-		boton.expand_icon = true
-		boton.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		boton.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-		boton.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		boton.position = Vector2(
-			randf() * maxf(0.0, escenario.size.x - TAMANO_ESPECIE.x),
-			franja * i + randf() * maxf(0.0, franja - TAMANO_ESPECIE.y))
-		escenario.add_child(boton)
-		boton.pressed.connect(_on_especie_pressed.bind(boton, especie))
-		_actualizar_boton(boton, especie)
+func _construir() -> void:
+	for hijo in contenido.get_children():
+		hijo.queue_free()
+
+	var resueltas := zona.misiones.filter(func(m: Mision) -> bool: return RegistroEspecies.mision_resuelta(m.id)).size()
+	contenido.add_child(_titulo_seccion("Misiones (%d/%d)" % [resueltas, zona.misiones.size()]))
+	for mision in zona.misiones:
+		contenido.add_child(_tarjeta_mision(mision))
+
+	contenido.add_child(_titulo_seccion("Especies de esta zona"))
+	var grilla := GridContainer.new()
+	grilla.columns = 3
+	grilla.add_theme_constant_override("h_separation", 12)
+	grilla.add_theme_constant_override("v_separation", 12)
+	for especie in zona.especies:
+		grilla.add_child(_tarjeta_especie(especie))
+	contenido.add_child(grilla)
 
 
-func _actualizar_boton(boton: Button, especie: Especie) -> void:
-	if RegistroEspecies.esta_descubierta(especie.id):
-		boton.icon = especie.imagen
-		boton.text = especie.nombre_comun
-		boton.remove_theme_font_size_override("font_size")
-		boton.scale = Vector2.ONE
-		if boton.has_meta("latido"):
-			boton.get_meta("latido").kill()
-			boton.remove_meta("latido")
+func _tarjeta_mision(mision: Mision) -> Button:
+	var resuelta := RegistroEspecies.mision_resuelta(mision.id)
+	var tarjeta := Button.new()
+	tarjeta.custom_minimum_size = Vector2(0, 100)
+	tarjeta.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	tarjeta.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tarjeta.add_theme_font_size_override("font_size", 22)
+	tarjeta.text = "%s · %s\n%s" % [NOMBRES_TIPO[mision.tipo], "Resuelta" if resuelta else "Pendiente", mision.enunciado]
+	if resuelta:
+		tarjeta.modulate = Color(0.7, 1.0, 0.75)
+	tarjeta.pressed.connect(_abrir_mision.bind(mision))
+	return tarjeta
+
+
+func _tarjeta_especie(especie: Especie) -> Button:
+	var conocida := RegistroEspecies.esta_descubierta(especie.id)
+	var tarjeta := Button.new()
+	tarjeta.custom_minimum_size = Vector2(196, 230)
+	tarjeta.icon = especie.obtener_imagen()
+	tarjeta.expand_icon = true
+	tarjeta.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tarjeta.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
+	tarjeta.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tarjeta.add_theme_font_size_override("font_size", 20)
+	if conocida:
+		tarjeta.text = especie.nombre_comun
 	else:
-		boton.icon = null
-		boton.text = "?"
-		boton.add_theme_font_size_override("font_size", 72)
-		var latido := boton.create_tween().set_loops()
-		latido.tween_property(boton, "scale", Vector2(1.08, 1.08), 0.6)
-		latido.tween_property(boton, "scale", Vector2.ONE, 0.6)
-		boton.set_meta("latido", latido)
+		tarjeta.text = "???" + ("\n(insecto)" if especie.es_capturable() else "")
+		tarjeta.add_theme_color_override("icon_normal_color", Color.BLACK)
+		tarjeta.add_theme_color_override("icon_hover_color", Color.BLACK)
+		tarjeta.add_theme_color_override("icon_pressed_color", Color.BLACK)
+	tarjeta.pressed.connect(_ver_especie.bind(especie))
+	return tarjeta
 
 
-func _on_especie_pressed(boton: Button, especie: Especie) -> void:
-	if RegistroEspecies.descubrir(especie.id):
-		_actualizar_boton(boton, especie)
+func _ver_especie(especie: Especie) -> void:
+	if not RegistroEspecies.esta_descubierta(especie.id):
+		var como := "Búscalo en el mapa: los insectos con anillo dorado se pueden fotografiar." if especie.es_capturable() \
+			else "Búscala en el mapa o resuelve las misiones de esta zona."
+		Aviso.mostrar(self, "Aún no la conoces. " + como)
+		return
+	var capturas := RegistroEspecies.capturas_de(especie.id)
+	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
+	FichaEspecie.mostrar(self, especie, "", foto)
+
+
+# --- Misiones ---------------------------------------------------------------------------------
+
+func _abrir_mision(mision: Mision) -> void:
+	var capa := Control.new()
+	capa.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	capa.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(capa)
+	var sombra := ColorRect.new()
+	sombra.color = Color(0, 0, 0, 0.6)
+	sombra.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	capa.add_child(sombra)
+	var panel := PanelContainer.new()
+	capa.add_child(panel)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel.offset_left = 28
+	panel.offset_right = -28
+	panel.offset_top = 90
+	panel.offset_bottom = -70
+	var caja := VBoxContainer.new()
+	caja.add_theme_constant_override("separation", 14)
+	panel.add_child(caja)
+
+	caja.add_child(_etiqueta(NOMBRES_TIPO[mision.tipo], 24, Color(1, 0.84, 0.3)))
+	caja.add_child(_etiqueta(mision.enunciado, 30, Color.WHITE))
+
+	if mision.tipo == Mision.Tipo.IDENTIFICAR:
+		var especie := RegistroEspecies.buscar(mision.especie_id)
+		var imagen := TextureRect.new()
+		imagen.texture = especie.obtener_imagen() if especie else null
+		imagen.custom_minimum_size = Vector2(0, 320)
+		imagen.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		imagen.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		caja.add_child(imagen)
+
+	var resultado := _etiqueta("", 24, Color.WHITE)
+	if mision.tipo == Mision.Tipo.FOTO:
+		var abrir := Button.new()
+		abrir.text = "Abrir cámara"
+		abrir.custom_minimum_size = Vector2(0, 72)
+		abrir.pressed.connect(_tomar_foto_mision.bind(mision, resultado))
+		caja.add_child(abrir)
 	else:
-		Aviso.mostrar(self, "%s ya está en tu Bioentdex" % especie.nombre_comun)
+		var botones: Array[Button] = []
+		for i in mision.opciones.size():
+			var opcion := Button.new()
+			opcion.text = mision.opciones[i]
+			opcion.custom_minimum_size = Vector2(0, 68)
+			opcion.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			botones.append(opcion)
+			caja.add_child(opcion)
+		for i in botones.size():
+			botones[i].pressed.connect(_responder.bind(mision, i, botones, resultado))
+	if RegistroEspecies.mision_resuelta(mision.id):
+		resultado.text = "Ya resolviste esta misión. " + mision.explicacion
+	caja.add_child(resultado)
+
+	var espacio := Control.new()
+	espacio.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	caja.add_child(espacio)
+	var cerrar := Button.new()
+	cerrar.text = "Cerrar"
+	cerrar.custom_minimum_size = Vector2(0, 64)
+	cerrar.pressed.connect(func() -> void:
+		capa.queue_free()
+		_construir())
+	caja.add_child(cerrar)
+
+
+func _responder(mision: Mision, elegida: int, botones: Array[Button], resultado: Label) -> void:
+	var correcta := elegida == mision.correcta
+	RegistroEspecies.registrar_mision(mision, zona.id, mision.opciones[elegida], correcta)
+	if correcta:
+		botones[elegida].modulate = Color(0.5, 1.0, 0.55)
+		for boton in botones:
+			boton.disabled = boton != botones[elegida]
+		resultado.text = "¡Correcto! " + mision.explicacion
+	else:
+		botones[elegida].modulate = Color(1.0, 0.5, 0.5)
+		botones[elegida].disabled = true
+		resultado.text = "No es correcto. Intenta de nuevo."
+
+
+func _tomar_foto_mision(mision: Mision, resultado: Label) -> void:
+	var camara := CAPTURA.instantiate()
+	camara.tipo_fondo = FONDOS.get(zona.id, "pradera")
+	camara.texto_mision = mision.enunciado
+	camara.zona_id = zona.id
+	camara.foto_tomada.connect(func(foto: Image) -> void:
+		RegistroEspecies.registrar_mision(mision, zona.id, "foto", true, foto)
+		resultado.text = "¡Foto guardada en tu Bioentdex! " + mision.explicacion)
+	add_child(camara)
+
+
+func _titulo_seccion(texto: String) -> Label:
+	return _etiqueta(texto, 28, Color(1, 0.84, 0.3))
+
+
+func _etiqueta(texto: String, tamano: int, color: Color) -> Label:
+	var etiqueta := Label.new()
+	etiqueta.text = texto
+	etiqueta.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	etiqueta.add_theme_font_size_override("font_size", tamano)
+	etiqueta.add_theme_color_override("font_color", color)
+	return etiqueta
 
 
 func _on_especie_descubierta(especie: Especie) -> void:
-	Aviso.mostrar(self, "¡Nueva especie: %s!" % especie.nombre_comun)
+	Aviso.mostrar(self, "¡Nueva especie en tu Bioentdex: %s!" % especie.nombre_comun)

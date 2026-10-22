@@ -1,17 +1,34 @@
 extends Control
+## Pantalla de inicio: el mapa ilustrado de fondo con un acercamiento lento, nubes y los botones.
+
+const ESCENA_MENU := "res://MenuPrincipal.tscn"
+
 
 func _ready() -> void:
-	# Conectamos el primer botón del menú para que abra el mapa del humedal
-	$VBoxContainer/Button.pressed.connect(_on_iniciar_expedicion_pressed)
-	$VBoxContainer/Button2.pressed.connect(_on_guia_macro_pressed)
-	$VBoxContainer/Button3.pressed.connect(_on_bioentdex_pressed)
+	$Botones/BtnExpedicion.pressed.connect(_ir_a.bind("res://MapaExpedicion.tscn"))
+	$Botones/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
+	$Botones/BtnGuia.pressed.connect(_ir_a.bind("res://GuiaMacro.tscn"))
+	$Botones/BtnPersonalizar.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
+	$Saludo.text = "Hola, %s" % Perfil.nombre
 
-func _on_iniciar_expedicion_pressed() -> void:
-	# Salto hacia la escena del mapa de expedición
-	get_tree().change_scene_to_file("res://MapaExpedicion.tscn")
+	# El fondo se acerca y se aleja muy despacio
+	var fondo: TextureRect = $Fondo
+	var vaiven := create_tween().set_loops().set_trans(Tween.TRANS_SINE)
+	vaiven.tween_property(fondo, "scale", Vector2(1.08, 1.08), 18.0)
+	vaiven.tween_property(fondo, "scale", Vector2.ONE, 18.0)
 
-func _on_guia_macro_pressed() -> void:
-	get_tree().change_scene_to_file("res://GuiaMacro.tscn")
+	# Entrada del título y los botones
+	var titulo: Control = $Titulo
+	titulo.modulate.a = 0.0
+	titulo.position.y -= 40
+	var entrada := create_tween().set_parallel().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	entrada.tween_property(titulo, "modulate:a", 1.0, 0.6)
+	entrada.tween_property(titulo, "position:y", titulo.position.y + 40, 0.7)
+	var botones: Control = $Botones
+	botones.modulate.a = 0.0
+	entrada.tween_property(botones, "modulate:a", 1.0, 0.6).set_delay(0.3)
 
-func _on_bioentdex_pressed() -> void:
-	get_tree().change_scene_to_file("res://Bioentdex.tscn")
+
+func _ir_a(escena: String) -> void:
+	Perfil.volver_a = ESCENA_MENU
+	get_tree().change_scene_to_file(escena)

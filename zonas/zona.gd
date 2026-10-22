@@ -9,4 +9,6 @@ extends Resource
 ## Centro de la zona en el mapa: x = este/oeste, y = norte(-)/sur(+). El mapa mide 24 x 43.
 @export var posicion: Vector2 = Vector2.ZERO
 @export var radio: float = 2.5
+## Especies que viven en la zona (los insectos capturados solo vuelven a aparecer en sus zonas)
 @export var especies: Array[Especie] = []
+@export var misiones: Array[Mision] = []

@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://personalizar.gd" id="1_per"]
+[ext_resource type="PackedScene" path="res://Explorador.tscn" id="2_exp"]
+
+[sub_resource type="Environment" id="Entorno"]
+background_mode = 1
+background_color = Color(0, 0, 0, 0)
+ambient_light_source = 2
+ambient_light_color = Color(0.85, 0.88, 0.9, 1)
+ambient_light_energy = 0.8
+
+[sub_resource type="CylinderMesh" id="Pedestal"]
+top_radius = 0.7
+bottom_radius = 0.75
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="MatPedestal"]
+albedo_color = Color(0.35, 0.55, 0.3, 1)
+
+[node name="Personalizar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_per")
+
+[node name="Fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.11, 0.2, 0.17, 1)
+
+[node name="Margen" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margen"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Encabezado" type="HBoxContainer" parent="Margen/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BtnVolver" type="Button" parent="Margen/VBox/Encabezado"]
+custom_minimum_size = Vector2(140, 56)
+layout_mode = 2
+text = "← Volver"
+
+[node name="Titulo" type="Label" parent="Margen/VBox/Encabezado"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 34
+text = "Tu explorador"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Vista" type="SubViewportContainer" parent="Margen/VBox"]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Margen/VBox/Vista"]
+own_world_3d = true
+transparent_bg = true
+size = Vector2i(672, 420)
+
+[node name="Camara" type="Camera3D" parent="Margen/VBox/Vista/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.97, 0.24, 0, -0.24, 0.97, 0, 1.25, 3)
+fov = 40.0
+
+[node name="Luz" type="DirectionalLight3D" parent="Margen/VBox/Vista/SubViewport"]
+transform = Transform3D(0.866025, -0.409576, 0.286788, 0, 0.573576, 0.819152, -0.5, -0.709406, 0.496732, 0, 3, 0)
+
+[node name="Entorno" type="WorldEnvironment" parent="Margen/VBox/Vista/SubViewport"]
+environment = SubResource("Entorno")
+
+[node name="Pedestal" type="MeshInstance3D" parent="Margen/VBox/Vista/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+mesh = SubResource("Pedestal")
+material_override = SubResource("MatPedestal")
+
+[node name="Explorador" parent="Margen/VBox/Vista/SubViewport" instance=ExtResource("2_exp")]
+
+[node name="Scroll" type="ScrollContainer" parent="Margen/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Opciones" type="VBoxContainer" parent="Margen/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="BtnGuardar" type="Button" parent="Margen/VBox"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+text = "Guardar"

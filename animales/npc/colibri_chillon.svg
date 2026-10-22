@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<g stroke="#1d2a22" stroke-width="9" stroke-linejoin="round" stroke-linecap="round">
+  <!-- far wing -->
+  <path d="M250,224 C200,170 140,110 96,52 C150,64 220,110 276,196Z" fill="#cfe3dc"/>
+  <!-- near wing -->
+  <path d="M262,228 C252,160 250,90 268,30 C304,76 316,150 296,222Z" fill="#e8f3ef"/>
+  <path d="M272,60 C268,110 270,160 280,206 M130,76 C180,110 220,150 256,196" fill="none" stroke="#b2cbc3" stroke-width="6"/>
+  <path d="M86,90 C100,110 120,130 140,148 M310,48 C318,70 322,96 320,120" fill="none" stroke="#b2cbc3" stroke-width="5"/>
+  <!-- tail -->
+  <path d="M206,330 L118,424 C126,450 164,466 182,456 L244,356Z" fill="#2e8a4e"/>
+  <path d="M136,432 C150,446 166,452 180,450 L190,436 C170,438 154,432 144,420Z" fill="#1d3a2a" stroke="none"/>
+  <path d="M118,424 C126,450 164,466 182,456 L244,356 L206,330Z" fill="none"/>
+  <!-- body -->
+  <path d="M188,336 C178,272 218,216 280,200 C322,190 352,202 360,228 C370,262 340,312 290,342 C250,364 196,366 188,336Z" fill="#2fae5a"/>
+  <path d="M214,322 C220,284 246,250 282,234" fill="none" stroke="#6fd88a" stroke-width="10"/>
+  <!-- violet belly patch -->
+  <ellipse cx="282" cy="314" rx="34" ry="22" fill="#6a4fd0" transform="rotate(-30 282 314)"/>
+  <ellipse cx="276" cy="310" rx="14" ry="8" fill="#9a86f2" stroke="none" transform="rotate(-30 276 310)"/>
+  <!-- tiny feet -->
+  <path d="M240,350 L236,366 M256,346 L254,362" fill="none" stroke-width="6"/>
+  <!-- head -->
+  <circle cx="330" cy="186" r="46" fill="#2fae5a"/>
+  <path d="M300,160 C312,148 330,142 350,146" fill="none" stroke="#7fe29a" stroke-width="8"/>
+  <!-- violet ear patch -->
+  <path d="M330,186 C344,180 362,190 364,206 C358,224 334,232 310,222 C302,206 314,190 330,186Z" fill="#6a4fd0" stroke-width="6"/>
+  <path d="M322,200 C334,196 346,200 352,208" fill="none" stroke="#9a86f2" stroke-width="5"/>
+  <!-- eye -->
+  <circle cx="346" cy="176" r="7" fill="#0c0c0e" stroke="none"/>
+  <circle cx="343" cy="173" r="2.5" fill="#ffffff" stroke="none"/>
+  <!-- bill -->
+  <path d="M368,166 L494,132 L372,184Z" fill="#1d2a22"/>
+</g>
+</svg>

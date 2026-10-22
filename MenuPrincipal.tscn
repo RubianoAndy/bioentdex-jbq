@@ -1,44 +1,189 @@
 [gd_scene format=3 uid="uid://cvqo7i4r3yyux"]
 
 [ext_resource type="Script" uid="uid://8b0mqlutge6t" path="res://menu_principal.gd" id="1_0oe1n"]
+[ext_resource type="Texture2D" path="res://Gemini_Generated_Image_7sjxlu7sjxlu7sjx.jpg" id="2_fondo"]
+[ext_resource type="Shader" path="res://ui/nubes.gdshader" id="3_nub"]
 
-[node name="Control" type="Control" unique_id=242471054]
+[sub_resource type="FastNoiseLite" id="RuidoNubes"]
+frequency = 0.006
+fractal_octaves = 5
+
+[sub_resource type="NoiseTexture2D" id="TexturaNubes"]
+seamless = true
+noise = SubResource("RuidoNubes")
+
+[sub_resource type="ShaderMaterial" id="MaterialNubes"]
+shader = ExtResource("3_nub")
+shader_parameter/ruido = SubResource("TexturaNubes")
+shader_parameter/velocidad = 0.008
+shader_parameter/cobertura = 0.5
+shader_parameter/opacidad = 0.85
+shader_parameter/escala = Vector2(0.9, 1.4)
+shader_parameter/limite_inferior = 0.42
+
+[sub_resource type="Gradient" id="Degradado"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.03, 0.1, 0.07, 0, 0.03, 0.1, 0.07, 0.1, 0.03, 0.1, 0.07, 0.92)
+
+[sub_resource type="GradientTexture2D" id="TexturaDegradado"]
+gradient = SubResource("Degradado")
+fill_from = Vector2(0, 0)
+fill_to = Vector2(0, 1)
+
+[sub_resource type="SystemFont" id="FuenteTitulo"]
+font_names = PackedStringArray("Nunito", "Segoe UI", "Roboto", "Arial")
+font_weight = 800
+
+[sub_resource type="StyleBoxFlat" id="BotonPrincipal"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.78, 0.25, 1)
+border_width_bottom = 6
+border_color = Color(0.7, 0.45, 0.08, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="BotonPrincipalPresionado"]
+content_margin_left = 20.0
+content_margin_top = 15.0
+content_margin_right = 20.0
+content_margin_bottom = 9.0
+bg_color = Color(0.92, 0.66, 0.15, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[node name="Menu" type="Control" unique_id=242471054]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 script = ExtResource("1_0oe1n")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=962136737]
+[node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -90.5
-offset_top = -50.5
-offset_right = 90.5
-offset_bottom = 50.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
-theme_override_constants/separation = 20
+pivot_offset = Vector2(360, 640)
+texture = ExtResource("2_fondo")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Button" type="Button" parent="VBoxContainer" unique_id=293208603]
-custom_minimum_size = Vector2(250, 50)
-layout_mode = 2
-text = "Iniciar Expedición"
+[node name="Nubes" type="ColorRect" parent="."]
+material = SubResource("MaterialNubes")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Button2" type="Button" parent="VBoxContainer" unique_id=115040612]
-custom_minimum_size = Vector2(250, 50)
-layout_mode = 2
-text = "Guía Macrofotográfica"
+[node name="Degradado" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("TexturaDegradado")
+expand_mode = 1
 
-[node name="Button3" type="Button" parent="VBoxContainer" unique_id=1306340549]
-custom_minimum_size = Vector2(250, 50)
+[node name="Titulo" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 110.0
+offset_bottom = 330.0
+grow_horizontal = 2
+theme_override_constants/separation = 0
+
+[node name="Nombre" type="Label" parent="Titulo"]
 layout_mode = 2
-text = "Pokédex Ecológica"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.08, 0.27, 0.18, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.35)
+theme_override_constants/outline_size = 22
+theme_override_constants/shadow_offset_y = 6
+theme_override_fonts/font = SubResource("FuenteTitulo")
+theme_override_font_sizes/font_size = 104
+text = "Bioentdex"
+horizontal_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="Titulo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.88, 0.45, 1)
+theme_override_colors/font_outline_color = Color(0.08, 0.27, 0.18, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 32
+text = "Explora los humedales de Bogotá"
+horizontal_alignment = 1
+
+[node name="Saludo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -560.0
+offset_bottom = -510.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+
+[node name="Botones" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -270.0
+offset_top = -490.0
+offset_right = 270.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="BtnExpedicion" type="Button" parent="Botones"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.22, 0.15, 1)
+theme_override_colors/font_hover_color = Color(0.1, 0.22, 0.15, 1)
+theme_override_colors/font_pressed_color = Color(0.1, 0.22, 0.15, 1)
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("BotonPrincipal")
+theme_override_styles/hover = SubResource("BotonPrincipal")
+theme_override_styles/pressed = SubResource("BotonPrincipalPresionado")
+text = "Iniciar expedición"
+
+[node name="BtnBioentdex" type="Button" parent="Botones"]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+text = "Bioentdex"
+
+[node name="BtnGuia" type="Button" parent="Botones"]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+text = "Guía macrofotográfica"
+
+[node name="BtnPersonalizar" type="Button" parent="Botones"]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+text = "Personalizar explorador"

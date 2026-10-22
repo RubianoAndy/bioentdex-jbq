@@ -2,8 +2,40 @@
 
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
-[ext_resource type="Resource" path="res://especies/datos/aliso.tres" id="3_aliso"]
-[ext_resource type="Resource" path="res://especies/datos/mirla_patiamarilla.tres" id="4_mirla_patiamarilla"]
+[ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
+[ext_resource type="Resource" path="res://especies/datos/aliso.tres" id="4_aliso"]
+[ext_resource type="Resource" path="res://especies/datos/mirla_patiamarilla.tres" id="5_mirla_patiamarilla"]
+[ext_resource type="Resource" path="res://especies/datos/mariquita.tres" id="6_mariquita"]
+
+[sub_resource type="Resource" id="m1"]
+script = ExtResource("3_mis")
+id = "ronda_hidrica_1"
+tipo = 0
+enunciado = "¿Qué es la ronda hídrica?"
+opciones = PackedStringArray("La franja protegida alrededor del humedal", "Una carretera junto al agua", "Un tipo de pez")
+correcta = 0
+especie_id = ""
+explicacion = "Es una franja de protección: sus árboles y arbustos cuidan el agua y dan hogar a la fauna."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "ronda_hidrica_2"
+tipo = 0
+enunciado = "¿Por qué se siembran alisos en la ronda?"
+opciones = PackedStringArray("Porque mejoran el suelo y protegen la orilla", "Porque crecen dentro del agua", "Porque son invasores")
+correcta = 0
+especie_id = "aliso"
+explicacion = "El aliso es nativo, fija nitrógeno y sus raíces sostienen la orilla."
+
+[sub_resource type="Resource" id="m3"]
+script = ExtResource("3_mis")
+id = "ronda_hidrica_3"
+tipo = 1
+enunciado = "¿Qué ave es esta?"
+opciones = PackedStringArray("Mirla patiamarilla", "Garza blanca", "Copetón")
+correcta = 0
+especie_id = "mirla_patiamarilla"
+explicacion = "La mirla patiamarilla tiene el pico y las patas amarillo-naranja."
 
 [resource]
 script = ExtResource("1_zona")
@@ -13,4 +45,5 @@ descripcion = "La franja de árboles y arbustos que rodea y protege el humedal. 
 color = Color(0.1, 0.55, 0.3, 1)
 posicion = Vector2(-16.2, -12.1)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_aliso"), ExtResource("4_mirla_patiamarilla")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_aliso"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_mariquita")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

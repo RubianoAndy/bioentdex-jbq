@@ -2,7 +2,30 @@
 
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
-[ext_resource type="Resource" path="res://especies/datos/chucha.tres" id="3_chucha"]
+[ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
+[ext_resource type="Resource" path="res://especies/datos/chucha.tres" id="4_chucha"]
+[ext_resource type="Resource" path="res://especies/datos/copeton.tres" id="5_copeton"]
+[ext_resource type="Resource" path="res://especies/datos/mosca_domestica.tres" id="6_mosca_domestica"]
+
+[sub_resource type="Resource" id="m1"]
+script = ExtResource("3_mis")
+id = "urbana_1"
+tipo = 0
+enunciado = "¿Qué puedes hacer desde tu casa para proteger el humedal?"
+opciones = PackedStringArray("Botar el aceite por el lavaplatos", "Separar residuos y no botar basura en la calle", "Dejar sueltas a las mascotas en el humedal")
+correcta = 1
+especie_id = ""
+explicacion = "La basura y el aceite de la calle llegan al humedal por las alcantarillas."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "urbana_2"
+tipo = 1
+enunciado = "Este animal nativo es inofensivo. ¿Cuál es?"
+opciones = PackedStringArray("Rata parda", "Chucha", "Copetón")
+correcta = 1
+especie_id = "chucha"
+explicacion = "La chucha es un marsupial nativo: no la confundas con una rata."
 
 [resource]
 script = ExtResource("1_zona")
@@ -12,4 +35,5 @@ descripcion = "Donde la ciudad se encuentra con el humedal. Aun aquí vive fauna
 color = Color(0.4, 0.6, 0.8, 1)
 posicion = Vector2(19.5, 28.9)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_chucha")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_chucha"), ExtResource("5_copeton"), ExtResource("6_mosca_domestica")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2")])
