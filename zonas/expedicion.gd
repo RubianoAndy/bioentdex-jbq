@@ -2,7 +2,7 @@ extends Node
 ## Autoload "Expedicion": zonas del humedal y estado del recorrido al cambiar de escena.
 
 const CARPETA_ZONAS := "res://zonas/datos/"
-const POSICION_INICIAL := Vector3(-2.6, 0, 9.4)   # sendero al sur del mapa
+const POSICION_INICIAL := Vector3(0, 0, 44)   # entrada del sendero, al sur del mapa
 
 var zonas: Array[Zona] = []
 var zona_actual: Zona = null

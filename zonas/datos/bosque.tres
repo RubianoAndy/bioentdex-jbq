@@ -3,13 +3,14 @@
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
 [ext_resource type="Resource" path="res://especies/datos/colibri_chillon.tres" id="3_colibri_chillon"]
+[ext_resource type="Resource" path="res://especies/datos/mirla_patiamarilla.tres" id="4_mirla_patiamarilla"]
 
 [resource]
 script = ExtResource("1_zona")
 id = "bosque"
 nombre = "Zona de Bosque"
-descripcion = "Árboles y arbustos en la ronda del humedal, llenos de flores que visitan los colibríes."
+descripcion = "Árboles y arbustos en la ronda del humedal, llenos de flores y frutos que visitan las aves."
 color = Color(0.1, 0.55, 0.3, 1)
-posicion = Vector2(-8.6, -2.7)
-radio = 2.5
-especies = Array[ExtResource("2_esp")]([ExtResource("3_colibri_chillon")])
+posicion = Vector2(-32.8, -31.9)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_colibri_chillon"), ExtResource("4_mirla_patiamarilla")])

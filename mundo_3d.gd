@@ -6,7 +6,8 @@ signal zona_cercana_cambio(zona: Zona)   # null cuando el explorador sale de la 
 
 const MARCADOR_ZONA := preload("res://marcador_zona.gd")
 
-@export var textura_mapa: Texture2D
+## Máscara de colores que define el humedal (ver mapa/paleta_mapa.gd). Se puede repintar en Paint.
+@export var mascara: Texture2D
 @export var velocidad_teclado := 5.0       # con las flechas, para probar en el computador
 @export var sensibilidad_arrastre := 0.02  # unidades del mapa por cada píxel arrastrado
 @export var distancia_toque := 12.0        # píxeles: si el dedo se mueve menos, es un toque
@@ -24,14 +25,19 @@ var _toque_pendiente = null   # Vector2 o null; se procesa en _physics_process
 
 
 func _ready() -> void:
-	var mat := StandardMaterial3D.new()
-	mat.albedo_texture = textura_mapa
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	var tamano: Vector2 = suelo.mesh.size
+	var ruido := NoiseTexture2D.new()
+	ruido.seamless = true
+	ruido.noise = FastNoiseLite.new()
+	var mat := ShaderMaterial.new()
+	mat.shader = preload("res://mapa/suelo_humedal.gdshader")
+	mat.set_shader_parameter("mascara", mascara)
+	mat.set_shader_parameter("ruido", ruido)
+	mat.set_shader_parameter("tamano_mapa", tamano)
 	suelo.material_override = mat
+	$Vegetacion.generar(mascara, tamano, Expedicion.zonas)
 
 	# Límites del mapa según el tamaño del plano (con 1 unidad de margen)
-	var tamano: Vector2 = suelo.mesh.size
 	var limites := Rect2(-tamano / 2.0, tamano).grow(-1.0)
 	explorador.limites = limites
 	colibri.limites = limites

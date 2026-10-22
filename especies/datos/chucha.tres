@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 14
+id = "chucha"
+nombre_comun = "Chucha"
+nombre_cientifico = "Didelphis pernigra"
+tipo = 4
+estado_conservacion = 0
+descripcion = "Marsupial nocturno: la hembra carga a sus crías en una bolsa. Come insectos, frutos y pequeños animales, y ayuda a controlar plagas."
+consejo_macro = "Es nocturna y tímida: obsérvala de lejos, sin flash, y nunca la persigas."

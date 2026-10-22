@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/buchon_de_agua.tres" id="3_buchon_de_agua"]
+[ext_resource type="Resource" path="res://especies/datos/lenteja_de_agua.tres" id="4_lenteja_de_agua"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "flotantes"
+nombre = "Plantas Flotantes"
+descripcion = "Un rincón del lago cubierto de plantas que flotan. Algunas son invasoras y hay que controlarlas."
+color = Color(0.2, 0.75, 0.7, 1)
+posicion = Vector2(23.4, -13.1)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_buchon_de_agua"), ExtResource("4_lenteja_de_agua")])

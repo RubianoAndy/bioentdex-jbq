@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 12
+id = "abejorro"
+nombre_comun = "Abejorro"
+nombre_cientifico = "Bombus atratus"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Abejorro negro y peludo, uno de los grandes polinizadores de los Andes. Visita las flores de la pradera y de los cultivos."
+consejo_macro = "Elige una flor y espera a que llegue; enfoca la flor antes y dispara en ráfaga."

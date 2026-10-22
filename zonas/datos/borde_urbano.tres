@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/chucha.tres" id="3_chucha"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "borde_urbano"
+nombre = "Borde Urbano"
+descripcion = "Donde la ciudad se encuentra con el humedal. Aun aquí vive fauna que aprendió a convivir con las personas."
+color = Color(0.6, 0.6, 0.65, 1)
+posicion = Vector2(10.3, 52.5)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_chucha")])

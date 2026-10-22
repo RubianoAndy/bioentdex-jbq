@@ -3,9 +3,9 @@ extends Node3D
 ## Al tocarlo se registra en la Bioentdex y sale volando.
 
 @export var especie: Especie
-@export var velocidad := 7.0
+@export var velocidad := 9.0
 @export var altura := 2.2
-@export_range(0.0, 1.0) var prob_cerca_explorador := 0.35   # para que de vez en cuando pase cerca
+@export_range(0.0, 1.0) var prob_cerca_explorador := 0.5   # para que de vez en cuando pase cerca
 
 var limites := Rect2(-10, -10, 20, 20)   # el mapa lo ajusta al tamaño del suelo
 var explorador: Node3D

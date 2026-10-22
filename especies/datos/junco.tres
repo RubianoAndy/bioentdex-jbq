@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 13
+id = "junco"
+nombre_comun = "Junco"
+nombre_cientifico = "Schoenoplectus californicus"
+tipo = 6
+estado_conservacion = 0
+descripcion = "Planta de tallos largos y redondos que crece dentro del agua. Los muiscas lo usaban para tejer esteras y canastos."
+consejo_macro = "Busca las gotas de rocío sobre los tallos temprano en la mañana."

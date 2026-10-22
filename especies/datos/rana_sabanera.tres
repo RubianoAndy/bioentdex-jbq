@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 7
+id = "rana_sabanera"
+nombre_comun = "Rana sabanera"
+nombre_cientifico = "Dendropsophus molitor"
+tipo = 2
+estado_conservacion = 0
+descripcion = "Rana pequeña, verde o café, endémica de la cordillera Oriental de Colombia. Los machos cantan de noche desde la vegetación de las orillas."
+consejo_macro = "Búscala de noche con una linterna de luz cálida y fotografíala de lado para mostrar su silueta; no la toques."

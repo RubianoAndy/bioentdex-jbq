@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/junco.tres" id="3_junco"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "camellones"
+nombre = "Camellones Muiscas"
+descripcion = "Antiguos camellones: los muiscas alternaban franjas de tierra elevada y canales de agua para cultivar en el humedal."
+color = Color(0.75, 0.5, 0.25, 1)
+posicion = Vector2(-31.9, 38.4)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_junco")])

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 11
+id = "mirla_patiamarilla"
+nombre_comun = "Mirla patiamarilla"
+nombre_cientifico = "Turdus fuscater"
+tipo = 0
+estado_conservacion = 0
+descripcion = "Ave grande y café oscura, con el pico y las patas amarillo-naranja. Es de las aves más comunes de Bogotá y come frutos y lombrices."
+consejo_macro = "Espérala en el pasto húmedo de la mañana, cuando sale a buscar lombrices."

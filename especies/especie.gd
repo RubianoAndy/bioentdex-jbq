@@ -4,7 +4,7 @@ extends Resource
 ## (se crean desde el editor: clic derecho > Nuevo > Recurso > Especie).
 
 enum Tipo { AVE, INSECTO, ANFIBIO, REPTIL, MAMIFERO, PEZ, PLANTA }
-enum Estado { LC, NT, VU, EN, CR, DD }  # Categorías UICN
+enum Estado { LC, NT, VU, EN, CR, DD, NE }  # Categorías UICN
 
 const NOMBRES_TIPO := {
 	Tipo.AVE: "Ave",
@@ -23,6 +23,7 @@ const NOMBRES_ESTADO := {
 	Estado.EN: "En peligro",
 	Estado.CR: "En peligro crítico",
 	Estado.DD: "Datos insuficientes",
+	Estado.NE: "No evaluada",
 }
 
 @export var numero: int = 0              # orden en la Bioentdex (#001, #002...)

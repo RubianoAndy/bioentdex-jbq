@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 9
+id = "buchon_de_agua"
+nombre_comun = "Buchón de agua"
+nombre_cientifico = "Pontederia crassipes"
+tipo = 6
+estado_conservacion = 6
+descripcion = "Planta flotante de flores lilas. Es invasora: crece tan rápido que puede cubrir el agua y quitarle oxígeno al humedal."
+consejo_macro = "Enfoca el centro amarillo de la flor lila; un fondo de agua oscura hace que resalte."

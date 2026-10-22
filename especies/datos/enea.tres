@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 8
+id = "enea"
+nombre_comun = "Enea"
+nombre_cientifico = "Typha latifolia"
+tipo = 6
+estado_conservacion = 0
+descripcion = "Planta acuática alta con espigas cafés en forma de salchicha. Forma grandes colonias en las orillas y da refugio a muchas aves."
+consejo_macro = "Acércate a la espiga a contraluz al atardecer: se ven las fibras y las semillas algodonosas."

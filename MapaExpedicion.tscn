@@ -2,20 +2,21 @@
 
 [ext_resource type="Script" uid="uid://bbcegrt14g3n7" path="res://mapa_expedicion.gd" id="1_dxebk"]
 [ext_resource type="Script" uid="uid://467h6c4qhhvi" path="res://mundo_3d.gd" id="2_0crfa"]
-[ext_resource type="Texture2D" uid="uid://bdq2ubgct0s0j" path="res://Gemini_Generated_Image_e0zvwre0zvwre0zv.jpg" id="3_16l7u"]
+[ext_resource type="Texture2D" path="res://mapa/mascara_humedal.png" id="3_masc"]
+[ext_resource type="Script" path="res://mapa/vegetacion.gd" id="7_veg"]
 [ext_resource type="Texture2D" uid="uid://ces4rhnr750o7" path="res://nubes.png" id="4_rs8th"]
 [ext_resource type="PackedScene" path="res://Explorador.tscn" id="5_expl"]
 [ext_resource type="PackedScene" path="res://Colibri.tscn" id="6_coli"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_w0vpx"]
-size = Vector2(24, 43)
+size = Vector2(120, 120)
 
 [sub_resource type="Environment" id="Environment_w0vpx"]
 background_mode = 1
 background_color = Color(0.1882353, 0.40784314, 0.54901963, 0.92941177)
 fog_enabled = true
 fog_light_color = Color(0.1882353, 0.40784314, 0.54901963, 1)
-fog_density = 0.03
+fog_density = 0.02
 
 [sub_resource type="Animation" id="Animation_6i2eu"]
 length = 0.001
@@ -82,14 +83,14 @@ size = Vector2i(720, 1280)
 
 [node name="Mundo3D" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1308807492]
 script = ExtResource("2_0crfa")
-textura_mapa = ExtResource("3_16l7u")
+mascara = ExtResource("3_masc")
 
 [node name="Suelo" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Mundo3D" unique_id=270935750]
 mesh = SubResource("PlaneMesh_w0vpx")
 
 [node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Mundo3D" unique_id=1029941314]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 6, 7)
-far = 60.0
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 7, 8)
+far = 80.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Mundo3D" unique_id=1022272702]
 environment = SubResource("Environment_w0vpx")
@@ -97,10 +98,13 @@ environment = SubResource("Environment_w0vpx")
 [node name="Luz" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Mundo3D"]
 transform = Transform3D(0.866025, -0.409576, 0.286788, 0, 0.573576, 0.819152, -0.5, -0.709406, 0.496732, 0, 10, 0)
 
+[node name="Vegetacion" type="Node3D" parent="SubViewportContainer/SubViewport/Mundo3D"]
+script = ExtResource("7_veg")
+
 [node name="Explorador" parent="SubViewportContainer/SubViewport/Mundo3D" instance=ExtResource("5_expl")]
 
 [node name="Colibri" parent="SubViewportContainer/SubViewport/Mundo3D" instance=ExtResource("6_coli")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.2, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.2, 40)
 
 [node name="LienzoMapa" type="Control" parent="." unique_id=291822060]
 custom_minimum_size = Vector2(2880, 1280)
