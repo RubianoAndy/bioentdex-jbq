@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 21
+id = "sirfido"
+nombre_comun = "Mosca de las flores"
+nombre_cientifico = "Familia Syrphidae"
+familia = "Syrphidae"
+orden = "Diptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Imita a las abejas y avispas con rayas amarillas y negras, pero no pica."
+importancia = "Es excelente polinizadora; sus larvas controlan plagas y descomponen materia orgánica."
+consejo_macro = "Se queda suspendida en el aire frente a las flores: espera ese momento."
+pagina_guia = 43
+horario = 1
+movimiento = 4
+suelos_habitat = PackedInt32Array(5, 2, 11)
+tamano_en_mapa = 0.8

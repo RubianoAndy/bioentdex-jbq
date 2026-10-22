@@ -3,7 +3,8 @@ extends Control
 ## Las respuestas y las fotos se guardan en la base de datos de la Bioentdex.
 
 const CAPTURA := preload("res://captura/CapturaAR.tscn")
-const NOMBRES_TIPO := ["Pregunta", "¿Quién es?", "Foto"]
+const NOMBRES_TIPO := ["Pregunta", "¿Quién es?", "Foto", "Propuesta"]
+const DORADO := Color(1, 0.84, 0.3)
 ## Fondo simulado de la cámara para las misiones de foto de cada zona
 const FONDOS := {
 	"agua_abierta": "agua", "transicion": "agua", "avistamiento_aves": "agua",
@@ -31,9 +32,16 @@ func _construir() -> void:
 		hijo.queue_free()
 
 	var resueltas := zona.misiones.filter(func(m: Mision) -> bool: return RegistroEspecies.mision_resuelta(m.id)).size()
+	# Primero las misiones especiales (con bandera), luego las demás
+	var especiales := zona.misiones.filter(func(m: Mision) -> bool: return m.especial)
+	if not especiales.is_empty():
+		contenido.add_child(_titulo_seccion("Misión especial"))
+		for mision in especiales:
+			contenido.add_child(_tarjeta_mision(mision))
 	contenido.add_child(_titulo_seccion("Misiones (%d/%d)" % [resueltas, zona.misiones.size()]))
 	for mision in zona.misiones:
-		contenido.add_child(_tarjeta_mision(mision))
+		if not mision.especial:
+			contenido.add_child(_tarjeta_mision(mision))
 
 	contenido.add_child(_titulo_seccion("Especies de esta zona"))
 	var grilla := GridContainer.new()
@@ -55,8 +63,24 @@ func _tarjeta_mision(mision: Mision) -> Button:
 	tarjeta.text = "%s · %s\n%s" % [NOMBRES_TIPO[mision.tipo], "Resuelta" if resuelta else "Pendiente", mision.enunciado]
 	if resuelta:
 		tarjeta.modulate = Color(0.7, 1.0, 0.75)
+	if mision.especial:
+		_resaltar(tarjeta)
 	tarjeta.pressed.connect(_abrir_mision.bind(mision))
 	return tarjeta
+
+
+## Misión especial: bandera y borde dorado.
+static func _resaltar(tarjeta: Button) -> void:
+	if ResourceLoader.exists("res://ui/bandera.svg"):
+		tarjeta.icon = load("res://ui/bandera.svg")
+		tarjeta.expand_icon = true
+		tarjeta.add_theme_constant_override("icon_max_width", 56)
+	for estado in ["normal", "hover", "pressed"]:
+		var estilo: StyleBoxFlat = tarjeta.get_theme_stylebox(estado).duplicate()
+		estilo.bg_color = estilo.bg_color.lerp(Color(0.45, 0.32, 0.08), 0.55)
+		estilo.border_color = DORADO
+		estilo.set_border_width_all(4)
+		tarjeta.add_theme_stylebox_override(estado, estilo)
 
 
 func _tarjeta_especie(especie: Especie) -> Button:
@@ -113,7 +137,7 @@ func _abrir_mision(mision: Mision) -> void:
 	caja.add_theme_constant_override("separation", 14)
 	panel.add_child(caja)
 
-	caja.add_child(_etiqueta(NOMBRES_TIPO[mision.tipo], 24, Color(1, 0.84, 0.3)))
+	caja.add_child(_etiqueta(("Misión especial · " if mision.especial else "") + NOMBRES_TIPO[mision.tipo], 24, DORADO))
 	caja.add_child(_etiqueta(mision.enunciado, 30, Color.WHITE))
 
 	if mision.tipo == Mision.Tipo.IDENTIFICAR:
@@ -126,7 +150,20 @@ func _abrir_mision(mision: Mision) -> void:
 		caja.add_child(imagen)
 
 	var resultado := _etiqueta("", 24, Color.WHITE)
-	if mision.tipo == Mision.Tipo.FOTO:
+	if mision.tipo == Mision.Tipo.PROPUESTA:
+		var texto := TextEdit.new()
+		texto.placeholder_text = "Escribe aquí tu propuesta…"
+		texto.custom_minimum_size = Vector2(0, 300)
+		texto.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+		texto.add_theme_font_size_override("font_size", 24)
+		texto.text = RegistroEspecies.registro_mision(mision.id).get("respuesta", "")
+		caja.add_child(texto)
+		var enviar := Button.new()
+		enviar.text = "Guardar propuesta"
+		enviar.custom_minimum_size = Vector2(0, 68)
+		enviar.pressed.connect(_guardar_propuesta.bind(mision, texto, resultado))
+		caja.add_child(enviar)
+	elif mision.tipo == Mision.Tipo.FOTO:
 		var abrir := Button.new()
 		abrir.text = "Abrir cámara"
 		abrir.custom_minimum_size = Vector2(0, 72)
@@ -171,6 +208,15 @@ func _responder(mision: Mision, elegida: int, botones: Array[Button], resultado:
 		botones[elegida].modulate = Color(1.0, 0.5, 0.5)
 		botones[elegida].disabled = true
 		resultado.text = "No es correcto. Intenta de nuevo."
+
+
+func _guardar_propuesta(mision: Mision, texto: TextEdit, resultado: Label) -> void:
+	var propuesta := texto.text.strip_edges()
+	if propuesta.length() < 20:
+		resultado.text = "Cuéntanos un poco más: escribe al menos una o dos frases."
+		return
+	RegistroEspecies.registrar_mision(mision, zona.id, propuesta, true)
+	resultado.text = mision.explicacion
 
 
 func _tomar_foto_mision(mision: Mision, resultado: Label) -> void:

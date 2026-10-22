@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 13
+numero = 12
 id = "junco"
 nombre_comun = "Junco"
 nombre_cientifico = "Schoenoplectus californicus"
@@ -15,6 +15,7 @@ estado_conservacion = 0
 descripcion = "Planta de tallos largos y redondos que crece dentro del agua."
 importancia = "Sus raíces filtran el agua; los muiscas lo usaban para tejer esteras."
 consejo_macro = "Busca las gotas de rocío sobre los tallos temprano en la mañana."
+pagina_guia = 0
 horario = 0
 movimiento = 0
 suelos_habitat = PackedInt32Array()

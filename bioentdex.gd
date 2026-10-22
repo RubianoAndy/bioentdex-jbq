@@ -81,6 +81,14 @@ func _fila_mision(mision: Mision) -> Control:
 	else:
 		var estado := "Resuelta" if registro.correcta else "Sin resolver"
 		texto.text = "%s · %s\nTu respuesta: %s (%s)" % [estado, mision.enunciado, registro.respuesta, registro.fecha.substr(0, 10)]
+	if mision.especial and ResourceLoader.exists("res://ui/bandera.svg"):
+		var bandera := TextureRect.new()
+		bandera.texture = load("res://ui/bandera.svg")
+		bandera.custom_minimum_size = Vector2(44, 44)
+		bandera.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bandera.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		fila.add_child(bandera)
+		texto.add_theme_color_override("font_color", Color(1, 0.86, 0.4))
 	fila.add_child(texto)
 	var foto := RegistroEspecies.cargar_foto(registro.get("foto", ""))
 	if foto:

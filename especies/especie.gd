@@ -44,7 +44,9 @@ const NOMBRES_ESTADO := {
 @export_multiline var descripcion: String = ""    # muy corta: una frase
 @export_multiline var importancia: String = ""    # por qué es importante para el humedal
 @export var imagen: Texture2D                     # opcional: si está vacía se usa la de la convención
-@export_multiline var consejo_macro: String = ""  # se muestra en la Guía Macrofotográfica
+@export_multiline var consejo_macro: String = ""
+## Página de su familia en la guía macrofotográfica (0 = no está en la guía)
+@export var pagina_guia: int = 0
 
 @export_group("En el mapa")
 @export var horario: Horario = Horario.SIEMPRE

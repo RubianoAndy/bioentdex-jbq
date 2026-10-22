@@ -4,6 +4,7 @@ extends Node3D
 
 const ICONO_CAMARA := preload("res://ui/icono_camara.svg")
 const DORADO := Color(1.0, 0.82, 0.25)
+const ESCALA := 1.6   # en el mapa se ven más grandes que a escala real, como en Pokémon GO
 
 var especie: Especie
 var vida := 90.0          # segundos que se queda en el mapa
@@ -45,7 +46,7 @@ func _ready() -> void:
 	_sprite.texture = especie.imagen_mapa()
 	_sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	if _sprite.texture:
-		_sprite.pixel_size = especie.tamano_en_mapa / maxf(_sprite.texture.get_width(), _sprite.texture.get_height())
+		_sprite.pixel_size = especie.tamano_en_mapa * ESCALA / maxf(_sprite.texture.get_width(), _sprite.texture.get_height())
 	add_child(_sprite)
 
 	_icono = Sprite3D.new()

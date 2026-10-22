@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 32
+id = "ninfalida"
+nombre_comun = "Mariposa ninfálida"
+nombre_cientifico = "Familia Nymphalidae"
+familia = "Nymphalidae"
+orden = "Lepidoptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Parece tener solo 4 patas porque el primer par está reducido; alas de borde redondeado."
+importancia = "Es bioindicadora de la salud del ecosistema y ayuda a polinizar."
+consejo_macro = "Cuando abre las alas al sol, enfoca los ojos de sus alas."
+pagina_guia = 88
+horario = 1
+movimiento = 4
+suelos_habitat = PackedInt32Array(5, 3)
+tamano_en_mapa = 0.9

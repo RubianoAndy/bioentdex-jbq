@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 25
+id = "psocido"
+nombre_comun = "Piojo de la corteza"
+nombre_cientifico = "Familia Psocidae"
+familia = "Psocidae"
+orden = "Psocodea"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Insecto diminuto (1 a 10 mm) de cuerpo blando que vive en la corteza húmeda."
+importancia = "Descompone materia orgánica, controla hongos y es alimento de otros animales."
+consejo_macro = "Revisa la corteza húmeda de los árboles con una lupa."
+pagina_guia = 59
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(3, 8)
+tamano_en_mapa = 0.6

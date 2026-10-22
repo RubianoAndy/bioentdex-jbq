@@ -7,11 +7,13 @@
 [ext_resource type="Resource" path="res://especies/datos/pato_canadiense.tres" id="5_pato_canadiense"]
 [ext_resource type="Resource" path="res://especies/datos/garza_blanca.tres" id="6_garza_blanca"]
 [ext_resource type="Resource" path="res://especies/datos/libelula.tres" id="7_libelula"]
+[ext_resource type="Resource" path="res://especies/datos/caballito_del_diablo.tres" id="8_caballito_del_diablo"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
 id = "avistamiento_aves_1"
 tipo = 0
+especial = false
 enunciado = "¿Cuál es la mejor forma de observar aves?"
 opciones = PackedStringArray("Acercarse corriendo", "En silencio, con binoculares y a distancia", "Lanzándoles comida")
 correcta = 1
@@ -22,6 +24,7 @@ explicacion = "Si no las asustas, se comportan de forma natural y puedes verlas 
 script = ExtResource("3_mis")
 id = "avistamiento_aves_2"
 tipo = 1
+especial = false
 enunciado = "Este pato viaja miles de kilómetros. ¿Cuál es?"
 opciones = PackedStringArray("Pato canadiense", "Tingua de pico rojo", "Copetón")
 correcta = 0
@@ -32,6 +35,7 @@ explicacion = "El pato canadiense llega desde Norteamérica entre septiembre y a
 script = ExtResource("3_mis")
 id = "avistamiento_aves_3"
 tipo = 1
+especial = false
 enunciado = "¿Qué ave es esta?"
 opciones = PackedStringArray("Mirla patiamarilla", "Monjita bogotana", "Colibrí chillón")
 correcta = 1
@@ -44,7 +48,7 @@ id = "avistamiento_aves"
 nombre = "Zona de Avistamiento de Aves"
 descripcion = "Desde el mirador de madera se observan las aves sin molestarlas. ¡Trae binoculares y paciencia!"
 color = Color(0.6, 0.4, 0.9, 1)
-posicion = Vector2(27.4, -34.4)
-radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_monjita_bogotana"), ExtResource("5_pato_canadiense"), ExtResource("6_garza_blanca"), ExtResource("7_libelula")])
+posicion = Vector2(34.3, -43.0)
+radio = 5.0
+especies = Array[ExtResource("2_esp")]([ExtResource("4_monjita_bogotana"), ExtResource("5_pato_canadiense"), ExtResource("6_garza_blanca"), ExtResource("7_libelula"), ExtResource("8_caballito_del_diablo")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

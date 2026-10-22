@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 22
+id = "zancudo"
+nombre_comun = "Zancudo"
+nombre_cientifico = "Familia Culicidae"
+familia = "Culicidae"
+orden = "Diptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Insecto delgado de patas largas; solo las hembras pican, los machos no."
+importancia = "Sus larvas viven en el agua y alimentan a otros animales; las hembras pueden transmitir enfermedades."
+consejo_macro = "Fíjate en las antenas: las del macho son plumosas y las de la hembra delgadas."
+pagina_guia = 46
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(1, 0)
+tamano_en_mapa = 0.6

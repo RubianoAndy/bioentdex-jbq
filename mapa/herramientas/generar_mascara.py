@@ -9,8 +9,8 @@ import os
 import numpy as np
 from PIL import Image
 
-N = 512               # resolución de la máscara
-TAM_MAPA = 160.0      # tamaño del mapa en Godot (debe coincidir con el Suelo de MapaExpedicion.tscn)
+N = 640               # resolución de la máscara
+TAM_MAPA = 200.0      # tamaño del mapa en Godot (debe coincidir con el Suelo de MapaExpedicion.tscn)
 
 AGUA = (40, 90, 200); JUNCAL = (40, 120, 60); PASTO = (120, 190, 80); BOSQUE = (20, 80, 40)
 SENDERO = (160, 110, 60); PRADERA = (220, 200, 90); CALLE = (130, 130, 130); FLOTANTES = (60, 160, 160)

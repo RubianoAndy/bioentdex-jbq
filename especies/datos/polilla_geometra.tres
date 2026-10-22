@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 33
+id = "polilla_geometra"
+nombre_comun = "Polilla geómetra"
+nombre_cientifico = "Familia Geometridae"
+familia = "Geometridae"
+orden = "Lepidoptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Polilla nocturna de alas triangulares y gran camuflaje; su oruga avanza midiendo el camino."
+importancia = "Es polinizadora nocturna y bioindicadora del ecosistema."
+consejo_macro = "Búscala de noche cerca de las luces, o de día camuflada en la corteza."
+pagina_guia = 91
+horario = 2
+movimiento = 4
+suelos_habitat = PackedInt32Array(3, 2, 6)
+tamano_en_mapa = 0.8

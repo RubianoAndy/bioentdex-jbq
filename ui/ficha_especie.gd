@@ -67,8 +67,10 @@ func _ready() -> void:
 	datos.columns = 2
 	datos.add_theme_constant_override("h_separation", 16)
 	datos.add_theme_constant_override("v_separation", 6)
+	# Los insectos de la guía van a nivel de familia: no tienen una sola especie
+	var nombre_especie := "Varias especies" if _especie.nombre_cientifico.begins_with("Familia") else _especie.nombre_cientifico
 	for par in [["Tipo", _especie.nombre_tipo()], ["Orden", _especie.orden], ["Familia", _especie.familia],
-			["Especie", _especie.nombre_cientifico], ["Estado UICN", _especie.nombre_estado()]]:
+			["Especie", nombre_especie], ["Estado UICN", _especie.nombre_estado()]]:
 		var clave := _etiqueta(par[0], 22, Color(0.7, 0.8, 0.74))
 		clave.autowrap_mode = TextServer.AUTOWRAP_OFF
 		datos.add_child(clave)
@@ -79,10 +81,28 @@ func _ready() -> void:
 
 	contenido.add_child(_seccion("¿Por qué es importante?", _especie.importancia))
 	contenido.add_child(_seccion("Descripción", _especie.descripcion))
+	if not _especie.consejo_macro.is_empty():
+		contenido.add_child(_seccion("Consejo para fotografiarlo", _especie.consejo_macro))
 
 	var estado := _texto_estado()
 	if not estado.is_empty():
 		contenido.add_child(_etiqueta(estado, 20, Color(1, 0.84, 0.3), true))
+
+	# Enlaces a la guía macrofotográfica: la página de su familia y la de su orden
+	if _especie.pagina_guia > 0:
+		var familia := Button.new()
+		familia.text = "Ver la familia en la guía (pág. %d)" % _especie.pagina_guia
+		familia.custom_minimum_size = Vector2(0, 64)
+		familia.pressed.connect(func() -> void: VisorGuia.abrir(self, _especie.pagina_guia))
+		columna.add_child(familia)
+		var pagina_orden: int = VisorGuia.PAGINAS_ORDEN.get(_especie.orden, 0)
+		if pagina_orden > 0:
+			var orden := Button.new()
+			orden.text = "Ver el orden %s en la guía (pág. %d)" % [_especie.orden, pagina_orden]
+			orden.custom_minimum_size = Vector2(0, 56)
+			orden.add_theme_font_size_override("font_size", 22)
+			orden.pressed.connect(func() -> void: VisorGuia.abrir(self, pagina_orden))
+			columna.add_child(orden)
 
 	var cerrar := Button.new()
 	cerrar.text = "Cerrar"

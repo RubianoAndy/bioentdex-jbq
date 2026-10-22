@@ -3,7 +3,7 @@ extends Node3D
 ## No atraviesa agua, árboles ni casas: el Terreno le da las rutas y las colisiones.
 ## El modelo está hecho con figuras simples; se puede reemplazar por un modelo 3D dentro de "Modelo".
 
-@export var velocidad := 6.0
+@export var velocidad := 7.0
 
 var terreno: Terreno
 var _camino := PackedVector2Array()

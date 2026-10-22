@@ -8,21 +8,25 @@
 [ext_resource type="Resource" path="res://especies/datos/enea.tres" id="6_enea"]
 [ext_resource type="Resource" path="res://especies/datos/caballito_del_diablo.tres" id="7_caballito_del_diablo"]
 [ext_resource type="Resource" path="res://especies/datos/libelula.tres" id="8_libelula"]
+[ext_resource type="Resource" path="res://especies/datos/tipula.tres" id="9_tipula"]
+[ext_resource type="Resource" path="res://especies/datos/zancudo.tres" id="10_zancudo"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
 id = "transicion_1"
 tipo = 0
-enunciado = "¿Qué hacen los juncos y las eneas por el humedal?"
-opciones = PackedStringArray("Filtran el agua y dan refugio a la fauna", "Secan el humedal", "Solo sirven de adorno")
+especial = false
+enunciado = "¿Por qué las libélulas y los caballitos del diablo indican que el humedal está sano?"
+opciones = PackedStringArray("Porque sus ninfas solo viven en agua limpia", "Porque comen plantas", "Porque viven en la ciudad")
 correcta = 0
 especie_id = ""
-explicacion = "Sus raíces atrapan sedimentos y contaminantes, y entre sus tallos se esconden y anidan las aves."
+explicacion = "Sus ninfas pasan mucho tiempo en el agua: si está contaminada, no sobreviven."
 
 [sub_resource type="Resource" id="m2"]
 script = ExtResource("3_mis")
 id = "transicion_2"
 tipo = 1
+especial = false
 enunciado = "Esta ave está en peligro de extinción. ¿Cuál es?"
 opciones = PackedStringArray("Copetón", "Tingua bogotana", "Mirla patiamarilla")
 correcta = 1
@@ -33,6 +37,7 @@ explicacion = "La tingua bogotana solo vive en los humedales del altiplano cundi
 script = ExtResource("3_mis")
 id = "transicion_3"
 tipo = 1
+especial = false
 enunciado = "¿Qué animal es este?"
 opciones = PackedStringArray("Rana sabanera", "Lombriz roja", "Chucha")
 correcta = 0
@@ -43,6 +48,7 @@ explicacion = "La rana sabanera es endémica de la cordillera Oriental de Colomb
 script = ExtResource("3_mis")
 id = "transicion_4"
 tipo = 2
+especial = false
 enunciado = "Toma una foto de las eneas de la orilla."
 opciones = PackedStringArray()
 correcta = 0
@@ -53,9 +59,9 @@ explicacion = "Las eneas se reconocen por sus espigas cafés en forma de salchic
 script = ExtResource("1_zona")
 id = "transicion"
 nombre = "Zona de Transición"
-descripcion = "La franja entre el agua y la tierra firme. Juncos y eneas crecen en el barro y dan refugio a ranas y aves."
+descripcion = "La franja entre el agua y la tierra firme. Juncos y eneas crecen en el barro y dan refugio a ranas, aves e insectos."
 color = Color(0.55, 0.85, 0.25, 1)
-posicion = Vector2(-18.1, 16.9)
-radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_tingua_bogotana"), ExtResource("5_rana_sabanera"), ExtResource("6_enea"), ExtResource("7_caballito_del_diablo"), ExtResource("8_libelula")])
+posicion = Vector2(-22.7, 21.1)
+radio = 5.0
+especies = Array[ExtResource("2_esp")]([ExtResource("4_tingua_bogotana"), ExtResource("5_rana_sabanera"), ExtResource("6_enea"), ExtResource("7_caballito_del_diablo"), ExtResource("8_libelula"), ExtResource("9_tipula"), ExtResource("10_zancudo")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3"), SubResource("m4")])

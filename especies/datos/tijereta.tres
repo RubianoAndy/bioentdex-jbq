@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 36
+id = "tijereta"
+nombre_comun = "Tijereta"
+nombre_cientifico = "Familia Forficulidae"
+familia = "Forficulidae"
+orden = "Dermaptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Insecto aplanado con pinzas (cercos) al final del abdomen; sale de noche. No se mete en los oídos: es un mito."
+importancia = "Controla plagas y ayuda a descomponer la materia orgánica."
+consejo_macro = "Búscala bajo piedras y hojas secas; usa luz suave."
+pagina_guia = 103
+horario = 2
+movimiento = 4
+suelos_habitat = PackedInt32Array(8, 3)
+tamano_en_mapa = 0.7

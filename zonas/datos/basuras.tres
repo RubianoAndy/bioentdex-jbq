@@ -4,32 +4,47 @@
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
 [ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
 [ext_resource type="Resource" path="res://especies/datos/rata_parda.tres" id="4_rata_parda"]
-[ext_resource type="Resource" path="res://especies/datos/mosca_domestica.tres" id="5_mosca_domestica"]
+[ext_resource type="Resource" path="res://especies/datos/mosca_metalica.tres" id="5_mosca_metalica"]
+[ext_resource type="Resource" path="res://especies/datos/pececillo_plata.tres" id="6_pececillo_plata"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
 id = "basuras_1"
+tipo = 3
+especial = true
+enunciado = "Misión especial: propón una solución para manejar los residuos que llegan al humedal. ¿Qué harías tú, tu colegio o tu barrio?"
+opciones = PackedStringArray()
+correcta = 0
+especie_id = ""
+explicacion = "¡Gracias! Tu propuesta quedó guardada en tu Bioentdex. Separar en la fuente, reciclar, reducir el plástico y organizar jornadas de limpieza son buenas ideas."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "basuras_2"
 tipo = 0
+especial = false
 enunciado = "¿Qué animal invasor se multiplica donde hay basura?"
 opciones = PackedStringArray("Rata parda", "Tingua bogotana", "Rana sabanera")
 correcta = 0
 especie_id = "rata_parda"
 explicacion = "Las ratas encuentran comida y refugio en la basura, y desplazan a la fauna nativa."
 
-[sub_resource type="Resource" id="m2"]
+[sub_resource type="Resource" id="m3"]
 script = ExtResource("3_mis")
-id = "basuras_2"
+id = "basuras_3"
 tipo = 0
+especial = false
 enunciado = "¿Qué debes hacer con tu basura cuando visitas el humedal?"
 opciones = PackedStringArray("Dejarla en el pasto", "Llevarla contigo y separarla", "Tirarla al agua")
 correcta = 1
 especie_id = ""
 explicacion = "Llévate todo lo que traigas: un humedal limpio es un hogar para su fauna."
 
-[sub_resource type="Resource" id="m3"]
+[sub_resource type="Resource" id="m4"]
 script = ExtResource("3_mis")
-id = "basuras_3"
+id = "basuras_4"
 tipo = 2
+especial = false
 enunciado = "Toma una foto de la basura para reportarla."
 opciones = PackedStringArray()
 correcta = 0
@@ -42,7 +57,7 @@ id = "basuras"
 nombre = "Zona de Basuras Excesivas"
 descripcion = "Basura que botaron al humedal. Contamina el agua, atrae ratas y aleja a las especies nativas. ¡No botes basura!"
 color = Color(0.9, 0.25, 0.25, 1)
-posicion = Vector2(-44.5, 53.5)
-radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_rata_parda"), ExtResource("5_mosca_domestica")])
-misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])
+posicion = Vector2(-55.6, 66.9)
+radio = 5.0
+especies = Array[ExtResource("2_esp")]([ExtResource("4_rata_parda"), ExtResource("5_mosca_metalica"), ExtResource("6_pececillo_plata")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3"), SubResource("m4")])

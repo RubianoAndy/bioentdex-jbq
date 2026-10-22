@@ -7,21 +7,27 @@
 [ext_resource type="Resource" path="res://especies/datos/abejorro.tres" id="5_abejorro"]
 [ext_resource type="Resource" path="res://especies/datos/mariposa_blanca.tres" id="6_mariposa_blanca"]
 [ext_resource type="Resource" path="res://especies/datos/mariquita.tres" id="7_mariquita"]
+[ext_resource type="Resource" path="res://especies/datos/hormiga.tres" id="8_hormiga"]
+[ext_resource type="Resource" path="res://especies/datos/taquinido.tres" id="9_taquinido"]
+[ext_resource type="Resource" path="res://especies/datos/sirfido.tres" id="10_sirfido"]
+[ext_resource type="Resource" path="res://especies/datos/crisopa.tres" id="11_crisopa"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
 id = "terrestre_1"
-tipo = 1
-enunciado = "¿Qué ave es esta?"
-opciones = PackedStringArray("Copetón", "Monjita bogotana", "Tingua bogotana")
+tipo = 0
+especial = false
+enunciado = "La mosca de las flores tiene rayas como una abeja. ¿Por qué?"
+opciones = PackedStringArray("Para imitar a abejas y avispas y que no se la coman", "Porque es una abeja", "Para calentarse al sol")
 correcta = 0
-especie_id = "copeton"
-explicacion = "El copetón tiene un pequeño copete y un collar rojizo en la nuca."
+especie_id = ""
+explicacion = "Imitar a un insecto con aguijón la protege de sus depredadores, aunque ella no pica."
 
 [sub_resource type="Resource" id="m2"]
 script = ExtResource("3_mis")
 id = "terrestre_2"
 tipo = 0
+especial = false
 enunciado = "¿Por qué son importantes los abejorros?"
 opciones = PackedStringArray("Porque polinizan las flores", "Porque se comen las plantas", "Porque limpian el agua")
 correcta = 0
@@ -32,19 +38,20 @@ explicacion = "Al visitar las flores llevan el polen de una a otra, y así las p
 script = ExtResource("3_mis")
 id = "terrestre_3"
 tipo = 2
+especial = false
 enunciado = "Toma una foto de una flor silvestre de la pradera."
 opciones = PackedStringArray()
 correcta = 0
 especie_id = ""
-explicacion = "Las flores silvestres alimentan a abejorros, mariposas y colibríes."
+explicacion = "Las flores silvestres alimentan a abejorros, mariposas y moscas de las flores."
 
 [resource]
 script = ExtResource("1_zona")
 id = "terrestre"
 nombre = "Zona Terrestre"
-descripcion = "Tierra firme y seca, con pastos y flores donde buscan alimento las aves y los insectos."
+descripcion = "Tierra firme y seca, con pastos y flores donde buscan alimento aves e insectos."
 color = Color(0.95, 0.6, 0.3, 1)
-posicion = Vector2(21.1, 1.6)
-radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_copeton"), ExtResource("5_abejorro"), ExtResource("6_mariposa_blanca"), ExtResource("7_mariquita")])
+posicion = Vector2(26.4, 2.0)
+radio = 5.0
+especies = Array[ExtResource("2_esp")]([ExtResource("4_copeton"), ExtResource("5_abejorro"), ExtResource("6_mariposa_blanca"), ExtResource("7_mariquita"), ExtResource("8_hormiga"), ExtResource("9_taquinido"), ExtResource("10_sirfido"), ExtResource("11_crisopa")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

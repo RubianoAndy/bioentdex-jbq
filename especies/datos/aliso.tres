@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 16
+numero = 15
 id = "aliso"
 nombre_comun = "Aliso"
 nombre_cientifico = "Alnus acuminata"
@@ -14,7 +14,8 @@ tipo = 6
 estado_conservacion = 0
 descripcion = "Árbol nativo de los Andes que crece cerca del agua."
 importancia = "Fija nitrógeno y mejora el suelo; es ideal para restaurar la ronda."
-consejo_macro = "Busca sus amentos (las flores colgantes) y fotografíalos contra el cielo nublado."
+consejo_macro = "Busca sus amentos (las flores colgantes)."
+pagina_guia = 0
 horario = 0
 movimiento = 0
 suelos_habitat = PackedInt32Array()

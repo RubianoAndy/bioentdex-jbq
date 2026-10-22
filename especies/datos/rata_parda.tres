@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 19
+numero = 18
 id = "rata_parda"
 nombre_comun = "Rata parda"
 nombre_cientifico = "Rattus norvegicus"
@@ -14,7 +14,8 @@ tipo = 4
 estado_conservacion = 0
 descripcion = "Roedor introducido que vive donde se acumulan residuos."
 importancia = "Es invasora: se multiplica con la basura y transmite enfermedades."
-consejo_macro = "No te acerques ni la alimentes: fotografíala de lejos y documenta la basura que la atrae."
+consejo_macro = "No te acerques ni la alimentes: fotografíala de lejos."
+pagina_guia = 0
 horario = 0
 movimiento = 1
 suelos_habitat = PackedInt32Array(12)

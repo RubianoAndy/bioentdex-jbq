@@ -52,6 +52,18 @@ func _ready() -> void:
 	nombre.position.y = 2.6
 	add_child(nombre)
 
+	# Bandera si la zona tiene una misión especial pendiente
+	var especial_pendiente := zona.misiones.any(
+		func(m: Mision) -> bool: return m.especial and not RegistroEspecies.mision_resuelta(m.id))
+	if especial_pendiente and ResourceLoader.exists("res://ui/bandera.svg"):
+		var bandera := Sprite3D.new()
+		bandera.texture = load("res://ui/bandera.svg")
+		bandera.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		bandera.pixel_size = 1.4 / bandera.texture.get_width()
+		bandera.no_depth_test = true
+		bandera.position = Vector3(0.9, 2.3, 0)
+		add_child(bandera)
+
 	# Área para detectar el toque (ver mundo_3d.gd)
 	var area := Area3D.new()
 	var forma := CollisionShape3D.new()

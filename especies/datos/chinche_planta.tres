@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 24
+id = "chinche_planta"
+nombre_comun = "Chinche de las plantas"
+nombre_cientifico = "Familia Miridae"
+familia = "Miridae"
+orden = "Hemiptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Chinche pequeño, verde o marrón, de antenas largas; suelta olores para defenderse."
+importancia = "Algunas especies cazan plagas y otras ayudan a polinizar."
+consejo_macro = "Búscalo en los tallos y hojas; algunos imitan hormigas."
+pagina_guia = 55
+horario = 1
+movimiento = 4
+suelos_habitat = PackedInt32Array(2, 11, 3)
+tamano_en_mapa = 0.7

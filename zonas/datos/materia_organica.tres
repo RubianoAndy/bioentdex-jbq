@@ -4,45 +4,52 @@
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
 [ext_resource type="Script" path="res://zonas/mision.gd" id="3_mis"]
 [ext_resource type="Resource" path="res://especies/datos/lombriz_roja.tres" id="4_lombriz_roja"]
-[ext_resource type="Resource" path="res://especies/datos/mosca_domestica.tres" id="5_mosca_domestica"]
+[ext_resource type="Resource" path="res://especies/datos/mosca_metalica.tres" id="5_mosca_metalica"]
+[ext_resource type="Resource" path="res://especies/datos/pececillo_plata.tres" id="6_pececillo_plata"]
+[ext_resource type="Resource" path="res://especies/datos/tijereta.tres" id="7_tijereta"]
+[ext_resource type="Resource" path="res://especies/datos/hormiga.tres" id="8_hormiga"]
+[ext_resource type="Resource" path="res://especies/datos/psocido.tres" id="9_psocido"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
 id = "materia_organica_1"
+tipo = 3
+especial = true
+enunciado = "Misión especial: diseña un compostaje o lombricultivo para tu casa o tu colegio. ¿Qué residuos usarías, dónde lo pondrías y cómo lo cuidarías?"
+opciones = PackedStringArray()
+correcta = 0
+especie_id = ""
+explicacion = "¡Gracias! Tu propuesta quedó guardada en tu Bioentdex. Recuerda: solo residuos orgánicos (cáscaras, hojas, café), humedad y aire."
+
+[sub_resource type="Resource" id="m2"]
+script = ExtResource("3_mis")
+id = "materia_organica_2"
 tipo = 0
+especial = false
 enunciado = "¿Qué producen las lombrices en un lombricultivo?"
 opciones = PackedStringArray("Plástico", "Humus, un abono natural", "Agua potable")
 correcta = 1
 especie_id = "lombriz_roja"
 explicacion = "Las lombrices comen restos orgánicos y los convierten en humus, que alimenta el suelo."
 
-[sub_resource type="Resource" id="m2"]
+[sub_resource type="Resource" id="m3"]
 script = ExtResource("3_mis")
-id = "materia_organica_2"
+id = "materia_organica_3"
 tipo = 0
+especial = false
 enunciado = "¿Cuál de estos residuos sirve para hacer compost?"
 opciones = PackedStringArray("Cáscaras de frutas", "Pilas", "Bolsas plásticas")
 correcta = 0
 especie_id = ""
 explicacion = "Solo los residuos orgánicos se descomponen en compost. Las pilas y los plásticos contaminan."
 
-[sub_resource type="Resource" id="m3"]
-script = ExtResource("3_mis")
-id = "materia_organica_3"
-tipo = 2
-enunciado = "Toma una foto de la compostera."
-opciones = PackedStringArray()
-correcta = 0
-especie_id = ""
-explicacion = "El compost devuelve los nutrientes al suelo."
-
 [resource]
 script = ExtResource("1_zona")
 id = "materia_organica"
 nombre = "Zona de Materia Orgánica"
-descripcion = "Los restos de plantas se convierten en abono. En los lombricultivos, las lombrices transforman los residuos en humus."
+descripcion = "Los restos de plantas se convierten en abono. Lombrices, tijeretas y pececillos de plata ayudan a descomponerlos."
 color = Color(0.55, 0.35, 0.2, 1)
-posicion = Vector2(52.8, -24.6)
-radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_lombriz_roja"), ExtResource("5_mosca_domestica")])
+posicion = Vector2(66.0, -30.8)
+radio = 5.0
+especies = Array[ExtResource("2_esp")]([ExtResource("4_lombriz_roja"), ExtResource("5_mosca_metalica"), ExtResource("6_pececillo_plata"), ExtResource("7_tijereta"), ExtResource("8_hormiga"), ExtResource("9_psocido")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

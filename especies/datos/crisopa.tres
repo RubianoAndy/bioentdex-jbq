@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 37
+id = "crisopa"
+nombre_comun = "Crisopa"
+nombre_cientifico = "Familia Chrysopidae"
+familia = "Chrysopidae"
+orden = "Neuroptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Insecto verde de ojos dorados y alas transparentes más largas que su cuerpo."
+importancia = "Sus larvas devoran plagas de las plantas; de adulta también poliniza."
+consejo_macro = "Enfoca sus ojos dorados con un fondo oscuro."
+pagina_guia = 108
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(2, 5, 3)
+tamano_en_mapa = 0.8

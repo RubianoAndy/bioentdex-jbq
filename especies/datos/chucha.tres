@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 14
+numero = 13
 id = "chucha"
 nombre_comun = "Chucha"
 nombre_cientifico = "Didelphis pernigra"
@@ -14,7 +14,8 @@ tipo = 4
 estado_conservacion = 0
 descripcion = "Marsupial nocturno: la hembra carga a sus crías en una bolsa."
 importancia = "Come insectos, frutos y roedores, y ayuda a controlar plagas."
-consejo_macro = "Es nocturna y tímida: obsérvala de lejos, sin flash, y nunca la persigas."
+consejo_macro = "Obsérvala de lejos, sin flash, y nunca la persigas."
+pagina_guia = 0
 horario = 2
 movimiento = 1
 suelos_habitat = PackedInt32Array(6, 3)

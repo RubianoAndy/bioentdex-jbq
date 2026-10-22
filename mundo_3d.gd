@@ -9,7 +9,7 @@ const MARCADOR_ZONA := preload("res://marcador_zona.gd")
 ## Máscara de colores que define el humedal (ver mapa/paleta_mapa.gd). Se puede repintar en Paint.
 @export var mascara: Texture2D
 @export var velocidad_teclado := 5.0       # con las flechas, para probar en el computador
-@export var sensibilidad_arrastre := 0.02  # unidades del mapa por cada píxel arrastrado
+@export var sensibilidad_arrastre := 0.035  # unidades del mapa por cada píxel arrastrado
 @export var distancia_toque := 12.0        # píxeles: si el dedo se mueve menos, es un toque
 
 @onready var suelo: MeshInstance3D = $Suelo

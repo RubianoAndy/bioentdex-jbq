@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 38
+id = "pececillo_plata"
+nombre_comun = "Pececillo de plata"
+nombre_cientifico = "Familia Lepismatidae"
+familia = "Lepismatidae"
+orden = "Zygentoma"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Insecto sin alas, cubierto de escamas plateadas; existe hace unos 400 millones de años."
+importancia = "Descompone materia orgánica y produce abono; es alimento de tijeretas y otros animales."
+consejo_macro = "Huye de la luz: prepara la cámara antes de levantar la hoja."
+pagina_guia = 113
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(8, 6, 12)
+tamano_en_mapa = 0.6

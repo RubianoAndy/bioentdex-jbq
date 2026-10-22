@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 15
+numero = 14
 id = "kikuyo"
 nombre_comun = "Kikuyo"
 nombre_cientifico = "Cenchrus clandestinus"
@@ -14,7 +14,8 @@ tipo = 6
 estado_conservacion = 6
 descripcion = "Pasto africano que cubre gran parte de la sabana de Bogotá."
 importancia = "Es invasor: desplaza a las plantas nativas y seca las orillas."
-consejo_macro = "Fotografía de cerca el borde donde el kikuyo invade el juncal: así se entiende el problema."
+consejo_macro = "Fotografía el borde donde el kikuyo invade el juncal."
+pagina_guia = 0
 horario = 0
 movimiento = 0
 suelos_habitat = PackedInt32Array()

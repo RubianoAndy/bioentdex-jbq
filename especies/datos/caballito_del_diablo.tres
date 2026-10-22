@@ -4,17 +4,18 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 21
+numero = 27
 id = "caballito_del_diablo"
 nombre_comun = "Caballito del diablo"
 nombre_cientifico = "Ischnura sp."
-familia = "Coenagrionidae"
+familia = "Coenagrionidae (suborden Zygoptera)"
 orden = "Odonata"
 tipo = 1
 estado_conservacion = 6
-descripcion = "Insecto delgado y azul que pliega las alas sobre el cuerpo."
-importancia = "Caza insectos pequeños y, como la libélula, indica agua limpia."
+descripcion = "Delgado y de colores llamativos; al posarse pliega las alas sobre el cuerpo."
+importancia = "Caza otros insectos y sus ninfas acuáticas indican la salud del humedal."
 consejo_macro = "Acércate muy despacio por un lado y enfoca los ojos."
+pagina_guia = 68
 horario = 0
 movimiento = 4
 suelos_habitat = PackedInt32Array(1, 11)

@@ -6,11 +6,17 @@
 [ext_resource type="Resource" path="res://especies/datos/aliso.tres" id="4_aliso"]
 [ext_resource type="Resource" path="res://especies/datos/mirla_patiamarilla.tres" id="5_mirla_patiamarilla"]
 [ext_resource type="Resource" path="res://especies/datos/mariquita.tres" id="6_mariquita"]
+[ext_resource type="Resource" path="res://especies/datos/psocido.tres" id="7_psocido"]
+[ext_resource type="Resource" path="res://especies/datos/crisomelido.tres" id="8_crisomelido"]
+[ext_resource type="Resource" path="res://especies/datos/avispa.tres" id="9_avispa"]
+[ext_resource type="Resource" path="res://especies/datos/polilla_geometra.tres" id="10_polilla_geometra"]
+[ext_resource type="Resource" path="res://especies/datos/tijereta.tres" id="11_tijereta"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
 id = "ronda_hidrica_1"
 tipo = 0
+especial = false
 enunciado = "¿Qué es la ronda hídrica?"
 opciones = PackedStringArray("La franja protegida alrededor del humedal", "Una carretera junto al agua", "Un tipo de pez")
 correcta = 0
@@ -21,6 +27,7 @@ explicacion = "Es una franja de protección: sus árboles y arbustos cuidan el a
 script = ExtResource("3_mis")
 id = "ronda_hidrica_2"
 tipo = 0
+especial = false
 enunciado = "¿Por qué se siembran alisos en la ronda?"
 opciones = PackedStringArray("Porque mejoran el suelo y protegen la orilla", "Porque crecen dentro del agua", "Porque son invasores")
 correcta = 0
@@ -31,6 +38,7 @@ explicacion = "El aliso es nativo, fija nitrógeno y sus raíces sostienen la or
 script = ExtResource("3_mis")
 id = "ronda_hidrica_3"
 tipo = 1
+especial = false
 enunciado = "¿Qué ave es esta?"
 opciones = PackedStringArray("Mirla patiamarilla", "Garza blanca", "Copetón")
 correcta = 0
@@ -43,7 +51,7 @@ id = "ronda_hidrica"
 nombre = "Ronda Hídrica"
 descripcion = "La franja de árboles y arbustos que rodea y protege el humedal. Es un área protegida donde no se debe construir."
 color = Color(0.1, 0.55, 0.3, 1)
-posicion = Vector2(-16.2, -12.1)
-radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_aliso"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_mariquita")])
+posicion = Vector2(-20.3, -15.1)
+radio = 5.0
+especies = Array[ExtResource("2_esp")]([ExtResource("4_aliso"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_mariquita"), ExtResource("7_psocido"), ExtResource("8_crisomelido"), ExtResource("9_avispa"), ExtResource("10_polilla_geometra"), ExtResource("11_tijereta")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

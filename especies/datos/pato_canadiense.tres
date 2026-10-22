@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 17
+numero = 16
 id = "pato_canadiense"
 nombre_comun = "Pato canadiense"
 nombre_cientifico = "Spatula discors"
@@ -14,7 +14,8 @@ tipo = 0
 estado_conservacion = 0
 descripcion = "Pato migratorio que visita los humedales entre septiembre y abril."
 importancia = "Conecta ecosistemas: viaja miles de kilómetros desde Norteamérica."
-consejo_macro = "Desde el mirador, usa teleobjetivo y espera a que despegue para captar el azul de sus alas."
+consejo_macro = "Desde el mirador, espera a que despegue para captar el azul de sus alas."
+pagina_guia = 0
 horario = 0
 movimiento = 2
 suelos_habitat = PackedInt32Array(0)

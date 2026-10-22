@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 28
+id = "hormiga"
+nombre_comun = "Hormiga"
+nombre_cientifico = "Familia Formicidae"
+familia = "Formicidae"
+orden = "Hymenoptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Vive en colonias; tiene una cintura delgada (pecíolo) y antenas en forma de codo."
+importancia = "Al hacer hormigueros remueve el suelo y ayuda a drenar el agua; es bioindicadora."
+consejo_macro = "Sigue un camino de hormigas hasta encontrar a una quieta."
+pagina_guia = 74
+horario = 0
+movimiento = 4
+suelos_habitat = PackedInt32Array(2, 4, 5, 8)
+tamano_en_mapa = 0.6

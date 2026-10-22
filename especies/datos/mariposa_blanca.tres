@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 23
+numero = 31
 id = "mariposa_blanca"
 nombre_comun = "Mariposa blanca"
 nombre_cientifico = "Leptophobia aripa"
@@ -12,9 +12,10 @@ familia = "Pieridae"
 orden = "Lepidoptera"
 tipo = 1
 estado_conservacion = 6
-descripcion = "Mariposa blanca con bordes negros en las alas, muy común en Bogotá."
-importancia = "Poliniza flores y es alimento de muchas aves."
+descripcion = "Mariposa blanca de bordes negros; su oruga come repollo."
+importancia = "Poliniza flores y es indicadora del clima y la flora del ecosistema."
 consejo_macro = "Temprano en la mañana se mueve menos: aprovecha para acercarte."
+pagina_guia = 86
 horario = 1
 movimiento = 4
 suelos_habitat = PackedInt32Array(5, 2)

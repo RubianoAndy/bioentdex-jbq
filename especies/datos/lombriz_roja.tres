@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 18
+numero = 17
 id = "lombriz_roja"
 nombre_comun = "Lombriz roja californiana"
 nombre_cientifico = "Eisenia fetida"
@@ -15,6 +15,7 @@ estado_conservacion = 6
 descripcion = "Lombriz roja que se usa en los lombricultivos."
 importancia = "Convierte residuos orgánicos en humus, un abono natural."
 consejo_macro = "Fotografíala sobre el humus húmedo con luz suave."
+pagina_guia = 0
 horario = 0
 movimiento = 0
 suelos_habitat = PackedInt32Array(8)

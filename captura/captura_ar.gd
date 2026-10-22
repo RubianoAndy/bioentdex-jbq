@@ -11,7 +11,7 @@ signal foto_tomada(foto: Image)
 const INTENTOS := 3
 const RADIO_VISOR := 150.0
 ## Qué tan rápido revolotea cada insecto (1 = normal)
-const RAPIDEZ := {"mosca_domestica": 1.6, "libelula": 1.3, "caballito_del_diablo": 1.1, "mariquita": 0.6, "patinador": 0.7}
+const RAPIDEZ := {"mosca_metalica": 1.6, "zancudo": 1.5, "libelula": 1.3, "sirfido": 1.2, "caballito_del_diablo": 1.1, "mariquita": 0.6, "hormiga": 0.6, "psocido": 0.5, "pececillo_plata": 0.8, "tijereta": 0.6}
 
 var especie: Especie            # null = misión de foto
 var zona_id := ""

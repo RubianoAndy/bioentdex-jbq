@@ -9,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 script = ExtResource("1_guia")
 
 [node name="Fondo" type="ColorRect" parent="."]
@@ -18,48 +19,83 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.11, 0.2, 0.17, 1)
+color = Color(0.07, 0.13, 0.11, 1)
 
-[node name="Margen" type="MarginContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/separation = 0
 
-[node name="VBox" type="VBoxContainer" parent="Margen"]
+[node name="Encabezado" type="HBoxContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 
-[node name="Encabezado" type="HBoxContainer" parent="Margen/VBox"]
+[node name="Margen" type="Control" parent="VBox/Encabezado"]
+custom_minimum_size = Vector2(4, 0)
 layout_mode = 2
-theme_override_constants/separation = 16
 
-[node name="BtnVolver" type="Button" parent="Margen/VBox/Encabezado"]
-custom_minimum_size = Vector2(140, 56)
+[node name="BtnVolver" type="Button" parent="VBox/Encabezado"]
+custom_minimum_size = Vector2(140, 60)
 layout_mode = 2
-text = "← Menú"
+size_flags_vertical = 4
+text = "← Volver"
 
-[node name="Titulo" type="Label" parent="Margen/VBox/Encabezado"]
+[node name="Titulo" type="Label" parent="VBox/Encabezado"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 32
-text = "Guía Macrofotográfica"
+theme_override_font_sizes/font_size = 24
+text = "Guía macrofotográfica"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Scroll" type="ScrollContainer" parent="Margen/VBox"]
+[node name="BtnIndice" type="Button" parent="VBox/Encabezado"]
+custom_minimum_size = Vector2(130, 60)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Índice"
+
+[node name="Margen2" type="Control" parent="VBox/Encabezado"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+
+[node name="Area" type="Control" parent="VBox"]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
-horizontal_scroll_mode = 0
 
-[node name="Lista" type="VBoxContainer" parent="Margen/VBox/Scroll"]
+[node name="Pagina" type="TextureRect" parent="VBox/Area"]
+layout_mode = 0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 0
+
+[node name="Barra" type="HBoxContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="BtnAnterior" type="Button" parent="VBox/Barra"]
+custom_minimum_size = Vector2(150, 64)
+layout_mode = 2
+size_flags_vertical = 4
+text = "‹ Anterior"
+
+[node name="Numero" type="Label" parent="VBox/Barra"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnSiguiente" type="Button" parent="VBox/Barra"]
+custom_minimum_size = Vector2(150, 64)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Siguiente ›"

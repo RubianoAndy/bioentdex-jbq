@@ -2,6 +2,8 @@ extends Node3D
 ## Animal NPC (aves, ranas, mamíferos, lombrices...): vive en su zona y se mueve según su especie.
 ## No se captura: al tocarlo se abre su ficha y queda registrado como observado.
 
+const ESCALA := 1.3   # en el mapa se ven más grandes que a escala real
+
 var especie: Especie
 var terreno: Terreno
 var centro := Vector2.ZERO     # centro del área donde se mueve
@@ -31,7 +33,7 @@ func _ready() -> void:
 	_sprite.texture = textura
 	_sprite.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
 	if textura:
-		_sprite.pixel_size = especie.tamano_en_mapa / maxf(textura.get_width(), textura.get_height())
+		_sprite.pixel_size = especie.tamano_en_mapa * ESCALA / maxf(textura.get_width(), textura.get_height())
 		_alto = textura.get_height() * _sprite.pixel_size
 	add_child(_sprite)
 

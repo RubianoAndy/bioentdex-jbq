@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 22
+numero = 35
 id = "mariquita"
 nombre_comun = "Mariquita"
 nombre_cientifico = "Cycloneda sanguinea"
@@ -12,9 +12,10 @@ familia = "Coccinellidae"
 orden = "Coleoptera"
 tipo = 1
 estado_conservacion = 6
-descripcion = "Escarabajo pequeño, rojo y sin puntos en las alas."
-importancia = "Controla pulgones y otras plagas de forma natural."
+descripcion = "Escarabajo redondo de colores de alerta: avisan a los depredadores que es tóxica."
+importancia = "Come pulgones y protege los cultivos de forma natural."
 consejo_macro = "Fotografíala desde su altura, sobre una hoja."
+pagina_guia = 98
 horario = 0
 movimiento = 4
 suelos_habitat = PackedInt32Array(3, 2)

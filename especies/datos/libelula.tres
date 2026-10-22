@@ -4,17 +4,18 @@
 
 [resource]
 script = ExtResource("1_esp")
-numero = 20
+numero = 26
 id = "libelula"
 nombre_comun = "Libélula"
 nombre_cientifico = "Rhionaeschna marchali"
-familia = "Aeshnidae"
+familia = "Aeshnidae (suborden Anisoptera)"
 orden = "Odonata"
 tipo = 1
 estado_conservacion = 0
-descripcion = "Libélula grande y azul que patrulla sobre el agua."
-importancia = "Sus larvas solo viven en agua limpia: indica la salud del humedal. Además caza mosquitos."
+descripcion = "Ve 360° y es de los insectos más veloces; en reposo deja las alas abiertas."
+importancia = "Bioindicadora: sus ninfas necesitan agua limpia. De ninfa y de adulta controla mosquitos."
 consejo_macro = "Espera a que se pose en un tallo: suele volver al mismo sitio."
+pagina_guia = 65
 horario = 1
 movimiento = 4
 suelos_habitat = PackedInt32Array(1, 9)

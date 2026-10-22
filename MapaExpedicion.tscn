@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" path="res://Colibri.tscn" id="6_coli"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_w0vpx"]
-size = Vector2(160, 160)
+size = Vector2(200, 200)
 
 [sub_resource type="Environment" id="Environment_w0vpx"]
 background_mode = 1
@@ -20,7 +20,7 @@ ambient_light_color = Color(0.78, 0.82, 0.86, 1)
 ambient_light_energy = 0.7
 fog_enabled = true
 fog_light_color = Color(0.66, 0.71, 0.74, 1)
-fog_density = 0.008
+fog_density = 0.004
 
 [sub_resource type="FastNoiseLite" id="RuidoNubes"]
 frequency = 0.006
@@ -71,8 +71,8 @@ mascara = ExtResource("3_masc")
 mesh = SubResource("PlaneMesh_w0vpx")
 
 [node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Mundo3D" unique_id=1029941314]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0.8660254, 0, -0.8660254, 0.5, 0, 11, 6.5)
-far = 80.0
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.8660254, 0, -0.8660254, 0.5, 0, 19, 11)
+far = 120.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Mundo3D" unique_id=1022272702]
 environment = SubResource("Environment_w0vpx")

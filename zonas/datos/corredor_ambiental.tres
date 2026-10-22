@@ -7,11 +7,15 @@
 [ext_resource type="Resource" path="res://especies/datos/mirla_patiamarilla.tres" id="5_mirla_patiamarilla"]
 [ext_resource type="Resource" path="res://especies/datos/abejorro.tres" id="6_abejorro"]
 [ext_resource type="Resource" path="res://especies/datos/mariposa_blanca.tres" id="7_mariposa_blanca"]
+[ext_resource type="Resource" path="res://especies/datos/ninfalida.tres" id="8_ninfalida"]
+[ext_resource type="Resource" path="res://especies/datos/avispa.tres" id="9_avispa"]
+[ext_resource type="Resource" path="res://especies/datos/crisopa.tres" id="10_crisopa"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
 id = "corredor_ambiental_1"
 tipo = 0
+especial = false
 enunciado = "¿Para qué sirve un corredor ambiental?"
 opciones = PackedStringArray("Para que la fauna se mueva entre zonas verdes", "Para que pasen los carros", "Para guardar basura")
 correcta = 0
@@ -22,6 +26,7 @@ explicacion = "Sin corredores, los animales quedan atrapados en parches verdes a
 script = ExtResource("3_mis")
 id = "corredor_ambiental_2"
 tipo = 1
+especial = false
 enunciado = "¿Qué ave es esta?"
 opciones = PackedStringArray("Colibrí chillón", "Abejorro", "Mariposa blanca")
 correcta = 0
@@ -32,6 +37,7 @@ explicacion = "El colibrí chillón es verde brillante con manchas violeta en la
 script = ExtResource("3_mis")
 id = "corredor_ambiental_3"
 tipo = 2
+especial = false
 enunciado = "Toma una foto del corredor verde."
 opciones = PackedStringArray()
 correcta = 0
@@ -44,7 +50,7 @@ id = "corredor_ambiental"
 nombre = "Corredor Ambiental"
 descripcion = "Una franja verde que conecta el humedal con otros parques, para que aves e insectos puedan moverse por la ciudad."
 color = Color(0.3, 0.85, 0.6, 1)
-posicion = Vector2(5.7, -41.1)
-radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_colibri_chillon"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_abejorro"), ExtResource("7_mariposa_blanca")])
+posicion = Vector2(7.1, -51.3)
+radio = 5.0
+especies = Array[ExtResource("2_esp")]([ExtResource("4_colibri_chillon"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_abejorro"), ExtResource("7_mariposa_blanca"), ExtResource("8_ninfalida"), ExtResource("9_avispa"), ExtResource("10_crisopa")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

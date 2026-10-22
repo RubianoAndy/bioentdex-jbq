@@ -4,11 +4,14 @@ extends Resource
 ##   PREGUNTA:    pregunta con opciones.
 ##   IDENTIFICAR: muestra la imagen de la especie (especie_id) y hay que elegir cuál es.
 ##   FOTO:        tomar una foto con la cámara (se guarda en la base de datos).
+##   PROPUESTA:   escribir una propuesta o solución (texto libre).
+## Las misiones especiales se resaltan con una bandera en la zona y en el mapa.
 
-enum Tipo { PREGUNTA, IDENTIFICAR, FOTO }
+enum Tipo { PREGUNTA, IDENTIFICAR, FOTO, PROPUESTA }
 
 @export var id: String = ""
 @export var tipo: Tipo = Tipo.PREGUNTA
+@export var especial: bool = false
 @export_multiline var enunciado: String = ""
 @export var opciones: PackedStringArray = []
 @export var correcta: int = 0

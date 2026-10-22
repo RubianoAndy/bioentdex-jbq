@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 34
+id = "crisomelido"
+nombre_comun = "Escarabajo de las hojas"
+nombre_cientifico = "Familia Chrysomelidae"
+familia = "Chrysomelidae"
+orden = "Coleoptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Escarabajo ovalado de colores metálicos que vive sobre las hojas."
+importancia = "Controla malezas e indica la biodiversidad y la salud del ecosistema."
+consejo_macro = "Ponte del lado de la luz para que brille su color metálico."
+pagina_guia = 96
+horario = 1
+movimiento = 4
+suelos_habitat = PackedInt32Array(3, 2, 11)
+tamano_en_mapa = 0.7
