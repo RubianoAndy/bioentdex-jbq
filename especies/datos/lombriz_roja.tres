@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 18
+id = "lombriz_roja"
+nombre_comun = "Lombriz roja californiana"
+nombre_cientifico = "Eisenia fetida"
+tipo = 7
+estado_conservacion = 6
+descripcion = "Lombriz que transforma los restos orgánicos en humus, un abono natural. Se usa en los lombricultivos para aprovechar los residuos de plantas y de cocina."
+consejo_macro = "Fotografíala sobre el humus húmedo con luz suave; mójala apenas para que brille."

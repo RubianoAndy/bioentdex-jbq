@@ -3,7 +3,7 @@ extends Resource
 ## Ficha de una especie del humedal. Cada especie es un archivo .tres en res://especies/datos/
 ## (se crean desde el editor: clic derecho > Nuevo > Recurso > Especie).
 
-enum Tipo { AVE, INSECTO, ANFIBIO, REPTIL, MAMIFERO, PEZ, PLANTA }
+enum Tipo { AVE, INSECTO, ANFIBIO, REPTIL, MAMIFERO, PEZ, PLANTA, INVERTEBRADO }
 enum Estado { LC, NT, VU, EN, CR, DD, NE }  # Categorías UICN
 
 const NOMBRES_TIPO := {
@@ -14,6 +14,7 @@ const NOMBRES_TIPO := {
 	Tipo.MAMIFERO: "Mamífero",
 	Tipo.PEZ: "Pez",
 	Tipo.PLANTA: "Planta",
+	Tipo.INVERTEBRADO: "Invertebrado",
 }
 
 const NOMBRES_ESTADO := {

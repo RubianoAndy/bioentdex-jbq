@@ -7,10 +7,10 @@
 
 [resource]
 script = ExtResource("1_zona")
-id = "pradera"
-nombre = "Zona de Pradera"
-descripcion = "Pastos abiertos y flores, donde buscan semillas e insectos aves como el copetón."
-color = Color(0.95, 0.8, 0.3, 1)
-posicion = Vector2(31.4, 26.7)
+id = "terrestre"
+nombre = "Zona Terrestre"
+descripcion = "Tierra firme y seca, con pastos y flores donde buscan alimento las aves y los insectos."
+color = Color(0.95, 0.6, 0.3, 1)
+posicion = Vector2(21.1, 1.6)
 radio = 4.0
 especies = Array[ExtResource("2_esp")]([ExtResource("3_copeton"), ExtResource("4_abejorro")])

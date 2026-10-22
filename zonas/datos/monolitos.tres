@@ -6,10 +6,10 @@
 
 [resource]
 script = ExtResource("1_zona")
-id = "camellones"
-nombre = "Camellones Muiscas"
-descripcion = "Antiguos camellones: los muiscas alternaban franjas de tierra elevada y canales de agua para cultivar en el humedal."
-color = Color(0.75, 0.5, 0.25, 1)
-posicion = Vector2(-31.9, 38.4)
+id = "monolitos"
+nombre = "Zona de Monolitos Históricos"
+descripcion = "Piedras que recuerdan a los muiscas, quienes habitaron estos humedales mucho antes de que existiera la ciudad."
+color = Color(0.7, 0.7, 0.7, 1)
+posicion = Vector2(3.9, -18.2)
 radio = 4.0
 especies = Array[ExtResource("2_esp")]([ExtResource("3_junco")])

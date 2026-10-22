@@ -4,14 +4,14 @@
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
 [ext_resource type="Resource" path="res://especies/datos/tingua_pico_rojo.tres" id="3_tingua_pico_rojo"]
 [ext_resource type="Resource" path="res://especies/datos/garza_blanca.tres" id="4_garza_blanca"]
-[ext_resource type="Resource" path="res://especies/datos/rana_sabanera.tres" id="5_rana_sabanera"]
+[ext_resource type="Resource" path="res://especies/datos/lenteja_de_agua.tres" id="5_lenteja_de_agua"]
 
 [resource]
 script = ExtResource("1_zona")
-id = "acuatica"
-nombre = "Zona Acuática"
-descripcion = "El espejo de agua del humedal. Aquí nadan las aves acuáticas, pescan las garzas y cantan las ranas."
+id = "agua_abierta"
+nombre = "Zona de Agua Abierta"
+descripcion = "El espejo de agua del humedal, sin plantas encima. Aquí nadan y se alimentan las aves acuáticas."
 color = Color(0.2, 0.5, 0.95, 1)
-posicion = Vector2(-3.8, 11.3)
+posicion = Vector2(2.5, 5.3)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_tingua_pico_rojo"), ExtResource("4_garza_blanca"), ExtResource("5_rana_sabanera")])
+especies = Array[ExtResource("2_esp")]([ExtResource("3_tingua_pico_rojo"), ExtResource("4_garza_blanca"), ExtResource("5_lenteja_de_agua")])

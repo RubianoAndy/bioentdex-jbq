@@ -18,6 +18,7 @@ const MARCADOR_ZONA := preload("res://marcador_zona.gd")
 @onready var colibri: Node3D = $Colibri
 
 var zona_actual: Zona = null
+var terreno: Terreno
 var _offset_camara: Vector3
 var _inicio_toque := Vector2.ZERO
 var _es_arrastre := false
@@ -35,12 +36,14 @@ func _ready() -> void:
 	mat.set_shader_parameter("ruido", ruido)
 	mat.set_shader_parameter("tamano_mapa", tamano)
 	suelo.material_override = mat
-	$Vegetacion.generar(mascara, tamano, Expedicion.zonas)
 
-	# Límites del mapa según el tamaño del plano (con 1 unidad de margen)
-	var limites := Rect2(-tamano / 2.0, tamano).grow(-1.0)
-	explorador.limites = limites
-	colibri.limites = limites
+	# El terreno sabe por dónde se puede caminar; la vegetación y las zonas le agregan obstáculos
+	terreno = Terreno.new(mascara, tamano)
+	$Vegetacion.generar(terreno, Expedicion.zonas)
+	DecoracionZonas.decorar(self, Expedicion.zonas, terreno)
+	explorador.terreno = terreno
+
+	colibri.limites = Rect2(-tamano / 2.0, tamano).grow(-1.0)
 	colibri.explorador = explorador
 
 	for zona in Expedicion.zonas:

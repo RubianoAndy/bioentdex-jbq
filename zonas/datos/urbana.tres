@@ -6,10 +6,10 @@
 
 [resource]
 script = ExtResource("1_zona")
-id = "borde_urbano"
-nombre = "Borde Urbano"
+id = "urbana"
+nombre = "Zona Urbana"
 descripcion = "Donde la ciudad se encuentra con el humedal. Aun aquí vive fauna que aprendió a convivir con las personas."
-color = Color(0.6, 0.6, 0.65, 1)
-posicion = Vector2(10.3, 52.5)
+color = Color(0.4, 0.6, 0.8, 1)
+posicion = Vector2(19.5, 28.9)
 radio = 4.0
 especies = Array[ExtResource("2_esp")]([ExtResource("3_chucha")])

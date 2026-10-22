@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/colibri_chillon.tres" id="3_colibri_chillon"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "corredor_ambiental"
+nombre = "Corredor Ambiental"
+descripcion = "Una franja verde que conecta el humedal con otros parques, para que aves e insectos puedan moverse por la ciudad."
+color = Color(0.3, 0.85, 0.6, 1)
+posicion = Vector2(5.7, -41.1)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_colibri_chillon")])

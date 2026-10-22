@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/kikuyo.tres" id="3_kikuyo"]
+[ext_resource type="Resource" path="res://especies/datos/buchon_de_agua.tres" id="4_buchon_de_agua"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "neofita"
+nombre = "Zona Neófita"
+descripcion = "Aquí dominan plantas que llegaron de otros lugares, como el kikuyo y el buchón. Crecen tan rápido que desplazan a las plantas nativas."
+color = Color(0.85, 0.75, 0.2, 1)
+posicion = Vector2(-21.8, 35.7)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_kikuyo"), ExtResource("4_buchon_de_agua")])

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 17
+id = "pato_canadiense"
+nombre_comun = "Pato canadiense"
+nombre_cientifico = "Spatula discors"
+tipo = 0
+estado_conservacion = 0
+descripcion = "Pato migratorio que llega desde Norteamérica entre septiembre y abril. El macho tiene una media luna blanca en la cara y, al volar, ambos muestran un parche azul en el ala."
+consejo_macro = "Desde el mirador, usa teleobjetivo y espera a que despegue para captar el azul de sus alas."

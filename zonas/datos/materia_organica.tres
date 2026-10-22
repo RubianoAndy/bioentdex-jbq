@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/lombriz_roja.tres" id="3_lombriz_roja"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "materia_organica"
+nombre = "Zona de Materia Orgánica"
+descripcion = "Los restos de plantas se convierten en abono. En los lombricultivos, las lombrices transforman los residuos en humus para el suelo."
+color = Color(0.55, 0.35, 0.2, 1)
+posicion = Vector2(52.8, -24.6)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_lombriz_roja")])

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/rata_parda.tres" id="3_rata_parda"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "basuras"
+nombre = "Zona de Basuras Excesivas"
+descripcion = "Basura que botaron al humedal. Contamina el agua, atrae ratas y aleja a las especies nativas. ¡No botes basura!"
+color = Color(0.9, 0.25, 0.25, 1)
+posicion = Vector2(-44.5, 53.5)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_rata_parda")])

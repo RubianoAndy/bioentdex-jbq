@@ -2,15 +2,15 @@
 
 [ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
 [ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
-[ext_resource type="Resource" path="res://especies/datos/colibri_chillon.tres" id="3_colibri_chillon"]
+[ext_resource type="Resource" path="res://especies/datos/aliso.tres" id="3_aliso"]
 [ext_resource type="Resource" path="res://especies/datos/mirla_patiamarilla.tres" id="4_mirla_patiamarilla"]
 
 [resource]
 script = ExtResource("1_zona")
-id = "bosque"
-nombre = "Zona de Bosque"
-descripcion = "Árboles y arbustos en la ronda del humedal, llenos de flores y frutos que visitan las aves."
+id = "ronda_hidrica"
+nombre = "Ronda Hídrica"
+descripcion = "La franja de árboles y arbustos que rodea y protege el humedal. Es un área protegida donde no se debe construir."
 color = Color(0.1, 0.55, 0.3, 1)
-posicion = Vector2(-32.8, -31.9)
+posicion = Vector2(-16.2, -12.1)
 radio = 4.0
-especies = Array[ExtResource("2_esp")]([ExtResource("3_colibri_chillon"), ExtResource("4_mirla_patiamarilla")])
+especies = Array[ExtResource("2_esp")]([ExtResource("3_aliso"), ExtResource("4_mirla_patiamarilla")])

@@ -1,80 +1,102 @@
 extends Node3D
-## Llena el mapa con vegetación y edificios según la máscara de colores: eneas en el juncal,
-## árboles en el bosque, buchón en el agua, flores en la pradera y edificios en la ciudad.
-## Usa MultiMesh: miles de plantas con muy pocas llamadas de dibujo (importante en el celular).
+## Llena el mapa según la máscara: eneas y juncos en la transición, alisos, eucaliptos y sauces
+## en la ronda, buchón en el agua, kikuyo, basura y la ciudad (casas con tanque de agua).
+## Usa MultiMesh por bloques: miles de objetos con pocas llamadas de dibujo, y los bloques fuera
+## de la cámara no se dibujan (importante en el celular).
 
-const PASO := 2   # se revisa 1 de cada 2 píxeles de la máscara
+const PASO := 2                 # se revisa 1 de cada 2 píxeles de la máscara
+const TAM_BLOQUE := 40.0        # tamaño de cada bloque de MultiMesh
+const SEPARACION_CASAS := 8     # píxeles entre casa y casa
 
 ## Por cada tipo de suelo: [modelo, probabilidad de poner uno en cada punto revisado]
 const REGLAS := {
-	PaletaMapa.JUNCAL: [["enea", 0.30]],
-	PaletaMapa.BOSQUE: [["arbol", 0.10], ["arbusto", 0.06]],
-	PaletaMapa.PASTO: [["arbol", 0.006], ["arbusto", 0.012], ["flores", 0.02]],
-	PaletaMapa.PRADERA: [["flores", 0.08], ["arbusto", 0.004]],
+	PaletaMapa.JUNCAL: [["enea", 0.12], ["junco", 0.1]],
+	PaletaMapa.BOSQUE: [["aliso", 0.08], ["eucalipto", 0.03], ["sauce", 0.025], ["arbusto", 0.05]],
+	PaletaMapa.PASTO: [["aliso", 0.003], ["arbusto", 0.008], ["flores", 0.012]],
+	PaletaMapa.PRADERA: [["flores", 0.06]],
 	PaletaMapa.FLOTANTES: [["buchon", 0.35]],
-	PaletaMapa.AGUA: [["buchon", 0.004]],
-	PaletaMapa.CIUDAD: [["edificio", 0.012]],
+	PaletaMapa.AGUA: [["buchon", 0.003]],
+	PaletaMapa.KIKUYO: [["pasto_alto", 0.3]],
+	PaletaMapa.BASURAL: [["basura", 0.2], ["llanta", 0.03]],
 }
 
+## Objetos que no se pueden atravesar, con su radio
+const OBSTACULOS := {"aliso": 0.5, "eucalipto": 0.35, "sauce": 0.75}
+## Plantas que no se ponen encima de senderos, puentes ni calles
+const NO_EN_CAMINOS := ["aliso", "eucalipto", "sauce", "arbusto"]
+
 const COLORES_FLORES := [Color(1, 0.85, 0.2), Color(1, 1, 1), Color(0.75, 0.55, 0.95), Color(0.95, 0.35, 0.3)]
-const COLORES_EDIFICIOS := [Color(0.62, 0.32, 0.22), Color(0.7, 0.4, 0.28), Color(0.75, 0.75, 0.72), Color(0.85, 0.8, 0.68)]
+const COLORES_BASURA := [Color(0.1, 0.1, 0.1), Color(0.95, 0.95, 0.95), Color(0.2, 0.4, 0.85), Color(0.2, 0.6, 0.3)]
+# Casas bogotanas: casi todas de ladrillo, algunas pintadas
+const COLORES_CASAS := [
+	Color(0.62, 0.3, 0.2), Color(0.68, 0.36, 0.24), Color(0.58, 0.28, 0.2), Color(0.66, 0.4, 0.3),
+	Color(0.85, 0.82, 0.72), Color(0.9, 0.78, 0.55), Color(0.75, 0.8, 0.82),
+]
+const COLORES_TANQUES := [Color(0.15, 0.3, 0.7), Color(0.12, 0.12, 0.12)]
 
 
-func generar(mascara: Texture2D, tamano: Vector2, zonas: Array) -> void:
-	var img := mascara.get_image()
-	var ancho := img.get_width()
-	var alto := img.get_height()
-	var tam_pixel := tamano / Vector2(ancho, alto)
+func generar(terreno: Terreno, zonas: Array) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 2024   # semilla fija: el mapa siempre queda igual
-	var cache_clases := {}
-	var instancias := {}   # modelo -> [[Transform3D, Color], ...]
+	var celda := terreno.tamano_celda()
+	var instancias := {}   # "modelo|bloque" -> [[Transform3D, Color], ...]
 
-	for y in range(0, alto, PASO):
-		for x in range(0, ancho, PASO):
-			var clase := _clase(img, x, y, cache_clases)
+	for y in range(0, terreno.alto, PASO):
+		for x in range(0, terreno.ancho, PASO):
+			var clase := terreno.clase_celda(x, y)
+			if clase == PaletaMapa.MANZANA:
+				if x % SEPARACION_CASAS == 0 and y % SEPARACION_CASAS == 0 and _cabe_casa(terreno, x, y):
+					_agregar_casa(instancias, terreno.a_mundo(Vector2i(x, y)), rng)
+				continue
 			if not REGLAS.has(clase):
 				continue
 			for regla in REGLAS[clase]:
 				if rng.randf() >= regla[1]:
 					continue
 				var modelo: String = regla[0]
-				var pos := Vector2(x + rng.randf() * PASO, y + rng.randf() * PASO) * tam_pixel - tamano / 2.0
-				if _cerca_de_zona(pos, zonas, modelo == "arbol"):
+				var pos := terreno.a_mundo(Vector2i(x, y)) + Vector2(rng.randf() - 0.5, rng.randf() - 0.5) * PASO * celda
+				if _cerca_de_zona(pos, zonas, OBSTACULOS.has(modelo)):
 					break
-				if modelo in ["arbol", "arbusto"] and _clase_cerca(img, x, y, 6, PaletaMapa.SENDERO, cache_clases):
+				if modelo in NO_EN_CAMINOS and _camino_cerca(terreno, x, y):
 					break
-				# Edificios solo lejos del humedal, para que no tapen la vista
-				if modelo == "edificio" and _clase_cerca(img, x, y, 16, -PaletaMapa.CIUDAD, cache_clases):
-					break
-				if not instancias.has(modelo):
-					instancias[modelo] = []
-				instancias[modelo].append(_instancia(modelo, pos, rng))
+				var escala := rng.randf_range(0.8, 1.3)
+				var color := Color.WHITE
+				if modelo == "flores":
+					color = COLORES_FLORES[rng.randi() % COLORES_FLORES.size()]
+				elif modelo == "basura":
+					color = COLORES_BASURA[rng.randi() % COLORES_BASURA.size()]
+				_agregar(instancias, modelo, pos, Basis(Vector3.UP, rng.randf() * TAU).scaled(Vector3.ONE * escala), 0.0, color)
+				if OBSTACULOS.has(modelo):
+					terreno.bloquear_circulo(pos, OBSTACULOS[modelo] * escala)
 				break
 
-	for modelo in instancias:
-		_crear_multimesh(modelo, instancias[modelo])
+	for clave in instancias:
+		_crear_multimesh(clave.get_slice("|", 0), instancias[clave])
 
 
-func _instancia(modelo: String, pos: Vector2, rng: RandomNumberGenerator) -> Array:
-	var giro := Basis(Vector3.UP, rng.randf() * TAU)
-	var escala := Vector3.ONE * rng.randf_range(0.8, 1.3)
-	var color := Color.WHITE
-	match modelo:
-		"edificio":
-			escala = Vector3(rng.randf_range(2.0, 4.0), rng.randf_range(1.5, 4.0), rng.randf_range(2.0, 4.0))
-			giro = Basis()   # las cuadras van alineadas
-			color = COLORES_EDIFICIOS[rng.randi() % COLORES_EDIFICIOS.size()]
-		"flores":
-			color = COLORES_FLORES[rng.randi() % COLORES_FLORES.size()]
-	return [Transform3D(giro.scaled(escala), Vector3(pos.x, 0, pos.y)), color]
+func _agregar_casa(instancias: Dictionary, pos: Vector2, rng: RandomNumberGenerator) -> void:
+	var pisos: int = [1, 2, 2, 3, 3, 3, 4][rng.randi() % 7]
+	var alto_casa := pisos * 1.25
+	var color: Color = COLORES_CASAS[rng.randi() % COLORES_CASAS.size()]
+	_agregar(instancias, "casa", pos, Basis.from_scale(Vector3(2.3, alto_casa, 2.3)), 0.0, color)
+	if rng.randf() < 0.5:
+		var tanque := pos + Vector2(rng.randf_range(-0.6, 0.6), rng.randf_range(-0.6, 0.6))
+		_agregar(instancias, "tanque", tanque, Basis(), alto_casa, COLORES_TANQUES[rng.randi() % 2])
+
+
+func _agregar(instancias: Dictionary, modelo: String, pos: Vector2, base: Basis, altura: float, color: Color) -> void:
+	var bloque := Vector2i(((pos + Vector2.ONE * 1000.0) / TAM_BLOQUE).floor())
+	var clave := "%s|%d,%d" % [modelo, bloque.x, bloque.y]
+	if not instancias.has(clave):
+		instancias[clave] = []
+	instancias[clave].append([Transform3D(base, Vector3(pos.x, altura, pos.y)), color])
 
 
 func _crear_multimesh(modelo: String, lista: Array) -> void:
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
-	mm.use_colors = modelo in ["flores", "edificio"]
-	mm.mesh = ModelosMapa.crear(modelo)
+	mm.use_colors = modelo in ["flores", "casa", "tanque", "basura"]
+	mm.mesh = _malla(modelo)
 	mm.instance_count = lista.size()
 	for i in lista.size():
 		mm.set_instance_transform(i, lista[i][0])
@@ -84,23 +106,29 @@ func _crear_multimesh(modelo: String, lista: Array) -> void:
 	nodo.name = modelo.capitalize()
 	nodo.multimesh = mm
 	nodo.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	add_child(nodo)
+	add_child(nodo, true)
 
 
-func _clase(img: Image, x: int, y: int, cache: Dictionary) -> int:
-	var color := img.get_pixel(clampi(x, 0, img.get_width() - 1), clampi(y, 0, img.get_height() - 1))
-	if not cache.has(color):
-		cache[color] = PaletaMapa.clase(color)
-	return cache[color]
+var _mallas := {}
+func _malla(modelo: String) -> ArrayMesh:
+	if not _mallas.has(modelo):
+		_mallas[modelo] = ModelosMapa.crear(modelo)
+	return _mallas[modelo]
 
 
-## ¿Hay un píxel de esa clase a esa distancia (en 8 direcciones)? Con clase negativa busca
-## cualquier píxel que NO sea de esa clase (-PaletaMapa.CIUDAD = "algo que no es ciudad").
-func _clase_cerca(img: Image, x: int, y: int, radio: int, clase: int, cache: Dictionary) -> bool:
+## La casa cabe si toda su base cae dentro de la manzana.
+func _cabe_casa(terreno: Terreno, x: int, y: int) -> bool:
+	for d in [Vector2i(-4, -4), Vector2i(4, -4), Vector2i(-4, 4), Vector2i(4, 4)]:
+		if terreno.clase_celda(x + d.x, y + d.y) != PaletaMapa.MANZANA:
+			return false
+	return true
+
+
+func _camino_cerca(terreno: Terreno, x: int, y: int) -> bool:
 	for k in 9:
-		var d := Vector2i.ZERO if k == 8 else Vector2i(Vector2.from_angle(TAU * k / 8.0) * radio)
-		var encontrada := _clase(img, x + d.x, y + d.y, cache)
-		if (clase >= 0 and encontrada == clase) or (clase < 0 and encontrada != -clase):
+		var d := Vector2i.ZERO if k == 8 else Vector2i(Vector2.from_angle(TAU * k / 8.0) * 5.0)
+		var clase := terreno.clase_celda(x + d.x, y + d.y)
+		if clase in [PaletaMapa.SENDERO, PaletaMapa.PUENTE, PaletaMapa.CALLE]:
 			return true
 	return false
 
@@ -110,7 +138,7 @@ func _cerca_de_zona(pos: Vector2, zonas: Array, es_alto: bool) -> bool:
 	for zona in zonas:
 		var d: Vector2 = pos - zona.posicion
 		if es_alto and d.y > 0.0:
-			d.y *= 0.4
-		if d.length() < zona.radio + (2.5 if es_alto else 1.0):
+			d.y *= 0.5
+		if d.length() < zona.radio + (1.0 if es_alto else 0.5):
 			return true
 	return false

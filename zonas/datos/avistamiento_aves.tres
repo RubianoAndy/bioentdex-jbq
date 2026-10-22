@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/monjita_bogotana.tres" id="3_monjita_bogotana"]
+[ext_resource type="Resource" path="res://especies/datos/pato_canadiense.tres" id="4_pato_canadiense"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "avistamiento_aves"
+nombre = "Zona de Avistamiento de Aves"
+descripcion = "Desde el mirador de madera se observan las aves sin molestarlas. ¡Trae binoculares y paciencia!"
+color = Color(0.6, 0.4, 0.9, 1)
+posicion = Vector2(27.4, -34.4)
+radio = 4.0
+especies = Array[ExtResource("2_esp")]([ExtResource("3_monjita_bogotana"), ExtResource("4_pato_canadiense")])

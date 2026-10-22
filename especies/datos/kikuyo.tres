@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 15
+id = "kikuyo"
+nombre_comun = "Kikuyo"
+nombre_cientifico = "Cenchrus clandestinus"
+tipo = 6
+estado_conservacion = 6
+descripcion = "Pasto africano introducido que cubre gran parte de la sabana de Bogotá. Crece de forma tan agresiva que desplaza a las plantas nativas y seca las orillas de los humedales."
+consejo_macro = "Fotografía de cerca el borde donde el kikuyo invade el juncal: así se entiende el problema."
