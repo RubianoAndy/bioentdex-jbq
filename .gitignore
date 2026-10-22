@@ -1,0 +1,30 @@
+# Godot 4+ (caché del editor e importaciones; se regenera al abrir el proyecto)
+.godot/
+/android/
+
+# Exportaciones / builds
+/build/
+/export/
+*.apk
+*.aab
+*.exe
+*.pck
+*.zip
+
+# Credenciales de exportación (keystores, contraseñas)
+export_credentials.cfg
+*.keystore
+*.jks
+
+# Mono / C# (por si se usa más adelante)
+.mono/
+data_*/
+mono_crash.*.json
+
+# Editores / sistema operativo
+.vscode/
+.idea/
+*.tmp
+Thumbs.db
+Desktop.ini
+.DS_Store
