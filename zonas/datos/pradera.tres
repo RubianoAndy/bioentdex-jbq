@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/copeton.tres" id="3_copeton"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "pradera"
+nombre = "Zona de Pradera"
+descripcion = "Pastos abiertos alrededor del humedal, donde aves como el copetón buscan semillas e insectos."
+color = Color(0.95, 0.8, 0.3, 1)
+posicion = Vector2(7.4, 6.6)
+radio = 2.5
+especies = Array[ExtResource("2_esp")]([ExtResource("3_copeton")])

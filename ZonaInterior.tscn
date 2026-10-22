@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://zona_interior.gd" id="1_zona"]
+
+[node name="ZonaInterior" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_zona")
+
+[node name="Fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.11, 0.2, 0.17, 1)
+
+[node name="Margen" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margen"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Encabezado" type="HBoxContainer" parent="Margen/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BtnVolver" type="Button" parent="Margen/VBox/Encabezado"]
+custom_minimum_size = Vector2(140, 56)
+layout_mode = 2
+text = "← Mapa"
+
+[node name="Titulo" type="Label" parent="Margen/VBox/Encabezado"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Descripcion" type="Label" parent="Margen/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Escenario" type="Control" parent="Margen/VBox"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Pista" type="Label" parent="Margen/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 22
+text = "Toca los ? para descubrir las especies de esta zona"
+horizontal_alignment = 1
+autowrap_mode = 3

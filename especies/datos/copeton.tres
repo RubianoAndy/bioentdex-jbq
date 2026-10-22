@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 6
+id = "copeton"
+nombre_comun = "Copetón"
+nombre_cientifico = "Zonotrichia capensis"
+tipo = 0
+estado_conservacion = 0
+descripcion = "Pequeño gorrión con copete y un collar rojizo en la nuca. Es muy común en los prados y parques de Bogotá, donde busca semillas en el suelo."
+consejo_macro = "Agáchate a su altura cuando busque semillas en el pasto; con el fondo lejano y desenfocado, el copete resalta."

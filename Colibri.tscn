@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://colibri_npc.gd" id="1_npc"]
+[ext_resource type="Texture2D" uid="uid://ch1bqqwrsbv12" path="res://pngtree-watercolor-humming-bird-png-image_14906044.png" id="2_img"]
+[ext_resource type="Resource" path="res://especies/datos/colibri_chillon.tres" id="3_esp"]
+
+[sub_resource type="SphereShape3D" id="Forma_toque"]
+radius = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_sombra"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 0.3)
+
+[sub_resource type="CylinderMesh" id="Mesh_sombra"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.01
+
+[node name="Colibri" type="Node3D"]
+script = ExtResource("1_npc")
+especie = ExtResource("3_esp")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+pixel_size = 0.0005
+billboard = 1
+texture = ExtResource("2_img")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("Forma_toque")
+
+[node name="Sombra" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_sombra")
+material_override = SubResource("Mat_sombra")

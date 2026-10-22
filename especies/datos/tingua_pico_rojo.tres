@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 4
+id = "tingua_pico_rojo"
+nombre_comun = "Tingua de pico rojo"
+nombre_cientifico = "Gallinula galeata"
+tipo = 0
+estado_conservacion = 0
+descripcion = "Ave acuática de plumaje gris oscuro con escudo frontal y pico rojos con la punta amarilla. Nada entre la vegetación flotante moviendo la cabeza hacia adelante y atrás."
+consejo_macro = "Fotografíala a ras del agua, desde la orilla y lo más bajo posible: el reflejo hace la foto."

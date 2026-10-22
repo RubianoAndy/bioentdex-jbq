@@ -3,20 +3,19 @@
 [ext_resource type="Script" uid="uid://bbcegrt14g3n7" path="res://mapa_expedicion.gd" id="1_dxebk"]
 [ext_resource type="Script" uid="uid://467h6c4qhhvi" path="res://mundo_3d.gd" id="2_0crfa"]
 [ext_resource type="Texture2D" uid="uid://bdq2ubgct0s0j" path="res://Gemini_Generated_Image_e0zvwre0zvwre0zv.jpg" id="3_16l7u"]
-[ext_resource type="Texture2D" uid="uid://ch1bqqwrsbv12" path="res://pngtree-watercolor-humming-bird-png-image_14906044.png" id="3_efl8j"]
 [ext_resource type="Texture2D" uid="uid://ces4rhnr750o7" path="res://nubes.png" id="4_rs8th"]
-[ext_resource type="Script" path="res://especie_en_mapa.gd" id="5_espm"]
-[ext_resource type="Resource" path="res://especies/datos/colibri_chillon.tres" id="6_coli"]
+[ext_resource type="PackedScene" path="res://Explorador.tscn" id="5_expl"]
+[ext_resource type="PackedScene" path="res://Colibri.tscn" id="6_coli"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_w0vpx"]
-size = Vector2(80, 80)
+size = Vector2(24, 43)
 
 [sub_resource type="Environment" id="Environment_w0vpx"]
 background_mode = 1
 background_color = Color(0.1882353, 0.40784314, 0.54901963, 0.92941177)
 fog_enabled = true
 fog_light_color = Color(0.1882353, 0.40784314, 0.54901963, 1)
-fog_density = 0.045
+fog_density = 0.03
 
 [sub_resource type="Animation" id="Animation_6i2eu"]
 length = 0.001
@@ -95,6 +94,14 @@ far = 60.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Mundo3D" unique_id=1022272702]
 environment = SubResource("Environment_w0vpx")
 
+[node name="Luz" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Mundo3D"]
+transform = Transform3D(0.866025, -0.409576, 0.286788, 0, 0.573576, 0.819152, -0.5, -0.709406, 0.496732, 0, 10, 0)
+
+[node name="Explorador" parent="SubViewportContainer/SubViewport/Mundo3D" instance=ExtResource("5_expl")]
+
+[node name="Colibri" parent="SubViewportContainer/SubViewport/Mundo3D" instance=ExtResource("6_coli")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.2, 6)
+
 [node name="LienzoMapa" type="Control" parent="." unique_id=291822060]
 custom_minimum_size = Vector2(2880, 1280)
 clip_contents = true
@@ -124,20 +131,9 @@ offset_top = -593.0
 offset_right = 194.00317
 offset_bottom = -472.99805
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("4_rs8th")
 expand_mode = 1
-
-[node name="avehumedal" type="TextureRect" parent="LienzoMapa/CapaPaisaje" unique_id=35761081]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 291.0
-offset_top = 304.0
-offset_right = 371.0
-offset_bottom = 384.0
-texture = ExtResource("3_efl8j")
-expand_mode = 1
-script = ExtResource("5_espm")
-especie = ExtResource("6_coli")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="LienzoMapa/CapaPaisaje" unique_id=22434280]
 libraries/ = SubResource("AnimationLibrary_roqfa")
@@ -145,8 +141,48 @@ autoplay = &"mover_nubes"
 
 [node name="BtnRegresar" type="Button" parent="." unique_id=84325627]
 layout_mode = 1
-offset_right = 124.0
-offset_bottom = 31.0
-text = "Volver al Menú"
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 196.0
+offset_bottom = 72.0
+text = "← Menú"
+
+[node name="PanelZona" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -128.0
+offset_right = -16.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margen" type="MarginContainer" parent="PanelZona"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBox" type="HBoxContainer" parent="PanelZona/Margen"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="NombreZona" type="Label" parent="PanelZona/Margen/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BtnEntrar" type="Button" parent="PanelZona/Margen/HBox"]
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Entrar"
 
 [connection signal="pressed" from="BtnRegresar" to="." method="_on_btn_regresar_pressed"]

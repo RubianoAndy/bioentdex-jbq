@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 5
+id = "garza_blanca"
+nombre_comun = "Garza blanca"
+nombre_cientifico = "Ardea alba"
+tipo = 0
+estado_conservacion = 0
+descripcion = "Garza grande y completamente blanca, con pico amarillo y patas negras. Pesca peces y ranas caminando despacio en aguas poco profundas."
+consejo_macro = "Su plumaje blanco se quema con facilidad: baja un poco la exposición y aprovecha los días nublados."

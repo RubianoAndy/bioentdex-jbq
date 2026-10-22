@@ -1,58 +1,111 @@
 extends Node3D
+## Mapa del humedal estilo Google Maps: el explorador camina por el mapa y la cámara lo sigue.
+## Toca el suelo para caminar hasta ahí, toca una zona para ir a ella, arrastra para mover el mapa.
+
+signal zona_cercana_cambio(zona: Zona)   # null cuando el explorador sale de la zona
+
+const MARCADOR_ZONA := preload("res://marcador_zona.gd")
 
 @export var textura_mapa: Texture2D
-@export var repeticiones := 3.0
-@export var velocidad_caminata := 6.0      # velocidad con las flechas del teclado
-@export var sensibilidad_arrastre := 0.05  # cuánto avanza por cada píxel que arrastras
-@export_range(0.0, 0.9) var recorte_superior := 0.4   # fracción de arriba que se descarta (el cielo)
+@export var velocidad_teclado := 5.0       # con las flechas, para probar en el computador
+@export var sensibilidad_arrastre := 0.02  # unidades del mapa por cada píxel arrastrado
+@export var distancia_toque := 12.0        # píxeles: si el dedo se mueve menos, es un toque
 
 @onready var suelo: MeshInstance3D = $Suelo
-var mat := StandardMaterial3D.new()
-var tamano_suelo := 80.0   # el mismo Size que le pusiste al PlaneMesh
+@onready var camara: Camera3D = $Camera3D
+@onready var explorador: Node3D = $Explorador
+@onready var colibri: Node3D = $Colibri
+
+var zona_actual: Zona = null
+var _offset_camara: Vector3
+var _inicio_toque := Vector2.ZERO
+var _es_arrastre := false
+var _toque_pendiente = null   # Vector2 o null; se procesa en _physics_process
+
 
 func _ready() -> void:
-	mat.albedo_texture = _tile_sin_costuras(textura_mapa)
+	var mat := StandardMaterial3D.new()
+	mat.albedo_texture = textura_mapa
 	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-	mat.uv1_scale = Vector3(repeticiones, repeticiones, 1)
 	suelo.material_override = mat
 
-# Esta función es la que "mueve al personaje" por el mapa.
-# x = derecha, y = hacia abajo en pantalla (caminar hacia adelante es y negativo)
-func caminar(movimiento: Vector2) -> void:
-	var k := repeticiones / tamano_suelo
-	mat.uv1_offset.x += movimiento.x * k
-	mat.uv1_offset.y += movimiento.y * k
+	# Límites del mapa según el tamaño del plano (con 1 unidad de margen)
+	var tamano: Vector2 = suelo.mesh.size
+	var limites := Rect2(-tamano / 2.0, tamano).grow(-1.0)
+	explorador.limites = limites
+	colibri.limites = limites
+	colibri.explorador = explorador
+
+	for zona in Expedicion.zonas:
+		var marcador := MARCADOR_ZONA.new()
+		marcador.configurar(zona)
+		add_child(marcador)
+
+	# La cámara conserva la distancia que tiene en el editor respecto al explorador
+	_offset_camara = camara.position - explorador.position
+	explorador.position = Expedicion.posicion_explorador
+	camara.position = explorador.position + _offset_camara
+
 
 func _process(delta: float) -> void:
-	# Flechas del teclado, para probar en el computador
 	var dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	if dir != Vector2.ZERO:
-		caminar(dir * velocidad_caminata * delta)
+		explorador.mover(Vector3(dir.x, 0, dir.y) * velocidad_teclado * delta)
+
+	camara.position = camara.position.lerp(explorador.position + _offset_camara, minf(1.0, 8.0 * delta))
+	_revisar_zona_cercana()
+
 
 func _input(event: InputEvent) -> void:
-	# Arrastrar el dedo (o el mouse) en la dirección en la que quieres caminar.
 	# En PC el mouse llega como toque gracias a "Emular táctil desde mouse" (project.godot).
-	if event is InputEventScreenDrag:
-		caminar(event.relative * sensibilidad_arrastre)
+	if event is InputEventScreenTouch and event.index == 0:
+		if event.pressed:
+			_inicio_toque = event.position
+			_es_arrastre = false
+		elif not _es_arrastre:
+			_toque_pendiente = event.position
+	elif event is InputEventScreenDrag and event.index == 0:
+		if not _es_arrastre and event.position.distance_to(_inicio_toque) > distancia_toque:
+			_es_arrastre = true
+		if _es_arrastre:
+			# El mapa sigue al dedo: el explorador avanza en sentido contrario al arrastre
+			explorador.mover(Vector3(-event.relative.x, 0, -event.relative.y) * sensibilidad_arrastre)
 
-func _tile_sin_costuras(tex: Texture2D) -> ImageTexture:
-	var img := tex.get_image()
-	if img.is_compressed():
-		img.decompress()
-	var w := img.get_width()
-	var h := img.get_height()
-	var fx := img.duplicate() as Image
-	fx.flip_x()
-	var fy := img.duplicate() as Image
-	fy.flip_y()
-	var fxy := fx.duplicate() as Image
-	fxy.flip_y()
-	var out := Image.create(w * 2, h * 2, false, img.get_format())
-	var r := Rect2i(0, 0, w, h)
-	out.blit_rect(img, r, Vector2i(0, 0))
-	out.blit_rect(fx, r, Vector2i(w, 0))
-	out.blit_rect(fy, r, Vector2i(0, h))
-	out.blit_rect(fxy, r, Vector2i(w, h))
-	out.generate_mipmaps()
-	return ImageTexture.create_from_image(out)
+
+func _physics_process(_delta: float) -> void:
+	# Los rayos de física se lanzan aquí, que es donde el espacio físico es seguro de consultar
+	if _toque_pendiente != null:
+		_tocar(_toque_pendiente)
+		_toque_pendiente = null
+
+
+func _tocar(posicion_pantalla: Vector2) -> void:
+	var origen := camara.project_ray_origin(posicion_pantalla)
+	var direccion := camara.project_ray_normal(posicion_pantalla)
+
+	# ¿Tocó algo con área (colibrí, marcador de zona)?
+	var consulta := PhysicsRayQueryParameters3D.create(origen, origen + direccion * 100.0)
+	consulta.collide_with_areas = true
+	consulta.collide_with_bodies = false
+	var choque := get_world_3d().direct_space_state.intersect_ray(consulta)
+	if choque and choque.collider.get_parent().has_method("al_tocar"):
+		choque.collider.get_parent().al_tocar(explorador)
+		return
+
+	# Si no, caminar hasta el punto tocado del suelo
+	var punto = Plane(Vector3.UP, 0.0).intersects_ray(origen, direccion)
+	if punto != null:
+		explorador.ir_a(punto)
+
+
+func _revisar_zona_cercana() -> void:
+	var cercana: Zona = null
+	var pos := Vector2(explorador.position.x, explorador.position.z)
+	for zona in Expedicion.zonas:
+		if pos.distance_to(zona.posicion) <= zona.radio:
+			cercana = zona
+			break
+	if cercana != zona_actual:
+		zona_actual = cercana
+		zona_cercana_cambio.emit(zona_actual)

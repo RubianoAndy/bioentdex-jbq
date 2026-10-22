@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/tingua_pico_rojo.tres" id="3_tingua_pico_rojo"]
+[ext_resource type="Resource" path="res://especies/datos/garza_blanca.tres" id="4_garza_blanca"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "acuatica"
+nombre = "Zona Acuática"
+descripcion = "El espejo de agua del humedal. Aquí nadan las aves acuáticas y pescan las garzas."
+color = Color(0.2, 0.5, 0.95, 1)
+posicion = Vector2(3.6, 1.6)
+radio = 2.5
+especies = Array[ExtResource("2_esp")]([ExtResource("3_tingua_pico_rojo"), ExtResource("4_garza_blanca")])

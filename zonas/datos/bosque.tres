@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Zona" format=3]
+
+[ext_resource type="Script" path="res://zonas/zona.gd" id="1_zona"]
+[ext_resource type="Script" path="res://especies/especie.gd" id="2_esp"]
+[ext_resource type="Resource" path="res://especies/datos/colibri_chillon.tres" id="3_colibri_chillon"]
+
+[resource]
+script = ExtResource("1_zona")
+id = "bosque"
+nombre = "Zona de Bosque"
+descripcion = "Árboles y arbustos en la ronda del humedal, llenos de flores que visitan los colibríes."
+color = Color(0.1, 0.55, 0.3, 1)
+posicion = Vector2(-8.6, -2.7)
+radio = 2.5
+especies = Array[ExtResource("2_esp")]([ExtResource("3_colibri_chillon")])
