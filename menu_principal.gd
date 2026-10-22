@@ -10,6 +10,11 @@ func _ready() -> void:
 	$Botones/BtnGuia.pressed.connect(_ir_a.bind("res://GuiaMacro.tscn"))
 	$Botones/BtnPersonalizar.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
 	$Saludo.text = "Hola, %s" % Perfil.nombre
+	$Botones/BtnTienda.pressed.connect(_ir_a.bind("res://Tienda.tscn"))
+	var insignia := InsigniaJugador.new()
+	insignia.position = Vector2(16, 16)
+	insignia.tocada.connect(_ir_a.bind("res://Tienda.tscn"))
+	add_child(insignia)
 
 	# El fondo se acerca y se aleja muy despacio
 	var fondo: TextureRect = $Fondo

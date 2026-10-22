@@ -42,10 +42,16 @@ func _crear_tarjeta(especie: Especie) -> Button:
 	elif RegistroEspecies.esta_observada(especie.id):
 		tarjeta.text = "#%03d %s\nObservado" % [especie.numero, especie.nombre_comun]
 	else:
-		tarjeta.text = "#%03d ???%s" % [especie.numero, "\nInsecto" if especie.es_capturable() else ""]
+		tarjeta.text = "#%03d ???%s" % [especie.numero, "\nPlus · tienda" if especie.plus else ("\nInsecto" if especie.es_capturable() else "")]
 		tarjeta.disabled = true
 		# La imagen se pinta de negro: queda solo la silueta
 		tarjeta.add_theme_color_override("icon_disabled_color", Color.BLACK)
+	if especie.plus:
+		for estado in ["normal", "hover", "pressed", "disabled"]:
+			var estilo: StyleBoxFlat = tarjeta.get_theme_stylebox(estado).duplicate()
+			estilo.border_color = Color(1, 0.84, 0.3)
+			estilo.set_border_width_all(4)
+			tarjeta.add_theme_stylebox_override(estado, estilo)
 	tarjeta.pressed.connect(_mostrar_ficha.bind(especie))
 	return tarjeta
 

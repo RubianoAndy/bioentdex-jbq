@@ -47,6 +47,9 @@ const NOMBRES_ESTADO := {
 @export_multiline var consejo_macro: String = ""
 ## Página de su familia en la guía macrofotográfica (0 = no está en la guía)
 @export var pagina_guia: int = 0
+## Organismo Plus: no aparece en el mapa, se obtiene en la tienda con semillas
+@export var plus: bool = false
+@export var precio: int = 0
 
 @export_group("En el mapa")
 @export var horario: Horario = Horario.SIEMPRE

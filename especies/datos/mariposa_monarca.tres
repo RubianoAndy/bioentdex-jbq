@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 42
+id = "mariposa_monarca"
+nombre_comun = "Mariposa monarca"
+nombre_cientifico = "Danaus plexippus"
+familia = "Nymphalidae"
+orden = "Lepidoptera"
+tipo = 1
+estado_conservacion = 6
+descripcion = "Mariposa naranja de venas negras, famosa por sus larguísimas migraciones."
+importancia = "La guía la usa como ejemplo de su familia: con el primer par de patas reducido pesa menos para migrar."
+consejo_macro = "Sus colores avisan que es tóxica para los depredadores: por eso se posa sin miedo en las flores."
+pagina_guia = 90
+plus = true
+precio = 100
+horario = 0
+movimiento = 0
+suelos_habitat = PackedInt32Array()
+tamano_en_mapa = 1.0

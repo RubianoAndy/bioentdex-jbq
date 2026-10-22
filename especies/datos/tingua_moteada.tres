@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 40
+id = "tingua_moteada"
+nombre_comun = "Tingua moteada"
+nombre_cientifico = "Porphyriops melanops"
+familia = "Rallidae"
+orden = "Gruiformes"
+tipo = 0
+estado_conservacion = 0
+descripcion = "Tingua de flancos oscuros con puntos blancos y pico verde amarillento."
+importancia = "En la sabana de Bogotá es muy escasa: verla indica un humedal bien conservado."
+consejo_macro = "Espera en silencio en la orilla: sale a nadar entre la vegetación flotante."
+pagina_guia = 0
+plus = true
+precio = 50
+horario = 0
+movimiento = 0
+suelos_habitat = PackedInt32Array()
+tamano_en_mapa = 1.0

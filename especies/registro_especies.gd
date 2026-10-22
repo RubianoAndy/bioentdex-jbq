@@ -8,6 +8,7 @@ extends Node
 
 signal especie_descubierta(especie: Especie)            # primera captura u observación
 signal especie_capturada(especie: Especie, captura: Dictionary)
+signal especie_observada(especie: Especie, primera: bool)
 signal mision_registrada(mision: Mision, registro: Dictionary)
 
 const CARPETA_ESPECIES := "res://especies/datos/"
@@ -15,7 +16,9 @@ const ARCHIVO_BD := "user://bioentdex.json"
 const CARPETA_FOTOS := "user://fotos/"
 
 var especies: Array[Especie] = []   # ordenadas por número
-var _bd := {"version": 1, "capturas": [], "observaciones": {}, "misiones": {}}
+var _bd := {"version": 1, "capturas": [], "observaciones": {}, "misiones": {},
+	# Progreso del jugador (lo maneja el autoload Recompensas)
+	"jugador": {"experiencia": 0, "semillas": 0, "plus": [], "misiones_premiadas": [], "nectar_hasta": 0}}
 
 
 func _ready() -> void:
@@ -97,10 +100,12 @@ func registrar_observacion(especie: Especie) -> bool:
 	if esta_observada(especie.id):
 		_bd.observaciones[especie.id].veces += 1
 		_guardar_bd()
+		especie_observada.emit(especie, false)
 		return false
 	var primera := not esta_descubierta(especie.id)
 	_bd.observaciones[especie.id] = {"primera_vez": Time.get_datetime_string_from_system(), "veces": 1}
 	_guardar_bd()
+	especie_observada.emit(especie, true)
 	if primera:
 		especie_descubierta.emit(especie)
 	return true
@@ -127,6 +132,15 @@ func registrar_mision(mision: Mision, zona_id: String, respuesta: String, correc
 		if especie:
 			registrar_observacion(especie)
 	return registro
+
+
+## Datos de progreso del jugador (experiencia, semillas...). Llamar a guardar() después de cambiarlos.
+func jugador() -> Dictionary:
+	return _bd.jugador
+
+
+func guardar() -> void:
+	_guardar_bd()
 
 
 # --- Archivos ---------------------------------------------------------------------------------
@@ -157,7 +171,10 @@ func _cargar_bd() -> void:
 	if datos is Dictionary:
 		for clave in _bd:
 			if datos.has(clave):
-				_bd[clave] = datos[clave]
+				if _bd[clave] is Dictionary and clave == "jugador":
+					_bd[clave].merge(datos[clave], true)   # conserva los campos nuevos
+				else:
+					_bd[clave] = datos[clave]
 
 
 func _guardar_bd() -> void:

@@ -19,6 +19,12 @@ func _ready() -> void:
 	fauna.npc_seleccionado.connect(_on_npc_seleccionado)
 	mundo.colibri.tocado.connect(_on_npc_seleccionado)
 
+	var insignia := InsigniaJugador.new()
+	insignia.position = Vector2(16, 86)
+	insignia.tocada.connect(_ir_a.bind("res://Tienda.tscn"))
+	add_child(insignia)
+	move_child(insignia, $PanelZona.get_index())
+
 	# Capa para los avisos: queda debajo de la cámara y de las fichas (que se agregan después)
 	var avisos := Control.new()
 	avisos.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

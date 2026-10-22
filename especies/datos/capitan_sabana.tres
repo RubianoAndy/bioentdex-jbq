@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 41
+id = "capitan_sabana"
+nombre_comun = "Capitán de la sabana"
+nombre_cientifico = "Eremophilus mutisii"
+familia = "Trichomycteridae"
+orden = "Siluriformes"
+tipo = 5
+estado_conservacion = 6
+descripcion = "Pez sin escamas, de cabeza plana y bigotes, endémico de la cuenca alta del río Bogotá."
+importancia = "Es un símbolo de la sabana: la contaminación de ríos y humedales lo ha vuelto muy escaso."
+consejo_macro = "Vive en el fondo y casi nunca se deja ver: cuidar el agua es la mejor forma de protegerlo."
+pagina_guia = 0
+plus = true
+precio = 80
+horario = 0
+movimiento = 0
+suelos_habitat = PackedInt32Array()
+tamano_en_mapa = 1.0

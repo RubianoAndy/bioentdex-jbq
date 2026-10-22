@@ -54,10 +54,13 @@ func _process(delta: float) -> void:
 		if insecto.vida <= 0.0 or origen.distance_to(_pos2d(insecto)) > distancia_desaparicion:
 			quitar_insecto(insecto)
 
+	# Con el néctar atrayente de la tienda aparecen más insectos y más seguido
+	var nectar := Recompensas.nectar_activo()
 	_reloj -= delta
 	if _reloj <= 0.0:
-		_reloj = intervalo
-		if _insectos.size() < max_insectos and randf() < prob_aparicion:
+		_reloj = intervalo * (0.5 if nectar else 1.0)
+		var maximo := max_insectos + (2 if nectar else 0)
+		if _insectos.size() < maximo and randf() < (0.9 if nectar else prob_aparicion):
 			_aparecer_insecto()
 
 	_actualizar_npcs(origen)
@@ -67,7 +70,7 @@ func _process(delta: float) -> void:
 
 func _aparecer_insecto() -> void:
 	var candidatos := RegistroEspecies.especies.filter(
-		func(e: Especie) -> bool: return e.es_capturable() and e.activa_ahora())
+		func(e: Especie) -> bool: return e.es_capturable() and not e.plus and e.activa_ahora())
 	candidatos.shuffle()
 	for especie in candidatos:
 		if _insectos.any(func(i) -> bool: return i.especie == especie):

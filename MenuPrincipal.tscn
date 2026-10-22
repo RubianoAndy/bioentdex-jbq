@@ -107,8 +107,8 @@ expand_mode = 1
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 110.0
-offset_bottom = 330.0
+offset_top = 120.0
+offset_bottom = 340.0
 grow_horizontal = 2
 theme_override_constants/separation = 0
 
@@ -139,8 +139,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -560.0
-offset_bottom = -510.0
+offset_top = -650.0
+offset_bottom = -600.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 26
@@ -154,7 +154,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -270.0
-offset_top = -510.0
+offset_top = -600.0
 offset_right = 270.0
 offset_bottom = -90.0
 grow_horizontal = 2
@@ -182,6 +182,11 @@ text = "Bioentdex"
 custom_minimum_size = Vector2(0, 74)
 layout_mode = 2
 text = "Guía macrofotográfica"
+
+[node name="BtnTienda" type="Button" parent="Botones"]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+text = "Tienda del humedal"
 
 [node name="BtnPersonalizar" type="Button" parent="Botones"]
 custom_minimum_size = Vector2(0, 74)

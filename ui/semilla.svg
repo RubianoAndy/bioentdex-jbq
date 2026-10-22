@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+<g stroke="#1d2a22" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+<circle cx="64" cy="66" r="56" fill="#c8901e"/><circle cx="64" cy="62" r="56" fill="#f5c242"/><circle cx="64" cy="62" r="42" fill="#e8a82a" stroke-width="4"/><path d="M30,44 C38,26 56,16 76,18" fill="none" stroke="#fff0b0" stroke-width="6"/><path d="M56,92 C54,78 60,66 70,54" fill="none" stroke="#7a5208" stroke-width="10"/><path d="M56,92 C54,78 60,66 70,54" fill="none" stroke="#ffe07a" stroke-width="4"/><path d="M62,70 C52,56 36,54 26,62 C34,76 50,78 62,70Z" fill="#ffe07a" stroke-width="4.5"/><path d="M70,56 C76,36 94,24 108,28 C106,48 90,62 70,56Z" fill="#ffe07a" stroke-width="4.5"/><path d="M58,68 C50,64 42,62 34,62 M74,52 C82,44 90,38 100,34" fill="none" stroke="#c8901e" stroke-width="3"/><ellipse cx="60" cy="96" rx="18" ry="10" fill="#d08a14" stroke-width="4.5" transform="rotate(-18 60 96)"/><path d="M50,96 C56,92 64,92 70,94" fill="none" stroke="#ffe89a" stroke-width="3"/><circle cx="64" cy="62" r="56" fill="none"/>
+</g>
+</svg>
