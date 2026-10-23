@@ -23,6 +23,7 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 | **Fauna NPC** | Aves, ranas, mamíferos y lombrices que viven en sus zonas y se mueven según su especie (nadan, caminan, saltan). No se capturan, se observan. Algunos tienen horario (la chucha solo sale de noche). |
 | **Captura con cámara** | Realidad aumentada sencilla: el insecto aparece sobre la imagen de la cámara y hay que encuadrarlo en el visor. Se apunta con el giroscopio, el dedo o el mouse. Sin cámara se usa un fondo simulado. |
 | **Ficha de la especie** | Al estilo de la pantalla de detalle de Pokémon GO: hábitat, arco de riesgo de extinción (UICN), taxonomía, importancia, descripción, consejo de fotografía y botones que abren la guía en la página de su familia y de su orden. |
+| **Fotos reales** | Después de capturar un insecto, el botón de cámara de su ficha abre sus **fotografías reales del humedal**, a pantalla completa, con zoom (doble toque, pellizco o rueda) y para pasar de una a otra. |
 | **Misiones** | 37 misiones (preguntas, identificar especies, tomar fotos y escribir propuestas). 5 son **misiones especiales**, marcadas con bandera en la zona y en el mapa. |
 | **Guía macrofotográfica** | La guía completa (121 páginas) dentro de la app, con zoom, índice y saltos a cada orden y familia. |
 | **Recompensas** | Experiencia y niveles (sobre todo por capturar), **semillas** como moneda (por misiones y por subir de nivel) y una **tienda** con *néctar atrayente* y 4 **organismos Plus**: especies raras que no aparecen en el mapa. |
@@ -37,7 +38,8 @@ Biología y Diversidad Cultural), que viene incluida en la app.
   solo GDScript.
 - Renderizador **Mobile**, pantalla vertical de 720×1280.
 - Opcional: **Visual Studio Code** con la extensión *godot-tools* para editar los scripts.
-- Opcional, para regenerar el mapa o las páginas de la guía: **Python 3** con `numpy`, `Pillow` y `PyMuPDF`.
+- Opcional, para regenerar el mapa, las páginas de la guía o las fotos reales de la app: **Python 3** con
+  `numpy`, `Pillow` y `PyMuPDF`.
 
 ## Cómo ejecutarlo
 
@@ -85,14 +87,16 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 │   └── herramientas/           generar_mascara.py (genera el mapa desde cero)
 ├── fauna/                    Aparición de insectos y animales NPC en el mapa
 ├── captura/                  Vista de captura con cámara / realidad aumentada
-├── ui/                       Tema visual, ficha de especie, insignia del jugador, íconos, nubes y
-│                               fondos/fondo_inicio.jpg (fondo de la pantalla de inicio)
+├── ui/                       Tema visual, ficha de especie, visor de fotos, insignia del jugador, íconos,
+│                               nubes y fondos/fondo_inicio.jpg (fondo de la pantalla de inicio)
 ├── animales/npc/             Ilustraciones de los animales NPC y de los organismos Plus
 ├── dataset/
 │   ├── insectos/<id>/          Imágenes de cada insecto para la cámara (ilustraciones de prueba)
 │   ├── fondos/                 Fondos simulados de la cámara (agua, pradera, bosque)
-│   ├── insectos reales/        143 fotografías reales organizadas por orden/familia (originales)
-│   └── fotos_app/<id>/         Copias livianas que muestra la ficha (botón de cámara tras capturar)
+│   ├── insectos reales/        143 fotografías reales por orden/familia, con indice.csv (originales;
+│   │                           tiene .gdignore, Godot no las importa)
+│   ├── fotos_app/<id>/         Copias livianas que muestra la ficha (botón de cámara tras capturar)
+│   └── herramientas/           generar_fotos_app.py (genera fotos_app a partir del índice)
 ├── guia/
 │   ├── Guia.pdf                La guía original
 │   └── paginas/                Las 121 páginas en imagen (lo que muestra la app)
@@ -131,6 +135,14 @@ código.
   bosque, sendero, calle, casas…). Se puede repintar en cualquier editor de imágenes con los colores de
   [`mapa/paleta_mapa.gd`](mapa/paleta_mapa.gd); el suelo, la vegetación y las colisiones se arman solos. Si
   algo se mueve, actualiza la `posicion` de las zonas.
+- **Fotos reales** (`dataset/insectos reales/`): cada foto va en la carpeta de su orden y familia y tiene una
+  fila en `indice.csv` (nombre original, insecto del juego, estadio, confianza de la identificación). Después
+  de agregar o corregir fotos, regenera las copias que usa la app:
+  ```bash
+  python dataset/herramientas/generar_fotos_app.py
+  ```
+  Solo entran las fotos con insecto del juego y confianza alta o media. Ver
+  [dataset/insectos reales/LEEME.md](dataset/insectos%20reales/LEEME.md).
 - **Guía**: si cambia el PDF, regenera `guia/paginas/` y ajusta las páginas en `guia_macro.gd` y en las
   especies. Ver [dataset/LEEME.md](dataset/LEEME.md).
 - **Recompensas**: las cantidades de experiencia, semillas y precios están al inicio de
@@ -146,13 +158,22 @@ Todo se guarda en el dispositivo, en la carpeta de usuario de Godot (`user://`; 
 - `fotos/`: fotos de las capturas y de las misiones de foto.
 - `perfil.cfg`: apariencia del explorador.
 
+## Dataset de insectos reales
+
+`dataset/insectos reales/` tiene **143 fotografías** del humedal organizadas por **Orden / Familia** con los
+nombres de la guía. **19 de las 20 familias del juego** ya tienen al menos una foto (falta Geometridae, la
+polilla geómetra). También hay grupos que no están en la guía (gorgojos, saltamontes, avispas Ichneumonidae,
+chicharritas, una termita y una cucaracha), fotos con la familia por confirmar y una carpeta `_por_revisar`.
+La app usa **69** de ellas (las de confianza alta o media) como fotos reales en la ficha.
+
 ---
 
 ## Pendientes
 
 - Probar en un celular Android real (cámara, giroscopio, rendimiento).
 - Validar con una persona experta los textos de especies y misiones, y la identificación de las fotos de
-  `dataset/insectos reales/`.
+  `dataset/insectos reales/` (sobre todo las de confianza media o baja y las de `_por_revisar`).
+- Conseguir una foto real de la polilla geómetra (Geometridae).
 - Recortar con fondo transparente las fotos reales para usarlas también en la cámara de realidad aumentada.
 - Definir el contenido final de las 5 misiones especiales.
 - Conectar la base de datos a un servidor si se quiere compartir el progreso (por ejemplo, para docentes).
