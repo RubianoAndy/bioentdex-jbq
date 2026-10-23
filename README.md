@@ -91,7 +91,8 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 ├── dataset/
 │   ├── insectos/<id>/          Imágenes de cada insecto para la cámara (ilustraciones de prueba)
 │   ├── fondos/                 Fondos simulados de la cámara (agua, pradera, bosque)
-│   └── insectos reales/        143 fotografías reales organizadas por orden/familia (aún no se usan)
+│   ├── insectos reales/        143 fotografías reales organizadas por orden/familia (originales)
+│   └── fotos_app/<id>/         Copias livianas que muestra la ficha (botón de cámara tras capturar)
 ├── guia/
 │   ├── Guia.pdf                La guía original
 │   └── paginas/                Las 121 páginas en imagen (lo que muestra la app)
@@ -152,7 +153,7 @@ Todo se guarda en el dispositivo, en la carpeta de usuario de Godot (`user://`; 
 - Probar en un celular Android real (cámara, giroscopio, rendimiento).
 - Validar con una persona experta los textos de especies y misiones, y la identificación de las fotos de
   `dataset/insectos reales/`.
-- Integrar las fotos reales (recortadas con fondo transparente para la cámara, o como foto real en la ficha).
+- Recortar con fondo transparente las fotos reales para usarlas también en la cámara de realidad aumentada.
 - Definir el contenido final de las 5 misiones especiales.
 - Conectar la base de datos a un servidor si se quiere compartir el progreso (por ejemplo, para docentes).
 

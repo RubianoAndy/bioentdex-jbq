@@ -12,6 +12,18 @@ La cámara elige al azar **una de las imágenes de la carpeta**, así que entre 
 
 Las imágenes actuales (`<id>_1.svg`, `<id>_2.svg`) son ilustraciones de prueba que emulan el dataset.
 
+## Fotos reales en la ficha — `dataset/fotos_app/<id>/`
+
+Después de capturar un insecto, el botón de cámara de su ficha abre su **foto real** (se puede ampliar y pasar a
+la siguiente). Estas fotos son copias livianas (máximo 1280 px) de `dataset/insectos reales/`, generadas a partir
+de su `indice.csv` (solo las que tienen insecto del juego y confianza alta o media):
+
+```
+python dataset/herramientas/generar_fotos_app.py
+```
+
+Vuelve a ejecutarlo cada vez que cambies el índice o agregues fotos al dataset real.
+
 ## Animales NPC del mapa — `animales/npc/<id>.svg` (o `.png`)
 
 Una imagen por animal, de lado y **mirando a la derecha** (el juego la voltea cuando camina a la izquierda).

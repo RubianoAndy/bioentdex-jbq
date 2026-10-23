@@ -56,7 +56,6 @@ var _escena: Control
 var _animal: TextureRect
 var _tarjeta: PanelContainer
 var _tiempo := 0.0
-var _mostrando_foto := false
 var _fuente_negrita: SystemFont
 
 
@@ -140,7 +139,7 @@ func _construir_escena() -> void:
 
 	# El animal: al tocarlo salta y suelta destellos
 	_animal = TextureRect.new()
-	_animal.texture = _foto if _foto and _mostrando_foto else _especie.obtener_imagen()
+	_animal.texture = _especie.obtener_imagen()
 	_animal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_animal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_animal.size = Vector2(280, 280)
@@ -157,19 +156,20 @@ func _construir_escena() -> void:
 		cinta.grow_horizontal = Control.GROW_DIRECTION_BOTH
 		_escena.add_child(cinta)
 
-	# Botón de cámara: cambia entre tu foto y la ilustración
-	if _foto:
+	# Botón de cámara (después de capturar): abre la foto real del insecto, que se puede ampliar
+	var capturado := RegistroEspecies.esta_capturada(_especie.id) or (_especie.plus and Recompensas.tiene_plus(_especie.id))
+	if capturado and (_foto or not _especie.fotos_reales().is_empty()):
 		var camara := Button.new()
 		camara.icon = load("res://ui/icono_camara.svg")
 		camara.expand_icon = true
 		camara.flat = true
-		camara.tooltip_text = "Ver tu foto / la ilustración"
+		camara.tooltip_text = "Ver la foto real"
 		camara.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 		camara.offset_left = -96
 		camara.offset_top = 70
 		camara.offset_right = -24
 		camara.offset_bottom = 142
-		camara.pressed.connect(_alternar_foto)
+		camara.pressed.connect(_ver_foto_real)
 		_escena.add_child(camara)
 
 
@@ -186,10 +186,12 @@ func _on_animal_input(event: InputEvent) -> void:
 		_destellos(_animal.position + Vector2(140, 140))
 
 
-func _alternar_foto() -> void:
-	_mostrando_foto = not _mostrando_foto
-	_animal.texture = _foto if _mostrando_foto else _especie.obtener_imagen()
-	_destellos(_animal.position + Vector2(140, 140))
+## Foto real del insecto (del dataset del humedal); si no hay, la foto que tomó el jugador.
+func _ver_foto_real() -> void:
+	var fotos: Array = _especie.fotos_reales()
+	if fotos.is_empty():
+		fotos = [_foto]
+	VisorFotos.abrir(self, fotos, 0, _especie.nombre_comun)
 
 
 func _destellos(centro: Vector2) -> void:

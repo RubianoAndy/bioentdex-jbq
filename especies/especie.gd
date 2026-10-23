@@ -107,6 +107,19 @@ func imagen_mapa() -> Texture2D:
 	return null
 
 
+## Fotografías reales del humedal (res://dataset/fotos_app/<id>/). Se generan desde
+## dataset/insectos reales con dataset/herramientas/generar_fotos_app.py.
+func fotos_reales() -> Array[Texture2D]:
+	var fotos: Array[Texture2D] = []
+	var carpeta := "res://dataset/fotos_app/%s/" % id
+	for archivo in ResourceLoader.list_directory(carpeta):
+		if archivo.get_extension().to_lower() in ["jpg", "jpeg", "png", "webp"]:
+			var textura := load(carpeta + archivo) as Texture2D
+			if textura:
+				fotos.append(textura)
+	return fotos
+
+
 ## Imágenes del dataset de realidad aumentada (res://dataset/insectos/<id>/).
 func imagenes_dataset() -> Array[Texture2D]:
 	var imagenes: Array[Texture2D] = []
