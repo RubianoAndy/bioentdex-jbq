@@ -16,6 +16,7 @@ const VIDA_DEPREDADOR := 3
 const VIDA_INSECTO := 2
 const MAX_EQUIPO := 3
 const GUIA := "Guía del humedal"
+const PRESTADO := "mariquita"   # insecto que presta la guía si el jugador aún no tiene ninguno
 
 ## Poder que lanza cada insecto al acertar (los demás usan "Ataque sorpresa")
 const PODERES := {
@@ -220,9 +221,11 @@ func _elegir_equipo() -> void:
 	var capturados := RegistroEspecies.especies.filter(func(e: Especie) -> bool:
 		return e.es_capturable() and RegistroEspecies.esta_capturada(e.id))
 	if capturados.is_empty():
-		_caja.add_child(_etiqueta("Aún no tienes insectos. Captura alguno con la cámara y vuelve a enfrentar al depredador.", 28, Color.WHITE))
-		_caja.add_child(_espacio())
-		_caja.add_child(_boton("Volver al mapa", _terminar.bind(false)))
+		# Sin insectos todavía: la guía le presta uno para esta batalla
+		var prestado := RegistroEspecies.buscar(PRESTADO)
+		_equipo = [prestado]
+		_dialogo([[GUIA, "Aún no has capturado insectos, así que te presto a mi %s para esta batalla. ¡Después captura los tuyos con la cámara!" % prestado.nombre_comun.to_lower()]],
+			_empezar_combate)
 		return
 
 	_caja.add_child(_etiqueta("Elige tu equipo (hasta %d)" % MAX_EQUIPO, 28, DORADO))

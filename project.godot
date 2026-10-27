@@ -21,6 +21,7 @@ RegistroEspecies="*res://especies/registro_especies.gd"
 Expedicion="*res://zonas/expedicion.gd"
 Perfil="*res://perfil.gd"
 Recompensas="*res://recompensas.gd"
+DesplazamientoTactil="*res://ui/desplazamiento_tactil.gd"
 
 [display]
 

@@ -8,7 +8,7 @@ extends Node3D
 ## EMBOSCADA (globo de los depredadores)
 ##   - Un globo baja del cielo con un depredador (aves, ranas, ratas...) que tiene atrapado un
 ##     insecto especial. Para rescatarlo hay que ganarle una batalla de preguntas con los
-##     insectos capturados. Solo aparece cuando el jugador ya tiene al menos un insecto.
+##     insectos capturados (si aún no tiene, la guía le presta uno).
 
 signal reto_foto_seleccionado(marcador: Node3D)
 signal batalla_seleccionada(globo: Node3D)
@@ -85,7 +85,7 @@ func _process(delta: float) -> void:
 	_reloj -= delta
 	if _reloj <= 0.0:
 		_reloj = intervalo
-		if _globo == null and _hay_insectos() and randf() < prob_batalla:
+		if _globo == null and randf() < prob_batalla:
 			_aparecer_globo()
 		elif _reto_foto == null and randf() < prob_foto:
 			_aparecer_reto_foto()
@@ -157,11 +157,6 @@ func _elegir_premio() -> Especie:
 func globo_tocado(globo: Node3D) -> void:
 	if _acercarse(globo, "Acércate al globo para enfrentar al depredador"):
 		batalla_seleccionada.emit(globo)
-
-
-func _hay_insectos() -> bool:
-	return RegistroEspecies.especies.any(func(e: Especie) -> bool:
-		return e.es_capturable() and RegistroEspecies.esta_capturada(e.id))
 
 
 # --- Utilidades -------------------------------------------------------------------------------

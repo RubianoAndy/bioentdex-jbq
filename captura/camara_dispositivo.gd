@@ -1,7 +1,7 @@
 class_name CamaraDispositivo
 extends Node
 ## Muestra la cámara trasera del teléfono en un TextureRect, si está disponible.
-## Si no hay cámara (por ejemplo en el PC) o falta el permiso, devuelve false y la vista usa
+## Si no hay cámara (por ejemplo en el PC) o niegan el permiso, devuelve false y la vista usa
 ## un fondo simulado. En Android hay que activar el permiso "Camera" en el preset de exportación.
 
 const SHADER_YCBCR := """
@@ -16,12 +16,17 @@ void fragment() {
 """
 
 var _feed: CameraFeed
+var _destino: TextureRect
+var _tipo := -1   # formato que se está mostrando (CameraFeed.FEED_*), -1 = aún no llega imagen
 
 
 func iniciar(destino: TextureRect) -> bool:
 	if OS.get_name() == "Android" and not OS.get_granted_permissions().has("android.permission.CAMERA"):
-		OS.request_permission("CAMERA")   # la próxima vez que se abra ya habrá permiso
-		return false
+		# Se pide el permiso y se espera la respuesta: así la cámara funciona desde la primera vez
+		OS.request_permission("CAMERA")
+		var respuesta: Array = await get_tree().on_request_permissions_result
+		if not respuesta[1] and not OS.get_granted_permissions().has("android.permission.CAMERA"):
+			return false
 	CameraServer.monitoring_feeds = true
 	for intento in 30:   # la lista de cámaras tarda unos instantes en llegar
 		if CameraServer.get_feed_count() > 0:
@@ -36,31 +41,43 @@ func iniciar(destino: TextureRect) -> bool:
 			_feed = CameraServer.get_feed(i)
 	if not _feed.get_formats().is_empty():
 		_feed.set_format(0, {})
+	_destino = destino
+	_feed.frame_changed.connect(_on_cuadro)
 	_feed.feed_is_active = true
-	for intento in 60:   # esperar el primer cuadro para saber el formato
-		if _feed.get_datatype() != CameraFeed.FEED_NOIMAGE:
-			break
+	# Ojo: antes del primer cuadro get_datatype() dice FEED_RGB aunque la cámara mande YCbCr
+	# (en Android casi siempre). Por eso se espera a que llegue un cuadro de verdad.
+	for intento in 180:
+		if _tipo != -1:
+			return true
 		await get_tree().process_frame
+	detener()
+	return false
 
-	match _feed.get_datatype():
+
+## Cada cuadro nuevo: si cambió el formato, se ajusta la textura (y el shader para YCbCr).
+func _on_cuadro() -> void:
+	var tipo := _feed.get_datatype()
+	if tipo == _tipo:
+		return
+	_tipo = tipo
+	match tipo:
 		CameraFeed.FEED_RGB:
-			destino.texture = _textura(CameraServer.FEED_RGBA_IMAGE)
+			_destino.material = null
+			_destino.texture = _textura(CameraServer.FEED_RGBA_IMAGE)
 		CameraFeed.FEED_YCBCR_SEP:
 			var mat := ShaderMaterial.new()
 			mat.shader = Shader.new()
 			mat.shader.code = SHADER_YCBCR
 			mat.set_shader_parameter("textura_y", _textura(CameraServer.FEED_Y_IMAGE))
 			mat.set_shader_parameter("textura_cbcr", _textura(CameraServer.FEED_CBCR_IMAGE))
-			destino.texture = _textura(CameraServer.FEED_Y_IMAGE)
-			destino.material = mat
-		_:
-			detener()
-			return false
-	return true
+			_destino.texture = _textura(CameraServer.FEED_Y_IMAGE)
+			_destino.material = mat
 
 
 func detener() -> void:
 	if _feed:
+		if _feed.frame_changed.is_connected(_on_cuadro):
+			_feed.frame_changed.disconnect(_on_cuadro)
 		_feed.feed_is_active = false
 
 

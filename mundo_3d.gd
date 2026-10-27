@@ -1,6 +1,6 @@
 extends Node3D
 ## Mapa del humedal estilo Google Maps: el explorador camina por el mapa y la cámara lo sigue.
-## Toca el suelo para caminar hasta ahí, toca una zona para ir a ella, arrastra para mover el mapa.
+## Toca el suelo para caminar hasta ahí, toca una zona para ir a ella, desliza el dedo para caminar.
 
 signal zona_cercana_cambio(zona: Zona)   # null cuando el explorador sale de la zona
 
@@ -36,6 +36,20 @@ func _ready() -> void:
 	mat.set_shader_parameter("ruido", Expedicion.ruido_suelo)   # generado al abrir la app
 	mat.set_shader_parameter("tamano_mapa", tamano)
 	suelo.material_override = mat
+
+	# Alrededores: la máscara termina en ciudad, así que fuera del mapa sigue un andén gris claro.
+	# Sin esto, al caminar cerca del borde se veía el vacío.
+	var alrededores := MeshInstance3D.new()
+	var plano := PlaneMesh.new()
+	plano.size = tamano * 4.0
+	alrededores.mesh = plano
+	alrededores.position.y = -0.05
+	var mat_alrededores := StandardMaterial3D.new()
+	mat_alrededores.albedo_color = Color(0.62, 0.6, 0.56)   # mismo color del andén en el shader del suelo
+	mat_alrededores.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	alrededores.material_override = mat_alrededores
+	alrededores.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(alrededores)
 
 	# El terreno sabe por dónde se puede caminar; la vegetación y las zonas le agregan obstáculos
 	if mascara == Expedicion.MASCARA and tamano == Expedicion.TAMANO_MAPA:
@@ -108,9 +122,9 @@ func _input(event: InputEvent) -> void:
 			_es_arrastre = true
 			explorador.detener()
 		if _es_arrastre:
-			# El mapa sigue al dedo: el explorador avanza en sentido contrario al arrastre.
+			# El explorador camina hacia donde se desliza el dedo (derecha = derecha, abajo = abajo).
 			# Se acumula poco (máx. 2 unidades) para que al soltar no siga caminando.
-			_arrastre_pendiente += Vector3(-event.relative.x, 0, -event.relative.y) * sensibilidad_arrastre
+			_arrastre_pendiente += Vector3(event.relative.x, 0, event.relative.y) * sensibilidad_arrastre
 			_arrastre_pendiente = _arrastre_pendiente.limit_length(2.0)
 
 
