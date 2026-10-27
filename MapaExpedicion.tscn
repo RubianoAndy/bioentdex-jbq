@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://mapa/vegetacion.gd" id="7_veg"]
 [ext_resource type="Shader" path="res://ui/nubes.gdshader" id="8_nub"]
 [ext_resource type="Script" path="res://fauna/aparicion_fauna.gd" id="9_fau"]
+[ext_resource type="Script" path="res://retos/aparicion_retos.gd" id="10_ret"]
 [ext_resource type="PackedScene" path="res://Explorador.tscn" id="5_expl"]
 [ext_resource type="PackedScene" path="res://Colibri.tscn" id="6_coli"]
 
@@ -88,6 +89,9 @@ script = ExtResource("7_veg")
 
 [node name="Fauna" type="Node3D" parent="SubViewportContainer/SubViewport/Mundo3D"]
 script = ExtResource("9_fau")
+
+[node name="Retos" type="Node3D" parent="SubViewportContainer/SubViewport/Mundo3D"]
+script = ExtResource("10_ret")
 
 [node name="Colibri" parent="SubViewportContainer/SubViewport/Mundo3D" instance=ExtResource("6_coli")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.2, 40)

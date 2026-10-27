@@ -45,9 +45,19 @@ func _ready() -> void:
 	else:
 		terreno = Terreno.new(mascara.get_image(), tamano)
 		$Vegetacion.construir($Vegetacion.calcular(terreno, Expedicion.zonas))
+	# El shader del suelo lee el tipo de suelo ya clasificado en vez de calcularlo por píxel
+	var clases := Image.create_from_data(terreno.ancho, terreno.alto, false, Image.FORMAT_R8, terreno.clases)
+	mat.set_shader_parameter("clases", ImageTexture.create_from_image(clases))
+	mat.set_shader_parameter("usar_clases", true)
+
+	# En el celular el 3D se dibuja al 75 % de la resolución (casi no se nota y es bastante más fluido)
+	if OS.has_feature("mobile"):
+		get_viewport().scaling_3d_scale = 0.75
+
 	DecoracionZonas.decorar(self, Expedicion.zonas, terreno)
 	explorador.terreno = terreno
 	$Fauna.configurar(terreno, explorador, Expedicion.zonas)
+	$Retos.configurar(terreno, explorador, Expedicion.zonas)
 
 	colibri.limites = Rect2(-tamano / 2.0, tamano).grow(-1.0)
 	colibri.explorador = explorador

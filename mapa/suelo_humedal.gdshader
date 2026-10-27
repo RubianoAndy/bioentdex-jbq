@@ -2,8 +2,13 @@ shader_type spatial;
 render_mode unshaded;
 // Pinta el suelo del humedal según la máscara de colores (mapa/mascara_humedal.png).
 // Si cambias un color de la máscara aquí, cámbialo también en mapa/paleta_mapa.gd.
+// "clases" trae el tipo de suelo de cada píxel ya calculado por Terreno (0-12, en el canal rojo):
+// así no hay que comparar cada píxel con los 13 colores, que en el celular es muy costoso.
+// Si no se asigna, se clasifica la "mascara" aquí mismo (más lento).
 
 uniform sampler2D mascara : filter_nearest, repeat_disable;
+uniform sampler2D clases : filter_nearest, repeat_disable;
+uniform bool usar_clases = false;
 uniform sampler2D ruido : filter_linear_mipmap, repeat_enable;
 uniform vec2 tamano_mapa = vec2(160.0, 160.0);
 
@@ -27,6 +32,9 @@ const vec3 MASCARA[13] = vec3[13](
 const vec2 DIRECCION_PUENTES = vec2(0.657, 0.754);   // las tablas van atravesadas a esta dirección
 
 int clase(ivec2 px, ivec2 tam) {
+	if (usar_clases) {
+		return int(texelFetch(clases, clamp(px, ivec2(0), tam - 1), 0).r * 255.0 + 0.5);
+	}
 	vec3 c = texelFetch(mascara, clamp(px, ivec2(0), tam - 1), 0).rgb * 255.0;
 	int mejor = 2;
 	float menor = 1e9;

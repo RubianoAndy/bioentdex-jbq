@@ -3,20 +3,23 @@ extends Node
 ## Guarda en user://bioentdex.json:
 ##   - capturas: insectos fotografiados con la cámara (con la ruta de la foto),
 ##   - observaciones: animales NPC y plantas que el jugador ya conoció,
-##   - misiones: respuestas a las misiones de las zonas.
+##   - misiones: respuestas a las misiones de las zonas (y de los retos de foto del mapa),
+##   - fotos: todas las fotos de misiones y retos (en "misiones" solo queda la última de cada una),
+##   - batallas: resultado de cada batalla contra los depredadores.
 ## Cada registro es un diccionario simple, listo para enviarlo a un servidor más adelante.
 
 signal especie_descubierta(especie: Especie)            # primera captura u observación
 signal especie_capturada(especie: Especie, captura: Dictionary)
 signal especie_observada(especie: Especie, primera: bool)
 signal mision_registrada(mision: Mision, registro: Dictionary)
+signal batalla_registrada(registro: Dictionary)
 
 const CARPETA_ESPECIES := "res://especies/datos/"
 const ARCHIVO_BD := "user://bioentdex.json"
 const CARPETA_FOTOS := "user://fotos/"
 
 var especies: Array[Especie] = []   # ordenadas por número
-var _bd := {"version": 1, "capturas": [], "observaciones": {}, "misiones": {},
+var _bd := {"version": 1, "capturas": [], "observaciones": {}, "misiones": {}, "fotos": [], "batallas": [],
 	# Progreso del jugador (lo maneja el autoload Recompensas)
 	"jugador": {"experiencia": 0, "semillas": 0, "plus": [], "misiones_premiadas": [], "nectar_hasta": 0}}
 
@@ -114,6 +117,10 @@ func registrar_observacion(especie: Especie) -> bool:
 ## Guarda la respuesta a una misión (y la foto, si la misión es de tomar foto).
 func registrar_mision(mision: Mision, zona_id: String, respuesta: String, correcta: bool, foto: Image = null) -> Dictionary:
 	var anterior: Dictionary = _bd.misiones.get(mision.id, {})
+	var ruta_foto := _guardar_foto(foto, "mision_" + mision.id) if foto else ""
+	if foto:
+		_bd.fotos.append({"mision": mision.id, "zona": zona_id, "enunciado": mision.enunciado,
+			"fecha": Time.get_datetime_string_from_system(), "foto": ruta_foto})
 	var registro := {
 		"zona": zona_id,
 		"tipo": Mision.Tipo.keys()[mision.tipo],
@@ -121,7 +128,7 @@ func registrar_mision(mision: Mision, zona_id: String, respuesta: String, correc
 		"correcta": correcta or anterior.get("correcta", false),
 		"intentos": anterior.get("intentos", 0) + 1,
 		"fecha": Time.get_datetime_string_from_system(),
-		"foto": _guardar_foto(foto, "mision_" + mision.id) if foto else anterior.get("foto", ""),
+		"foto": ruta_foto if foto else anterior.get("foto", ""),
 	}
 	_bd.misiones[mision.id] = registro
 	_guardar_bd()
@@ -132,6 +139,29 @@ func registrar_mision(mision: Mision, zona_id: String, respuesta: String, correc
 		if especie:
 			registrar_observacion(especie)
 	return registro
+
+
+## Guarda el resultado de una batalla contra un depredador.
+func registrar_batalla(depredador: Especie, premio: Especie, zona_id: String, gano: bool,
+		equipo: Array, aciertos: int, errores: int) -> Dictionary:
+	var registro := {
+		"depredador": depredador.id,
+		"premio": premio.id if premio else "",
+		"zona": zona_id,
+		"gano": gano,
+		"equipo": equipo.map(func(e: Especie) -> String: return e.id),
+		"aciertos": aciertos,
+		"errores": errores,
+		"fecha": Time.get_datetime_string_from_system(),
+	}
+	_bd.batallas.append(registro)
+	_guardar_bd()
+	batalla_registrada.emit(registro)
+	return registro
+
+
+func batallas_ganadas() -> int:
+	return _bd.batallas.filter(func(b: Dictionary) -> bool: return b.gano).size()
 
 
 ## Datos de progreso del jugador (experiencia, semillas...). Llamar a guardar() después de cambiarlos.

@@ -18,6 +18,9 @@ const XP_MISION_ESPECIAL := 120
 const SEMILLAS_MISION := 10
 const SEMILLAS_MISION_ESPECIAL := 40
 const SEMILLAS_POR_NIVEL := 20
+const XP_BATALLA := 150
+const SEMILLAS_BATALLA := 25
+const XP_BATALLA_PERDIDA := 30         # por intentarlo
 const DURACION_NECTAR := 180           # segundos
 const PRECIO_NECTAR := 15
 
@@ -101,6 +104,23 @@ func comprar_plus(especie: Especie) -> bool:
 	_guardar()
 	RegistroEspecies.registrar_observacion(especie)   # queda en la Bioentdex
 	return true
+
+
+# --- Batallas ---------------------------------------------------------------------------------
+
+## Premio de una batalla contra un depredador. Si gana, rescata al insecto especial:
+## un Plus queda como obtenido (igual que en la tienda) y uno normal queda como capturado.
+func premiar_batalla(gano: bool, premio: Especie, zona_id: String) -> void:
+	if not gano:
+		_ganar(XP_BATALLA_PERDIDA, 0, "¡Buen intento!")
+		return
+	if premio and premio.plus and not tiene_plus(premio.id):
+		RegistroEspecies.jugador().plus.append(premio.id)
+		_guardar()
+		RegistroEspecies.registrar_observacion(premio)
+	elif premio and not RegistroEspecies.esta_capturada(premio.id):
+		RegistroEspecies.registrar_captura(premio, zona_id, null)   # rescatado: sin foto
+	_ganar(XP_BATALLA, SEMILLAS_BATALLA, "¡Batalla ganada!")
 
 
 func _pagar(precio: int) -> bool:
