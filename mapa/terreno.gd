@@ -12,9 +12,10 @@ var clases := PackedByteArray()        # una clase de PaletaMapa por píxel de l
 var _astar := AStarGrid2D.new()
 
 
-func _init(mascara: Texture2D, tamano_mapa: Vector2) -> void:
+## Recibe la imagen (no la textura) para poder construirse en un hilo aparte (ver zonas/expedicion.gd).
+func _init(mascara: Image, tamano_mapa: Vector2) -> void:
 	tamano = tamano_mapa
-	var img := mascara.get_image()
+	var img := mascara.duplicate() as Image
 	img.convert(Image.FORMAT_RGB8)
 	ancho = img.get_width()
 	alto = img.get_height()

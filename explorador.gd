@@ -50,6 +50,11 @@ func ir_a(punto: Vector3) -> void:
 		_camino = PackedVector2Array([destino])
 
 
+## Deja de seguir la ruta que llevaba.
+func detener() -> void:
+	_camino.clear()
+
+
 func mover(desplazamiento: Vector3) -> void:
 	_camino.clear()
 	var nueva := _pos2d() + Vector2(desplazamiento.x, desplazamiento.z)

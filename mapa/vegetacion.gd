@@ -35,7 +35,15 @@ const COLORES_CASAS := [
 const COLORES_TANQUES := [Color(0.15, 0.3, 0.7), Color(0.12, 0.12, 0.12)]
 
 
-func generar(terreno: Terreno, zonas: Array) -> void:
+## Crea los MultiMesh con lo que calculó calcular().
+func construir(instancias: Dictionary) -> void:
+	for clave in instancias:
+		_crear_multimesh(clave.get_slice("|", 0), instancias[clave])
+
+
+## Decide dónde va cada planta y casa, y marca los obstáculos en el terreno. Solo usa datos (no
+## nodos), así que se puede llamar desde otro hilo: el mapa se precalcula al abrir la app.
+static func calcular(terreno: Terreno, zonas: Array) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 2024   # semilla fija: el mapa siempre queda igual
 	var celda := terreno.tamano_celda()
@@ -69,12 +77,10 @@ func generar(terreno: Terreno, zonas: Array) -> void:
 				if OBSTACULOS.has(modelo):
 					terreno.bloquear_circulo(pos, OBSTACULOS[modelo] * escala)
 				break
-
-	for clave in instancias:
-		_crear_multimesh(clave.get_slice("|", 0), instancias[clave])
+	return instancias
 
 
-func _agregar_casa(instancias: Dictionary, pos: Vector2, rng: RandomNumberGenerator) -> void:
+static func _agregar_casa(instancias: Dictionary, pos: Vector2, rng: RandomNumberGenerator) -> void:
 	var pisos: int = [1, 2, 2, 3, 3, 3, 4][rng.randi() % 7]
 	var alto_casa := pisos * 1.25
 	var color: Color = COLORES_CASAS[rng.randi() % COLORES_CASAS.size()]
@@ -84,7 +90,7 @@ func _agregar_casa(instancias: Dictionary, pos: Vector2, rng: RandomNumberGenera
 		_agregar(instancias, "tanque", tanque, Basis(), alto_casa, COLORES_TANQUES[rng.randi() % 2])
 
 
-func _agregar(instancias: Dictionary, modelo: String, pos: Vector2, base: Basis, altura: float, color: Color) -> void:
+static func _agregar(instancias: Dictionary, modelo: String, pos: Vector2, base: Basis, altura: float, color: Color) -> void:
 	var bloque := Vector2i(((pos + Vector2.ONE * 1000.0) / TAM_BLOQUE).floor())
 	var clave := "%s|%d,%d" % [modelo, bloque.x, bloque.y]
 	if not instancias.has(clave):
@@ -117,14 +123,14 @@ func _malla(modelo: String) -> ArrayMesh:
 
 
 ## La casa cabe si toda su base cae dentro de la manzana.
-func _cabe_casa(terreno: Terreno, x: int, y: int) -> bool:
+static func _cabe_casa(terreno: Terreno, x: int, y: int) -> bool:
 	for d in [Vector2i(-4, -4), Vector2i(4, -4), Vector2i(-4, 4), Vector2i(4, 4)]:
 		if terreno.clase_celda(x + d.x, y + d.y) != PaletaMapa.MANZANA:
 			return false
 	return true
 
 
-func _camino_cerca(terreno: Terreno, x: int, y: int) -> bool:
+static func _camino_cerca(terreno: Terreno, x: int, y: int) -> bool:
 	for k in 9:
 		var d := Vector2i.ZERO if k == 8 else Vector2i(Vector2.from_angle(TAU * k / 8.0) * 5.0)
 		var clase := terreno.clase_celda(x + d.x, y + d.y)
@@ -134,7 +140,7 @@ func _camino_cerca(terreno: Terreno, x: int, y: int) -> bool:
 
 
 ## Los árboles dejan más espacio, sobre todo hacia el sur (del lado de la cámara), para no tapar la zona.
-func _cerca_de_zona(pos: Vector2, zonas: Array, es_alto: bool) -> bool:
+static func _cerca_de_zona(pos: Vector2, zonas: Array, es_alto: bool) -> bool:
 	for zona in zonas:
 		var d: Vector2 = pos - zona.posicion
 		if es_alto and d.y > 0.0:

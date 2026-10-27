@@ -9,8 +9,9 @@ const MARCADOR_ZONA := preload("res://marcador_zona.gd")
 ## Máscara de colores que define el humedal (ver mapa/paleta_mapa.gd). Se puede repintar en Paint.
 @export var mascara: Texture2D
 @export var velocidad_teclado := 5.0       # con las flechas, para probar en el computador
-@export var sensibilidad_arrastre := 0.035  # unidades del mapa por cada píxel arrastrado
-@export var distancia_toque := 12.0        # píxeles: si el dedo se mueve menos, es un toque
+@export var sensibilidad_arrastre := 0.018  # unidades del mapa por cada píxel arrastrado
+@export var velocidad_arrastre := 9.0       # tope al arrastrar, para que el explorador no salga disparado
+@export var distancia_toque := 24.0        # píxeles: si el dedo se mueve menos, es un toque
 
 @onready var suelo: MeshInstance3D = $Suelo
 @onready var camara: Camera3D = $Camera3D
@@ -22,24 +23,28 @@ var terreno: Terreno
 var _offset_camara: Vector3
 var _inicio_toque := Vector2.ZERO
 var _es_arrastre := false
+var _dedo_abajo := false      # solo cuenta el arrastre si el mapa vio empezar el toque
+var _arrastre_pendiente := Vector3.ZERO   # lo arrastrado que el explorador aún no ha caminado
 var _toque_pendiente = null   # Vector2 o null; se procesa en _physics_process
 
 
 func _ready() -> void:
 	var tamano: Vector2 = suelo.mesh.size
-	var ruido := NoiseTexture2D.new()
-	ruido.seamless = true
-	ruido.noise = FastNoiseLite.new()
 	var mat := ShaderMaterial.new()
 	mat.shader = preload("res://mapa/suelo_humedal.gdshader")
 	mat.set_shader_parameter("mascara", mascara)
-	mat.set_shader_parameter("ruido", ruido)
+	mat.set_shader_parameter("ruido", Expedicion.ruido_suelo)   # generado al abrir la app
 	mat.set_shader_parameter("tamano_mapa", tamano)
 	suelo.material_override = mat
 
 	# El terreno sabe por dónde se puede caminar; la vegetación y las zonas le agregan obstáculos
-	terreno = Terreno.new(mascara, tamano)
-	$Vegetacion.generar(terreno, Expedicion.zonas)
+	if mascara == Expedicion.MASCARA and tamano == Expedicion.TAMANO_MAPA:
+		var datos := Expedicion.datos_mapa()   # ya precalculado al abrir la app
+		terreno = datos[0]
+		$Vegetacion.construir(datos[1])
+	else:
+		terreno = Terreno.new(mascara.get_image(), tamano)
+		$Vegetacion.construir($Vegetacion.calcular(terreno, Expedicion.zonas))
 	DecoracionZonas.decorar(self, Expedicion.zonas, terreno)
 	explorador.terreno = terreno
 	$Fauna.configurar(terreno, explorador, Expedicion.zonas)
@@ -59,9 +64,19 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	if dir != Vector2.ZERO:
-		explorador.mover(Vector3(dir.x, 0, dir.y) * velocidad_teclado * delta)
+	# Teclado solo en el PC: en el celular un control o sensor reconocido como joystick lo movería solo
+	if not OS.has_feature("mobile"):
+		var dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+		if dir != Vector2.ZERO:
+			explorador.mover(Vector3(dir.x, 0, dir.y) * velocidad_teclado * delta)
+
+	# El arrastre se camina a velocidad limitada, no de golpe con cada evento del dedo
+	if _arrastre_pendiente != Vector3.ZERO:
+		var paso := _arrastre_pendiente.limit_length(velocidad_arrastre * delta)
+		explorador.mover(paso)
+		_arrastre_pendiente -= paso
+		if _arrastre_pendiente.length() < 0.001:
+			_arrastre_pendiente = Vector3.ZERO
 
 	camara.position = camara.position.lerp(explorador.position + _offset_camara, minf(1.0, 8.0 * delta))
 	_revisar_zona_cercana()
@@ -73,14 +88,39 @@ func _input(event: InputEvent) -> void:
 		if event.pressed:
 			_inicio_toque = event.position
 			_es_arrastre = false
-		elif not _es_arrastre:
-			_toque_pendiente = event.position
-	elif event is InputEventScreenDrag and event.index == 0:
+			_dedo_abajo = true
+		else:
+			if _dedo_abajo and not _es_arrastre:
+				_toque_pendiente = event.position
+			_dedo_abajo = false
+	elif event is InputEventScreenDrag and event.index == 0 and _dedo_abajo:
 		if not _es_arrastre and event.position.distance_to(_inicio_toque) > distancia_toque:
 			_es_arrastre = true
+			explorador.detener()
 		if _es_arrastre:
-			# El mapa sigue al dedo: el explorador avanza en sentido contrario al arrastre
-			explorador.mover(Vector3(-event.relative.x, 0, -event.relative.y) * sensibilidad_arrastre)
+			# El mapa sigue al dedo: el explorador avanza en sentido contrario al arrastre.
+			# Se acumula poco (máx. 2 unidades) para que al soltar no siga caminando.
+			_arrastre_pendiente += Vector3(-event.relative.x, 0, -event.relative.y) * sensibilidad_arrastre
+			_arrastre_pendiente = _arrastre_pendiente.limit_length(2.0)
+
+
+func _notification(what: int) -> void:
+	# Si la app pierde el foco (permiso de cámara, notificación, cambiar de app) o el mapa se pausa
+	# para abrir la cámara, el "soltar" del dedo puede no llegar nunca: se olvida el toque para que
+	# el explorador no quede caminando.
+	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED,
+			NOTIFICATION_DISABLED, NOTIFICATION_ENABLED]:
+		cancelar_toque()
+
+
+## Olvida el toque o arrastre en curso y detiene al explorador (al abrir la cámara, una ficha...).
+func cancelar_toque() -> void:
+	_dedo_abajo = false
+	_es_arrastre = false
+	_arrastre_pendiente = Vector3.ZERO
+	_toque_pendiente = null
+	if explorador:
+		explorador.detener()
 
 
 func _physics_process(_delta: float) -> void:

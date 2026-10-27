@@ -54,15 +54,18 @@ func _on_insecto_seleccionado(insecto: Node3D) -> void:
 	captura.especie = insecto.especie
 	captura.zona_id = mundo.zona_actual.id if mundo.zona_actual else ""
 	captura.tipo_fondo = _fondo_para(mundo.terreno.clase_en(Vector2(insecto.position.x, insecto.position.z)))
+	mundo.cancelar_toque()
 	$SubViewportContainer.process_mode = Node.PROCESS_MODE_DISABLED
 	captura.terminada.connect(func(_capturado: bool) -> void:
 		$SubViewportContainer.process_mode = Node.PROCESS_MODE_INHERIT
+		mundo.cancelar_toque()   # que no se quede con toques viejos de antes de abrir la cámara
 		fauna.quitar_insecto(insecto))   # capturado o escapado, ya no está en el mapa
 	add_child(captura)
 
 
 ## Los animales NPC no se capturan: se observan y se ve su ficha.
 func _on_npc_seleccionado(especie: Especie) -> void:
+	mundo.cancelar_toque()
 	var primera := RegistroEspecies.registrar_observacion(especie)
 	FichaEspecie.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
 
