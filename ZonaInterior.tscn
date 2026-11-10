@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://zona_interior.gd" id="1_zona"]
+[ext_resource type="PackedScene" path="res://ui/companero_colibri.tscn" id="2_comp"]
 
 [node name="ZonaInterior" type="Control"]
 layout_mode = 3
@@ -59,6 +60,10 @@ theme_override_colors/font_color = Color(1, 1, 1, 0.85)
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="CompaneroColibri" parent="Margen/VBox" instance=ExtResource("2_comp")]
+layout_mode = 2
+mostrar_retrato = true
 
 [node name="Scroll" type="ScrollContainer" parent="Margen/VBox"]
 layout_mode = 2

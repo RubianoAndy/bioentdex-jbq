@@ -48,6 +48,7 @@ func ir_a(punto: Vector3) -> void:
 		_camino = terreno.camino(_pos2d(), destino)
 	else:
 		_camino = PackedVector2Array([destino])
+	FeedbackTactil.interaccion()
 
 
 ## Deja de seguir la ruta que llevaba.

@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Delgado y de colores llamativos; al posarse pliega las alas sobre el cuerpo."
 importancia = "Caza otros insectos y sus ninfas acuáticas indican la salud del humedal."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Ninfa", "Adulto")
 consejo_macro = "Acércate muy despacio por un lado y enfoca los ojos."
 pagina_guia = 68
 horario = 0

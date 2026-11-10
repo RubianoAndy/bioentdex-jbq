@@ -81,6 +81,12 @@ func detener() -> void:
 		_feed.feed_is_active = false
 
 
+## Convierte la velocidad angular del giroscopio en movimiento de apuntado en píxeles.
+func desplazamiento_giroscopio(delta: float, sensibilidad: float) -> Vector2:
+	var giro := Input.get_gyroscope()   # rad/s; al girar el teléfono la escena se mueve al revés
+	return Vector2(giro.y, giro.x) * sensibilidad * delta
+
+
 func _exit_tree() -> void:
 	detener()
 

@@ -1,11 +1,11 @@
 class_name Batalla
 extends Control
-## Batalla contra un depredador del humedal que llegó en su globo con un insecto especial atrapado.
+## Duelo educativo de relaciones ecológicas contra un organismo del humedal.
 ##   1. El depredador se presenta y la guía del humedal explica qué hacer.
-##   2. El jugador elige hasta MAX_EQUIPO de sus insectos capturados.
+##   2. El jugador elige hasta MAX_EQUIPO de sus insectos fotografiados.
 ##   3. Preguntas: cada respuesta correcta lanza un poder del insecto; cada error, un ataque del
 ##      depredador. Se gana con VIDA_DEPREDADOR aciertos; cada insecto aguanta VIDA_INSECTO errores.
-##   4. Si gana, rescata al insecto especial (Recompensas.premiar_batalla). Todo queda registrado.
+##   4. El resultado registra observaciones y aprendizaje, sin recolección física.
 
 signal terminada(peleo: bool)   # false si huyó antes de pelear (el globo se queda en el mapa)
 
@@ -17,6 +17,7 @@ const VIDA_INSECTO := 2
 const MAX_EQUIPO := 3
 const GUIA := "Guía del humedal"
 const PRESTADO := "mariquita"   # insecto que presta la guía si el jugador aún no tiene ninguno
+const DUELO_3D := preload("res://retos/DueloCombate3D.tscn")
 
 ## Poder que lanza cada insecto al acertar (los demás usan "Ataque sorpresa")
 const PODERES := {
@@ -67,7 +68,7 @@ static func mostrar(padre: Node, nuevo_depredador: Especie, nuevo_premio: Especi
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	_preguntas = PreguntasBatalla.para(depredador)
+	_preguntas = PreguntasBatalla.relacionales()
 	_construir()
 	_dialogo(_presentacion(), _elegir_equipo)
 
@@ -106,7 +107,7 @@ func _construir() -> void:
 	_img_depredador.pivot_offset = Vector2(150, 150)
 	add_child(_img_depredador)
 
-	# El insecto especial atrapado, en una burbuja junto al depredador
+	# Especie de referencia para el encuentro educativo
 	_img_premio = PanelContainer.new()
 	var burbuja := StyleBoxFlat.new()
 	burbuja.bg_color = Color(1, 1, 1, 0.85)
@@ -118,7 +119,7 @@ func _construir() -> void:
 	_img_premio.position = Vector2(220, 260)
 	_img_premio.pivot_offset = Vector2(70, 70)
 	add_child(_img_premio)
-	_atrapado = _etiqueta("Atrapado", 20, DORADO)
+	_atrapado = _etiqueta("Especie por conocer", 20, DORADO)
 	_atrapado.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_atrapado.position = Vector2(236, 410)
 	add_child(_atrapado)
@@ -189,16 +190,16 @@ func _tarjeta_vida(nombre: String, maximo: int, color: Color) -> VBoxContainer:
 
 func _presentacion() -> Array:
 	var nombre := depredador.nombre_comun
-	var frase := "Buscando comida encontré un insecto muy especial."
+	var frase := "Observando el humedal encontré una relación ecológica interesante."
 	match depredador.tipo:
-		Especie.Tipo.AVE: frase = "Desde el aire vi a todos tus insectos… y atrapé uno muy especial."
-		Especie.Tipo.ANFIBIO: frase = "Mi lengua pegajosa nunca falla: mira el insecto especial que atrapé."
-		Especie.Tipo.MAMIFERO: frase = "Husmeando entre la hierba encontré un insecto muy especial."
+		Especie.Tipo.AVE: frase = "Desde el aire observé una relación entre plantas, insectos y aves."
+		Especie.Tipo.ANFIBIO: frase = "Junto al agua observé una relación entre insectos y anfibios."
+		Especie.Tipo.MAMIFERO: frase = "Entre la hierba observé señales de una red alimenticia."
 	return [
-		[nombre, "¡Alto ahí, explorador! Aquí %s, de la banda de depredadores del humedal." % nombre],
-		[nombre, "%s Tengo atrapado: %s. ¡Si lo quieres, demuestra cuánto sabes!" % [frase, premio.nombre_comun]],
-		[GUIA, "Los depredadores no son malos: comen para vivir y así mantienen el equilibrio del humedal. Pero podemos rescatar a %s." % premio.nombre_comun],
-		[GUIA, "Elige hasta %d de tus insectos. Cada respuesta correcta lanza un poder; cada error le da un ataque al depredador. Acierta %d veces para ganar." % [MAX_EQUIPO, VIDA_DEPREDADOR]],
+		[nombre, "¡Hola, explorador! Soy %s, parte de la vida del humedal." % nombre],
+		[nombre, "%s ¿Qué sabes de %s y su lugar en el ecosistema?" % [frase, premio.nombre_comun]],
+		[GUIA, "Cada organismo cumple un papel. Aprendamos cómo se conectan sin molestar ni recolectar a los animales."],
+		[GUIA, "Elige hasta %d insectos. Responde preguntas sobre relaciones ecológicas para cargar dos habilidades; después podrás esquivar el contraataque." % MAX_EQUIPO],
 	]
 
 
@@ -218,9 +219,9 @@ func _dialogo(lineas: Array, al_terminar: Callable, indice := 0) -> void:
 
 func _elegir_equipo() -> void:
 	_limpiar()
-	var capturados := RegistroEspecies.especies.filter(func(e: Especie) -> bool:
+	var fotografiados := RegistroEspecies.especies.filter(func(e: Especie) -> bool:
 		return e.es_capturable() and RegistroEspecies.esta_capturada(e.id))
-	if capturados.is_empty():
+	if fotografiados.is_empty():
 		# Sin insectos todavía: la guía le presta uno para esta batalla
 		var prestado := RegistroEspecies.buscar(PRESTADO)
 		_equipo = [prestado]
@@ -228,7 +229,7 @@ func _elegir_equipo() -> void:
 			_empezar_combate)
 		return
 
-	_caja.add_child(_etiqueta("Elige tu equipo (hasta %d)" % MAX_EQUIPO, 28, DORADO))
+	_caja.add_child(_etiqueta("Elige tu equipo fotografiado (hasta %d)" % MAX_EQUIPO, 28, DORADO))
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -243,7 +244,7 @@ func _elegir_equipo() -> void:
 	var pelear := _boton("¡A pelear!", _empezar_combate)
 	pelear.disabled = true
 	var seleccion: Array[Especie] = []
-	for especie in capturados:
+	for especie in fotografiados:
 		var opcion := Button.new()
 		opcion.toggle_mode = true
 		opcion.custom_minimum_size = Vector2(0, 170)
@@ -282,8 +283,23 @@ func _elegir_equipo() -> void:
 
 func _empezar_combate() -> void:
 	_actual = 0
-	_entrar_insecto()
-	_siguiente_pregunta()
+	var duelo: DueloCombate3D = DUELO_3D.instantiate()
+	duelo.equipo = _equipo.duplicate()
+	duelo.depredador = depredador
+	duelo.preguntas = PreguntasBatalla.relacionales()
+	duelo.vida_oponente = VIDA_DEPREDADOR
+	duelo.resultado.connect(_resultado_duelo)
+	add_child(duelo)
+
+
+func _resultado_duelo(gano: bool, nuevos_aciertos: int, nuevos_errores: int, equipo_final: int) -> void:
+	_aciertos += nuevos_aciertos
+	_errores += nuevos_errores
+	_actual = equipo_final
+	if gano:
+		_victoria()
+	else:
+		_derrota()
 
 
 func _entrar_insecto() -> void:
@@ -304,7 +320,27 @@ func _entrar_insecto() -> void:
 func _siguiente_pregunta() -> void:
 	if _preguntas.is_empty():
 		_preguntas = PreguntasBatalla.para(depredador)
-	var pregunta: Dictionary = _preguntas.pop_front()
+	if _preguntas.is_empty():
+		push_warning("Batalla: el banco de preguntas está vacío para '%s'." % depredador.id)
+		_limpiar()
+		_caja.add_child(_etiqueta("No hay preguntas disponibles para esta batalla.", 24, Color.WHITE))
+		_caja.add_child(_boton("Volver al mapa", _terminar.bind(true)))
+		return
+
+	var ids: Array[String] = []
+	for candidata in _preguntas:
+		ids.append(PreguntasBatalla.id_estable(candidata))
+	var id_pregunta := RegistroEspecies.siguiente_id_sin_repetir(
+		"preguntas_batalla:%s" % PreguntasBatalla.tema_de(depredador), ids)
+	var pregunta: Dictionary = {}
+	for candidata in _preguntas:
+		if PreguntasBatalla.id_estable(candidata) == id_pregunta:
+			pregunta = candidata
+			break
+	if pregunta.is_empty():
+		push_warning("Batalla: no se encontró el ID de pregunta seleccionado '%s'." % id_pregunta)
+		return
+	RegistroEspecies.registrar_pregunta_batalla(id_pregunta)
 	_limpiar()
 	_caja.add_child(_etiqueta("Pregunta · aciertos %d/%d" % [_aciertos, VIDA_DEPREDADOR], 22, DORADO))
 	_caja.add_child(_etiqueta(pregunta.pregunta, 28, Color.WHITE))
@@ -325,6 +361,7 @@ func _siguiente_pregunta() -> void:
 
 func _responder(pregunta: Dictionary, elegida: int, botones: Array[Button]) -> void:
 	var correcta: bool = elegida == pregunta.correcta
+	AnaliticaPedagogica.registrar_opcion_reto(str(pregunta.get("tema", "general")), elegida)
 	for boton in botones:
 		boton.mouse_filter = Control.MOUSE_FILTER_IGNORE   # no "disabled": se verían apagados
 		boton.focus_mode = Control.FOCUS_NONE
@@ -339,6 +376,7 @@ func _responder(pregunta: Dictionary, elegida: int, botones: Array[Button]) -> v
 		await _ataque_insecto()
 		_animar_barra(_barra_depredador, _vida_depredador)
 	else:
+		AnaliticaPedagogica.registrar_error_tema(str(pregunta.get("tema", "general")))
 		_errores += 1
 		_vida_insecto -= 1
 		await _ataque_depredador()
@@ -384,10 +422,10 @@ func _victoria() -> void:
 	_destellos(_img_premio.position + Vector2(70, 70), DORADO)
 	_limpiar()
 	_caja.add_child(_etiqueta("¡Ganaste!", 40, DORADO))
-	_caja.add_child(_etiqueta("%s soltó a %s. Ahora está en tu Bioentdex." % [depredador.nombre_comun, premio.nombre_comun], 28, Color.WHITE))
+	_caja.add_child(_etiqueta("%s quedó registrado como observado en tu Bioentdex." % premio.nombre_comun, 28, Color.WHITE))
 	_caja.add_child(_espacio())
-	_caja.add_child(_boton("Ver al insecto rescatado", func() -> void:
-		var ficha := FichaEspecie.mostrar(self, premio, "¡Insecto rescatado!")
+	_caja.add_child(_boton("Ver la ficha de especie", func() -> void:
+		var ficha := FichaEspecie.mostrar(self, premio, "¡Nuevo avistamiento!")
 		ficha.cerrada.connect(_terminar.bind(true))))
 
 

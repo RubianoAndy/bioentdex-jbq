@@ -8,6 +8,7 @@ extends Resource
 ## Las misiones especiales se resaltan con una bandera en la zona y en el mapa.
 
 enum Tipo { PREGUNTA, IDENTIFICAR, FOTO, PROPUESTA }
+enum RecompensaDigital { NINGUNA, MUESTRA_CAMPO, OOTECA }
 
 @export var id: String = ""
 @export var tipo: Tipo = Tipo.PREGUNTA
@@ -18,3 +19,7 @@ enum Tipo { PREGUNTA, IDENTIFICAR, FOTO, PROPUESTA }
 ## Especie relacionada: al resolver la misión queda registrada como observada
 @export var especie_id: String = ""
 @export_multiline var explicacion: String = ""   # se muestra después de responder
+## Hito virtual de estudio; no representa recolectar organismos del humedal.
+@export var recompensa_digital: RecompensaDigital = RecompensaDigital.NINGUNA
+## Todas las palabras/conceptos configurados deben aparecer en una propuesta para aceptarla.
+@export var conceptos_obligatorios: PackedStringArray = []

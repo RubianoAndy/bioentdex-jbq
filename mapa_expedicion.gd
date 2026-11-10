@@ -12,15 +12,18 @@ const ESCENA_MAPA := "res://MapaExpedicion.tscn"
 
 
 func _ready() -> void:
+	AudioManager.conectar_botones(self)
+	AudioManager.reproducir_paisaje_humedal()
 	mundo.zona_cercana_cambio.connect(_on_zona_cercana_cambio)
 	$PanelZona/Margen/HBox/BtnEntrar.pressed.connect(_on_entrar_pressed)
 	$BotonesDerecha/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
 	$BotonesDerecha/BtnExplorador.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
 	fauna.insecto_seleccionado.connect(_on_insecto_seleccionado)
 	fauna.npc_seleccionado.connect(_on_npc_seleccionado)
-	mundo.colibri.tocado.connect(_on_npc_seleccionado)
+	mundo.colibri.tocado.connect(_on_colibri_tocado)
 	retos.reto_foto_seleccionado.connect(_on_reto_foto_seleccionado)
 	retos.batalla_seleccionada.connect(_on_batalla_seleccionada)
+	$CompaneroColibri.establecer_contexto("")
 
 	var insignia := InsigniaJugador.new()
 	insignia.position = Vector2(16, 86)
@@ -41,9 +44,14 @@ func _ready() -> void:
 		Aviso.mostrar(avisos, "Los insectos con anillo dorado se pueden fotografiar. Los demás animales solo se observan.")
 
 
+func _exit_tree() -> void:
+	AudioManager.detener_paisaje_humedal()
+
+
 func _on_zona_cercana_cambio(zona: Zona) -> void:
 	# Al llegar a una zona aparece el panel de abajo con el botón "Entrar"
 	panel_zona.visible = zona != null
+	$CompaneroColibri.establecer_contexto(zona.id if zona else "")
 	if zona:
 		nombre_zona.text = zona.nombre
 
@@ -56,11 +64,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_entrar_pressed() -> void:
+	FeedbackTactil.interaccion()
 	Expedicion.entrar_a_zona(mundo.zona_actual, mundo.explorador.position)
 
 
 ## Abre la cámara para capturar el insecto. El mapa se pausa mientras tanto.
 func _on_insecto_seleccionado(insecto: Node3D) -> void:
+	FeedbackTactil.interaccion()
 	var captura := CAPTURA.instantiate()
 	captura.especie = insecto.especie
 	captura.zona_id = mundo.zona_actual.id if mundo.zona_actual else ""
@@ -74,6 +84,7 @@ func _on_insecto_seleccionado(insecto: Node3D) -> void:
 
 ## Reto de foto del mapa: abre la cámara y guarda la foto en la base de datos.
 func _on_reto_foto_seleccionado(marcador: Node3D) -> void:
+	FeedbackTactil.interaccion()
 	_pausar_mapa(true)
 	var reto := RetoFoto.mostrar(self, marcador.mision, marcador.zona_id, _fondo_en(marcador))
 	reto.terminado.connect(func(cumplido: bool) -> void:
@@ -84,6 +95,7 @@ func _on_reto_foto_seleccionado(marcador: Node3D) -> void:
 
 ## Emboscada: batalla de preguntas contra el depredador del globo.
 func _on_batalla_seleccionada(globo: Node3D) -> void:
+	FeedbackTactil.interaccion()
 	_pausar_mapa(true)
 	var zona_id: String = mundo.zona_actual.id if mundo.zona_actual else ""
 	var batalla := Batalla.mostrar(self, globo.depredador, globo.premio, zona_id, _fondo_en(globo))
@@ -101,9 +113,15 @@ func _pausar_mapa(pausar: bool) -> void:
 
 ## Los animales NPC no se capturan: se observan y se ve su ficha.
 func _on_npc_seleccionado(especie: Especie) -> void:
+	FeedbackTactil.interaccion()
 	mundo.cancelar_toque()
 	var primera := RegistroEspecies.registrar_observacion(especie)
 	FichaEspecie.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
+
+
+func _on_colibri_tocado(especie: Especie) -> void:
+	AudioManager.reproducir_sfx("aviso_colibri")
+	_on_npc_seleccionado(especie)
 
 
 func _fondo_en(nodo: Node3D) -> String:
@@ -119,11 +137,13 @@ func _fondo_para(clase: int) -> String:
 
 
 func _ir_a(escena: String) -> void:
+	FeedbackTactil.interaccion()
 	Expedicion.posicion_explorador = mundo.explorador.position
 	Perfil.volver_a = ESCENA_MAPA
 	get_tree().change_scene_to_file(escena)
 
 
 func _on_btn_regresar_pressed() -> void:
+	FeedbackTactil.interaccion()
 	Expedicion.posicion_explorador = mundo.explorador.position
 	get_tree().change_scene_to_file("res://MenuPrincipal.tscn")

@@ -8,7 +8,7 @@ extends Resource
 ##   - Insectos (dataset de RA):    res://dataset/insectos/<id>/  (todas las imágenes de la carpeta)
 
 enum Tipo { AVE, INSECTO, ANFIBIO, REPTIL, MAMIFERO, PEZ, PLANTA, INVERTEBRADO }
-enum Estado { LC, NT, VU, EN, CR, DD, NE }  # Categorías UICN
+enum Estado { LC, NT, VU, EN, CR, DD, NE }  # Categorías de conservación
 enum Horario { SIEMPRE, DIA, NOCHE }
 enum Movimiento { QUIETO, CAMINAR, NADAR, SALTAR, VOLAR }
 
@@ -40,9 +40,20 @@ const NOMBRES_ESTADO := {
 @export var familia: String = ""
 @export var orden: String = ""
 @export var tipo: Tipo = Tipo.AVE
-@export var estado_conservacion: Estado = Estado.LC
+@export var estado_conservacion: Estado = Estado.NE
+@export var fuente_estado_conservacion: String = ""
+@export var alcance_estado_conservacion: String = ""
 @export_multiline var descripcion: String = ""    # muy corta: una frase
 @export_multiline var importancia: String = ""    # por qué es importante para el humedal
+## Valores base del modelo educativo; no son mediciones de campo ni afirmaciones ecológicas.
+## Probabilidad de anular un impacto QTE; solo configúrala con respaldo documentado para la especie.
+@export_range(0.0, 0.5, 0.05) var defensa_morfologica_qte: float = 0.0
+@export var adaptacion_defensiva_documentada: String = ""
+## Incremento pequeño por categoría; LC, DD y NE permanecen neutrales.
+@export_range(0.0, 0.02, 0.005) var incremento_educativo_conservacion: float = 0.01
+## Fases que cuentan con respaldo en el contenido educativo de esta especie.
+@export var etapas_ciclo_vida: PackedStringArray = []
+@export_range(1, 10, 1) var registros_por_etapa: int = 3
 @export var imagen: Texture2D                     # opcional: si está vacía se usa la de la convención
 @export_multiline var consejo_macro: String = ""
 ## Página de su familia en la guía macrofotográfica (0 = no está en la guía)
@@ -50,6 +61,11 @@ const NOMBRES_ESTADO := {
 ## Organismo Plus: no aparece en el mapa, se obtiene en la tienda con semillas
 @export var plus: bool = false
 @export var precio: int = 0
+
+@export_group("Atributos ecológicos")
+@export_range(0.0, 100.0, 0.1) var impacto_ecologico: float = 50.0
+@export_range(0.0, 100.0, 0.1) var resistencia_habitat: float = 50.0
+@export_range(0.0, 100.0, 0.1) var vitalidad_poblacional: float = 50.0
 
 @export_group("En el mapa")
 @export var horario: Horario = Horario.SIEMPRE
@@ -65,6 +81,16 @@ func nombre_tipo() -> String:
 
 func nombre_estado() -> String:
 	return NOMBRES_ESTADO[estado_conservacion]
+
+
+func factor_conservacion_pb() -> float:
+	var peso := 0
+	match estado_conservacion:
+		Estado.NT: peso = 1
+		Estado.VU: peso = 2
+		Estado.EN: peso = 3
+		Estado.CR: peso = 4
+	return 1.0 + incremento_educativo_conservacion * peso
 
 
 ## Solo los insectos se capturan con la cámara; el resto de animales son NPC.

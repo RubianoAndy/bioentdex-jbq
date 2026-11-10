@@ -13,6 +13,13 @@ const RADIO_VISOR := 150.0
 ## Qué tan rápido revolotea cada insecto (1 = normal)
 const RAPIDEZ := {"mosca_metalica": 1.6, "zancudo": 1.5, "libelula": 1.3, "sirfido": 1.2, "caballito_del_diablo": 1.1, "mariquita": 0.6, "hormiga": 0.6, "psocido": 0.5, "pececillo_plata": 0.8, "tijereta": 0.6}
 
+@export_range(0.1, 3.0, 0.1) var sensibilidad_arrastre := 1.0
+@export_range(0.0, 1500.0, 10.0) var sensibilidad_giroscopio := 700.0
+@export_range(0.1, 20.0, 0.1) var suavizado_apuntado := 8.0
+@export_range(0.0, 2.0, 0.05) var retorno_al_centro := 0.3
+@export_range(0.1, 2.0, 0.1) var sensibilidad_mouse := 0.8
+@export var sensibilidad_camara := 1.0
+
 var especie: Especie            # null = misión de foto
 var zona_id := ""
 var tipo_fondo := "pradera"     # fondo simulado si no hay cámara: agua, pradera o bosque
@@ -22,6 +29,7 @@ var _intentos := INTENTOS
 var _tiempo := 0.0
 var _semilla := randf() * 100.0
 var _apuntar := Vector2.ZERO    # desplazamiento de la escena al mover la cámara
+var _apuntar_objetivo := Vector2.ZERO
 var _bloqueado := false
 var _camara := CamaraDispositivo.new()
 
@@ -36,6 +44,7 @@ var _camara := CamaraDispositivo.new()
 
 func _ready() -> void:
 	add_child(_camara)
+	AudioManager.conectar_botones(self)
 	visor.draw.connect(_dibujar_visor)
 	$HUD/BtnVolver.pressed.connect(_terminar.bind(false))
 	$HUD/BtnFoto.pressed.connect(_disparar)
@@ -47,6 +56,7 @@ func _ready() -> void:
 	if especie:
 		var imagenes := especie.imagenes_dataset()
 		insecto.texture = imagenes.pick_random() if not imagenes.is_empty() else especie.obtener_imagen()
+		FeedbackTactil.aparicion_sorpresa()
 		$HUD/Cartel/VBox/Nombre.text = especie.nombre_comun
 		_actualizar_intentos()
 	else:
@@ -74,24 +84,33 @@ func _process(delta: float) -> void:
 func _gui_input(event: InputEvent) -> void:
 	# Arrastrar el dedo también sirve para apuntar (por si el teléfono no tiene giroscopio)
 	if event is InputEventScreenDrag:
-		_apuntar += event.relative
+		_apuntar_objetivo += event.relative * sensibilidad_arrastre
 
 
 func _actualizar_apuntado(delta: float) -> void:
 	if DisplayServer.is_touchscreen_available():
-		var giro := Input.get_gyroscope()   # rad/s; al girar el teléfono la escena se mueve al revés
-		_apuntar += Vector2(giro.y, giro.x) * 700.0 * delta
-		_apuntar = _apuntar.lerp(Vector2.ZERO, minf(1.0, 0.3 * delta))
+		_apuntar_objetivo += _camara.desplazamiento_giroscopio(
+			delta, sensibilidad_giroscopio * sensibilidad_camara)
+		_apuntar_objetivo = _apuntar_objetivo.lerp(Vector2.ZERO, minf(1.0, retorno_al_centro * delta))
 	else:
 		# En el PC el mouse hace de teléfono: la escena se mueve al contrario del mouse
-		var objetivo := -(get_local_mouse_position() - size / 2.0) * 0.8
-		_apuntar = _apuntar.lerp(objetivo, minf(1.0, 8.0 * delta))
+		_apuntar_objetivo = -(get_local_mouse_position() - size / 2.0) \
+			* sensibilidad_mouse * sensibilidad_camara
+	var peso := 1.0 - exp(-suavizado_apuntado * delta)
+	_apuntar = _apuntar.lerp(_apuntar_objetivo, peso)
+	_apuntar_objetivo = _apuntar_objetivo.clamp(-size * 0.45, size * 0.45)
 	_apuntar = _apuntar.clamp(-size * 0.45, size * 0.45)
 
 
 func _en_visor() -> bool:
 	var centro_insecto := insecto.position + insecto.size / 2.0
 	return centro_insecto.distance_to(size / 2.0) < RADIO_VISOR * 0.8
+
+
+func _calidad_foto() -> float:
+	var centro_insecto := insecto.position + insecto.size / 2.0
+	var distancia := centro_insecto.distance_to(size / 2.0)
+	return clampf(1.0 - distancia / (RADIO_VISOR * 0.8), 0.0, 1.0)
 
 
 func _dibujar_visor() -> void:
@@ -107,17 +126,22 @@ func _dibujar_visor() -> void:
 func _disparar() -> void:
 	if _bloqueado:
 		return
+	FeedbackTactil.interaccion()
 	if especie == null:
 		_bloqueado = true
+		AudioManager.reproducir_sfx("camara_obturador")
 		foto_tomada.emit(await _tomar_foto())
 		_terminar(true)
 		return
 
 	if _en_visor():
 		_bloqueado = true
+		var calidad_foto := _calidad_foto()
+		AudioManager.reproducir_sfx("camara_obturador")
 		var foto := await _tomar_foto()
-		RegistroEspecies.registrar_captura(especie, zona_id, foto)
-		var ficha := FichaEspecie.mostrar(self, especie, "¡Capturaste un insecto!", ImageTexture.create_from_image(foto))
+		var captura := RegistroEspecies.registrar_captura(especie, zona_id, foto, calidad_foto)
+		var ficha := FichaEspecie.mostrar(self, especie, "¡Capturaste un insecto!",
+			ImageTexture.create_from_image(foto), captura)
 		ficha.cerrada.connect(_terminar.bind(true))
 		return
 

@@ -3,6 +3,7 @@ extends Control
 ## Las respuestas y las fotos se guardan en la base de datos de la Bioentdex.
 
 const CAPTURA := preload("res://captura/CapturaAR.tscn")
+const VALIDADOR_MISION := preload("res://zonas/validador_mision.gd")
 const NOMBRES_TIPO := ["Pregunta", "¿Quién es?", "Foto", "Propuesta"]
 const DORADO := Color(1, 0.84, 0.3)
 ## Fondo simulado de la cámara para las misiones de foto de cada zona
@@ -17,14 +18,21 @@ var zona: Zona
 
 
 func _ready() -> void:
+	AudioManager.reproducir_paisaje_humedal()
 	# Si se abre la escena sola desde el editor (F6), se usa la primera zona
 	zona = Expedicion.zona_actual if Expedicion.zona_actual else Expedicion.zonas[0]
 	$Fondo.color = zona.color.darkened(0.7)
 	$Margen/VBox/Encabezado/Titulo.text = zona.nombre
 	$Margen/VBox/Descripcion.text = zona.descripcion
+	$Margen/VBox/CompaneroColibri.establecer_contexto(zona.id)
 	$Margen/VBox/Encabezado/BtnVolver.pressed.connect(Expedicion.volver_al_mapa)
 	RegistroEspecies.especie_descubierta.connect(_on_especie_descubierta)
 	_construir()
+	AudioManager.conectar_botones(self)
+
+
+func _exit_tree() -> void:
+	AudioManager.detener_paisaje_humedal()
 
 
 func _construir() -> void:
@@ -151,15 +159,19 @@ func _abrir_mision(mision: Mision) -> void:
 
 	var resultado := _etiqueta("", 24, Color.WHITE)
 	if mision.tipo == Mision.Tipo.PROPUESTA:
+		var aviso_texto := _etiqueta(
+			"El texto nuevo solo estará en esta sesión y no se guardará. Las propuestas guardadas antes de esta actualización se conservan.",
+			18, Color(1.0, 0.88, 0.66))
+		caja.add_child(aviso_texto)
 		var texto := TextEdit.new()
-		texto.placeholder_text = "Escribe aquí tu propuesta…"
+		texto.placeholder_text = "Escribe aquí tu propuesta… (no se guardará)"
 		texto.custom_minimum_size = Vector2(0, 300)
 		texto.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
 		texto.add_theme_font_size_override("font_size", 24)
 		texto.text = RegistroEspecies.registro_mision(mision.id).get("respuesta", "")
 		caja.add_child(texto)
 		var enviar := Button.new()
-		enviar.text = "Guardar propuesta"
+		enviar.text = "Registrar participación"
 		enviar.custom_minimum_size = Vector2(0, 68)
 		enviar.pressed.connect(_guardar_propuesta.bind(mision, texto, resultado))
 		caja.add_child(enviar)
@@ -198,6 +210,7 @@ func _abrir_mision(mision: Mision) -> void:
 
 func _responder(mision: Mision, elegida: int, botones: Array[Button], resultado: Label) -> void:
 	var correcta := elegida == mision.correcta
+	AnaliticaPedagogica.registrar_opcion_reto(AnaliticaPedagogica.tema_de_mision(mision.id), elegida)
 	RegistroEspecies.registrar_mision(mision, zona.id, mision.opciones[elegida], correcta)
 	if correcta:
 		botones[elegida].modulate = Color(0.5, 1.0, 0.55)
@@ -205,6 +218,7 @@ func _responder(mision: Mision, elegida: int, botones: Array[Button], resultado:
 			boton.disabled = boton != botones[elegida]
 		resultado.text = "¡Correcto! " + mision.explicacion
 	else:
+		AnaliticaPedagogica.registrar_error_tema(AnaliticaPedagogica.tema_de_mision(mision.id))
 		botones[elegida].modulate = Color(1.0, 0.5, 0.5)
 		botones[elegida].disabled = true
 		resultado.text = "No es correcto. Intenta de nuevo."
@@ -215,8 +229,14 @@ func _guardar_propuesta(mision: Mision, texto: TextEdit, resultado: Label) -> vo
 	if propuesta.length() < 20:
 		resultado.text = "Cuéntanos un poco más: escribe al menos una o dos frases."
 		return
+	if not mision.conceptos_obligatorios.is_empty():
+		var faltantes := VALIDADOR_MISION.conceptos_faltantes(propuesta, mision.conceptos_obligatorios)
+		if not faltantes.is_empty():
+			resultado.text = "Para completar tu propuesta, menciona: %s." % ", ".join(faltantes)
+			return
 	RegistroEspecies.registrar_mision(mision, zona.id, propuesta, true)
-	resultado.text = mision.explicacion
+	AnaliticaPedagogica.registrar_participacion_propuesta()
+	resultado.text = "Participación registrada; el texto no se guardó. " + mision.explicacion
 
 
 func _tomar_foto_mision(mision: Mision, resultado: Label) -> void:

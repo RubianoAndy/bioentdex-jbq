@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Mosca de colores metálicos verdes o azules y ojos rojos."
 importancia = "Come materia en descomposición y devuelve nutrientes al suelo; se usa en medicina forense."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Detecta olores a gran distancia y ve la luz ultravioleta: acércate despacio."
 pagina_guia = 41
 horario = 0

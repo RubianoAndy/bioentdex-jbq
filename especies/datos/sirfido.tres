@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Imita a las abejas y avispas con rayas amarillas y negras, pero no pica."
 importancia = "Es excelente polinizadora; sus larvas controlan plagas y descomponen materia orgánica."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Se queda suspendida en el aire frente a las flores: espera ese momento."
 pagina_guia = 43
 horario = 1

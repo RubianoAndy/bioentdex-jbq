@@ -44,6 +44,19 @@ opciones = PackedStringArray()
 correcta = 0
 especie_id = ""
 explicacion = "Las flores silvestres alimentan a abejorros, mariposas y moscas de las flores."
+recompensa_digital = 1
+
+[sub_resource type="Resource" id="m4"]
+script = ExtResource("3_mis")
+id = "terrestre_4"
+tipo = 0
+especial = false
+enunciado = "¿Qué es una ooteca?"
+opciones = PackedStringArray("Una cápsula que protege los huevos de algunos insectos", "Una fase adulta de las libélulas", "Una planta flotante del humedal")
+correcta = 0
+especie_id = ""
+explicacion = "Algunos insectos forman ootecas para proteger sus huevos. Esta recompensa es un modelo digital: no busques ni retires huevos o nidos."
+recompensa_digital = 2
 
 [resource]
 script = ExtResource("1_zona")
@@ -54,4 +67,4 @@ color = Color(0.95, 0.6, 0.3, 1)
 posicion = Vector2(26.4, 2.0)
 radio = 5.0
 especies = Array[ExtResource("2_esp")]([ExtResource("4_copeton"), ExtResource("5_abejorro"), ExtResource("6_mariposa_blanca"), ExtResource("7_mariquita"), ExtResource("8_hormiga"), ExtResource("9_taquinido"), ExtResource("10_sirfido"), ExtResource("11_crisopa")])
-misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])
+misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3"), SubResource("m4")])

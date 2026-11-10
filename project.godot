@@ -18,10 +18,14 @@ config/icon="res://icon.svg"
 [autoload]
 
 RegistroEspecies="*res://especies/registro_especies.gd"
+AnaliticaPedagogica="*res://ui/analitica_pedagogica.gd"
 Expedicion="*res://zonas/expedicion.gd"
+DialogosColibri="*res://dialogos_colibri.gd"
 Perfil="*res://perfil.gd"
 Recompensas="*res://recompensas.gd"
 DesplazamientoTactil="*res://ui/desplazamiento_tactil.gd"
+FeedbackTactil="*res://ui/feedback_tactil.gd"
+AudioManager="*res://audio/audio_manager.gd"
 
 [display]
 

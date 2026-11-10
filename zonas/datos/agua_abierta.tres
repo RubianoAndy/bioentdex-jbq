@@ -20,6 +20,7 @@ opciones = PackedStringArray()
 correcta = 0
 especie_id = ""
 explicacion = "¡Gracias! Tu propuesta quedó guardada en tu Bioentdex. No botar aceite ni basura al desagüe y cuidar la ronda son buenas acciones para empezar."
+conceptos_obligatorios = PackedStringArray("aceite", "basura", "ronda")
 
 [sub_resource type="Resource" id="m2"]
 script = ExtResource("3_mis")
@@ -53,6 +54,7 @@ opciones = PackedStringArray()
 correcta = 0
 especie_id = "lenteja_de_agua"
 explicacion = "La lenteja de agua forma un tapete verde que alimenta a patos y tinguas."
+recompensa_digital = 1
 
 [resource]
 script = ExtResource("1_zona")

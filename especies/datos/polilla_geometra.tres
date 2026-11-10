@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Polilla nocturna de alas triangulares y gran camuflaje; su oruga avanza midiendo el camino."
 importancia = "Es polinizadora nocturna y bioindicadora del ecosistema."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Búscala de noche cerca de las luces, o de día camuflada en la corteza."
 pagina_guia = 91
 horario = 2

@@ -29,6 +29,8 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 | **Recompensas** | Experiencia y niveles (sobre todo por capturar), **semillas** como moneda (por misiones y por subir de nivel) y una **tienda** con *néctar atrayente* y 4 **organismos Plus**: especies raras que no aparecen en el mapa. |
 | **Personalización** | Nombre, piel, camisa, pantalón, sombrero o gorra y mochila del explorador. |
 | **Bioentdex** | Todas las especies (las que faltan aparecen como silueta), con tus fotos, y el historial de misiones. |
+| **Tarjeta de exploración** | Exporta localmente una imagen PNG con insignia, nivel, especies conocidas y una foto que elijas entre las guardadas en tu Bioentdex. |
+| **Analítica docente local** | Contadores agregados de aprendizaje con acceso por PIN local; la exportación JSON es manual y no usa red. |
 
 ---
 
@@ -72,6 +74,8 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 ├── MapaExpedicion.tscn       Mapa del humedal (mundo 3D + interfaz)
 ├── ZonaInterior.tscn         Interior de una zona: misiones y especies
 ├── Bioentdex.tscn            La Bioentdex (especies y misiones del jugador)
+├── comunidad/
+│   └── tarjeta_hallazgo.tscn   Tarjeta visual y exportación PNG local
 ├── GuiaMacro.tscn            Visor de la guía macrofotográfica
 ├── Tienda.tscn               Tienda (néctar y organismos Plus)
 ├── Personalizar.tscn         Personalización del explorador
@@ -89,6 +93,9 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 ├── captura/                  Vista de captura con cámara / realidad aumentada
 ├── ui/                       Tema visual, ficha de especie, visor de fotos, insignia del jugador, íconos,
 │                               nubes y fondos/fondo_inicio.jpg (fondo de la pantalla de inicio)
+│   ├── privacidad.gd           Avisos de privacidad compartidos
+│   ├── analitica_docente.tscn  Acceso local del docente y exportación manual
+│   └── analitica_pedagogica.gd Contadores pedagógicos locales
 ├── animales/npc/             Ilustraciones de los animales NPC y de los organismos Plus
 ├── dataset/
 │   ├── insectos/<id>/          Imágenes de cada insecto para la cámara (ilustraciones de prueba)
@@ -110,6 +117,7 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 | Nombre | Archivo | Qué hace |
 |---|---|---|
 | `RegistroEspecies` | `especies/registro_especies.gd` | Carga las especies y guarda la base de datos del jugador (capturas, observaciones, misiones, progreso). |
+| `AnaliticaPedagogica` | `ui/analitica_pedagogica.gd` | Guarda solo contadores agregados de especies descubiertas, errores por tema y participaciones en propuestas. |
 | `Expedicion` | `zonas/expedicion.gd` | Carga las zonas y recuerda dónde estaba el explorador al cambiar de pantalla. |
 | `Perfil` | `perfil.gd` | Nombre y apariencia del explorador. |
 | `Recompensas` | `recompensas.gd` | Experiencia, niveles, semillas, tienda y avisos de recompensa. |
@@ -153,10 +161,19 @@ código.
 Todo se guarda en el dispositivo, en la carpeta de usuario de Godot (`user://`; en Windows,
 `%APPDATA%\Godot\app_userdata\Bioentdex Jbq\`):
 
-- `bioentdex.json`: capturas, observaciones, respuestas de misiones y progreso (experiencia, semillas, Plus).
-  Cada registro es un diccionario simple, listo para enviarlo a un servidor más adelante.
+El conteo de especies corresponde a registros digitales de observación o fotografía; no promueve la recolección física de animales.
+
+- `bioentdex.json`: capturas, observaciones, respuestas cerradas de misiones y progreso (experiencia, semillas, Plus). Las propuestas guardadas con versiones anteriores se conservan; las nuevas propuestas no guardan su texto.
 - `fotos/`: fotos de las capturas y de las misiones de foto.
 - `perfil.cfg`: apariencia del explorador.
+- `analitica_pedagogica.json`: contadores locales por instalación, sin nombres, rostros, fechas, identificadores ni respuestas o texto libre.
+- `docente_pin.cfg`: sal y verificador derivado del PIN; el PIN en texto no se guarda. Tras cinco intentos fallidos, el acceso se bloquea por 60 segundos.
+- `analitica_docente_###.json`: exportación manual que solo se crea después de validar el PIN. Los temas y opciones de retos con menos de tres selecciones se omiten, igual que las participaciones con menos de tres envíos; el total de especies descubiertas sí se incluye.
+- `tarjetas/tarjeta_explorador_###.png`: imagen de la tarjeta, generada localmente desde la pantalla y sin metadatos de perfil.
+
+La tarjeta permite elegir una foto ya guardada en la Bioentdex. Antes de exportar, revisa que no aparezcan nombres reales, rostros, ubicaciones ni otros datos personales: esos detalles podrían estar dentro de la imagen. Las fotos y los archivos exportados permanecen en `user://` y no se comparten automáticamente.
+
+La analítica no envía datos a un servidor ni incluye identificadores de instalación. Las participaciones cuentan envíos válidos, no personas únicas, y las selecciones de retos guardan solo la posición de la opción por tema, nunca su texto. Aun así, los contadores pertenecen a una instalación individual y no garantizan anonimato absoluto, especialmente en grupos pequeños. El PIN solo ofrece una barrera local limitada: el APK y los archivos del dispositivo pueden inspeccionarse o alterarse; no es autenticación fuerte. No se debe usar esta función para recopilar datos personales ni tratar el archivo exportado como anónimo de forma absoluta.
 
 ## Dataset de insectos reales
 
@@ -176,7 +193,7 @@ La app usa **69** de ellas (las de confianza alta o media) como fotos reales en 
 - Conseguir una foto real de la polilla geómetra (Geometridae).
 - Recortar con fondo transparente las fotos reales para usarlas también en la cámara de realidad aumentada.
 - Definir el contenido final de las 5 misiones especiales.
-- Conectar la base de datos a un servidor si se quiere compartir el progreso (por ejemplo, para docentes).
+- No hay telemetría ni sincronización: las tarjetas y la analítica se mantienen locales y se exportan solo por acción manual.
 
 ### Archivos antiguos sin uso
 

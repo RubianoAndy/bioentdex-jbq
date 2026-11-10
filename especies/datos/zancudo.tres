@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Insecto delgado de patas largas; solo las hembras pican, los machos no."
 importancia = "Sus larvas viven en el agua y alimentan a otros animales; las hembras pueden transmitir enfermedades."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Fíjate en las antenas: las del macho son plumosas y las de la hembra delgadas."
 pagina_guia = 46
 horario = 0
