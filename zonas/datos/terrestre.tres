@@ -11,6 +11,9 @@
 [ext_resource type="Resource" path="res://especies/datos/taquinido.tres" id="9_taquinido"]
 [ext_resource type="Resource" path="res://especies/datos/sirfido.tres" id="10_sirfido"]
 [ext_resource type="Resource" path="res://especies/datos/crisopa.tres" id="11_crisopa"]
+[ext_resource type="Resource" path="res://especies/datos/capita_negra.tres" id="12_capita_negra"]
+[ext_resource type="Resource" path="res://especies/datos/turpial_oriental.tres" id="13_turpial_oriental"]
+[ext_resource type="Resource" path="res://especies/datos/espiguero_negriblanco.tres" id="14_espiguero_negriblanco"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
@@ -66,5 +69,5 @@ descripcion = "Tierra firme y seca, con pastos y flores donde buscan alimento av
 color = Color(0.95, 0.6, 0.3, 1)
 posicion = Vector2(26.4, 2.0)
 radio = 5.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_copeton"), ExtResource("5_abejorro"), ExtResource("6_mariposa_blanca"), ExtResource("7_mariquita"), ExtResource("8_hormiga"), ExtResource("9_taquinido"), ExtResource("10_sirfido"), ExtResource("11_crisopa")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_copeton"), ExtResource("5_abejorro"), ExtResource("6_mariposa_blanca"), ExtResource("7_mariquita"), ExtResource("8_hormiga"), ExtResource("9_taquinido"), ExtResource("10_sirfido"), ExtResource("11_crisopa"), ExtResource("12_capita_negra"), ExtResource("13_turpial_oriental"), ExtResource("14_espiguero_negriblanco")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3"), SubResource("m4")])

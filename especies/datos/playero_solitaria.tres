@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 46
+id = "playero_solitaria"
+nombre_comun = "Playero solitario"
+nombre_cientifico = "Tringa solitaria"
+familia = "Scolopacidae"
+orden = "Charadriiformes"
+tipo = 0
+estado_conservacion = 6
+descripcion = "Ave zancuda identificada en registros sonoros de los senderos del Jaboque."
+importancia = "Su registro contribuye a documentar la diversidad de aves reportadas en el humedal."
+consejo_macro = "Obsérvala desde lejos y en silencio; no reproduzcas llamados para atraerla."
+horario = 1
+movimiento = 1
+suelos_habitat = PackedInt32Array(0, 1, 8)
+tamano_en_mapa = 0.75

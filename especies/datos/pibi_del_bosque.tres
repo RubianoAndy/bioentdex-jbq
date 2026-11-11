@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 50
+id = "pibi_del_bosque"
+nombre_comun = "Pibí del bosque"
+nombre_cientifico = "Contopus virens"
+familia = "Tyrannidae"
+orden = "Passeriformes"
+tipo = 0
+estado_conservacion = 6
+descripcion = "Ave identificada en uno de los registros sonoros publicados para el humedal."
+importancia = "Su registro contribuye a documentar la diversidad de aves reportadas en el humedal."
+consejo_macro = "Obsérvala desde lejos y en silencio; no reproduzcas llamados para atraerla."
+horario = 1
+movimiento = 0
+suelos_habitat = PackedInt32Array(3, 5)
+tamano_en_mapa = 0.8

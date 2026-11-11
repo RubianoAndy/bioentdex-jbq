@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 45
+id = "turpial_oriental"
+nombre_comun = "Turpial oriental"
+nombre_cientifico = "Sturnella magna"
+familia = "Icteridae"
+orden = "Passeriformes"
+tipo = 0
+estado_conservacion = 6
+descripcion = "Ave de pastizal identificada entre las vocalizaciones reportadas para el humedal."
+importancia = "Su registro contribuye a documentar la diversidad de aves reportadas en el humedal."
+consejo_macro = "Obsérvala desde lejos y en silencio; no reproduzcas llamados para atraerla."
+horario = 1
+movimiento = 1
+suelos_habitat = PackedInt32Array(2, 5, 11)
+tamano_en_mapa = 1.0

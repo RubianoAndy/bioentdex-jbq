@@ -3,14 +3,20 @@
 Coloca los archivos de audio en las rutas indicadas en `audio_manager.gd` o cambia
 una ruta con `AudioManager.configurar_ruta("clave", "res://audio/carpeta/archivo.ogg")`.
 Se aceptan recursos `AudioStream` compatibles con Godot; configura en el importador los
-archivos de ambiente para que se repitan. No se incluyen clips de audio en el proyecto.
+archivos de ambiente para que se repitan.
+
+El paisaje sonoro de aves de 13:07 está incluido como
+`ambiente/paisaje_sonoro_total.mp3` y se reproduce en el mapa y las zonas interiores.
+Fuente: [AVE-WIX, paisajes sonoros del humedal Jaboque](https://luciabernal555.wixsite.com/avifaunahumeljab/paisajes-sonoros).
+La página acredita grabaciones a Olga Lucía Millán. Uso incorporado con autorización confirmada
+por la usuaria. Los demás clips de ambiente y efectos siguen sin incluirse.
 
 Claves incluidas:
 
 | Clave | Uso | Ruta inicial |
 |---|---|---|
 | `musica_principal` | Musica de fondo | `musica/principal.ogg` |
-| `humedal_aves` | Cantos de aves | `ambiente/aves.ogg` |
+| `humedal_aves` | Paisaje sonoro de aves del Jaboque | `ambiente/paisaje_sonoro_total.mp3` |
 | `humedal_insectos` | Insectos | `ambiente/insectos.ogg` |
 | `humedal_viento` | Viento | `ambiente/viento.ogg` |
 | `humedal_agua` | Agua | `ambiente/agua.ogg` |

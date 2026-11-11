@@ -8,6 +8,7 @@
 [ext_resource type="Resource" path="res://especies/datos/garza_blanca.tres" id="6_garza_blanca"]
 [ext_resource type="Resource" path="res://especies/datos/libelula.tres" id="7_libelula"]
 [ext_resource type="Resource" path="res://especies/datos/caballito_del_diablo.tres" id="8_caballito_del_diablo"]
+[ext_resource type="Resource" path="res://especies/datos/tordo_lanero.tres" id="9_tordo_lanero"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
@@ -50,5 +51,5 @@ descripcion = "Desde el mirador de madera se observan las aves sin molestarlas. 
 color = Color(0.6, 0.4, 0.9, 1)
 posicion = Vector2(34.3, -43.0)
 radio = 5.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_monjita_bogotana"), ExtResource("5_pato_canadiense"), ExtResource("6_garza_blanca"), ExtResource("7_libelula"), ExtResource("8_caballito_del_diablo")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_monjita_bogotana"), ExtResource("5_pato_canadiense"), ExtResource("6_garza_blanca"), ExtResource("7_libelula"), ExtResource("8_caballito_del_diablo"), ExtResource("9_tordo_lanero")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

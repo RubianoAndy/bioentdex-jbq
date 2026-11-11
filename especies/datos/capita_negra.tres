@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 47
+id = "capita_negra"
+nombre_comun = "Capita negra"
+nombre_cientifico = "Spinus psaltria"
+familia = "Fringillidae"
+orden = "Passeriformes"
+tipo = 0
+estado_conservacion = 6
+descripcion = "Pequeña ave semillera mencionada en las grabaciones publicadas del humedal."
+importancia = "Su registro contribuye a documentar la diversidad de aves reportadas en el humedal."
+consejo_macro = "Obsérvala desde lejos y en silencio; no reproduzcas llamados para atraerla."
+horario = 1
+movimiento = 1
+suelos_habitat = PackedInt32Array(2, 3, 5)
+tamano_en_mapa = 0.65

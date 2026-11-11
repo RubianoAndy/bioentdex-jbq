@@ -10,6 +10,8 @@
 [ext_resource type="Resource" path="res://especies/datos/ninfalida.tres" id="8_ninfalida"]
 [ext_resource type="Resource" path="res://especies/datos/avispa.tres" id="9_avispa"]
 [ext_resource type="Resource" path="res://especies/datos/crisopa.tres" id="10_crisopa"]
+[ext_resource type="Resource" path="res://especies/datos/siriri_comun.tres" id="11_siriri_comun"]
+[ext_resource type="Resource" path="res://especies/datos/pibi_del_bosque.tres" id="12_pibi_del_bosque"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
@@ -52,5 +54,5 @@ descripcion = "Una franja verde que conecta el humedal con otros parques, para q
 color = Color(0.3, 0.85, 0.6, 1)
 posicion = Vector2(7.1, -51.3)
 radio = 5.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_colibri_chillon"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_abejorro"), ExtResource("7_mariposa_blanca"), ExtResource("8_ninfalida"), ExtResource("9_avispa"), ExtResource("10_crisopa")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_colibri_chillon"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_abejorro"), ExtResource("7_mariposa_blanca"), ExtResource("8_ninfalida"), ExtResource("9_avispa"), ExtResource("10_crisopa"), ExtResource("11_siriri_comun"), ExtResource("12_pibi_del_bosque")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

@@ -15,7 +15,7 @@ const CLAVES_AMBIENTE := [
 
 var catalogo_audio: Dictionary = {
 	"musica_principal": "res://audio/musica/principal.ogg",
-	"humedal_aves": "res://audio/ambiente/aves.ogg",
+	"humedal_aves": "res://audio/ambiente/paisaje_sonoro_total.mp3",
 	"humedal_insectos": "res://audio/ambiente/insectos.ogg",
 	"humedal_viento": "res://audio/ambiente/viento.ogg",
 	"humedal_agua": "res://audio/ambiente/agua.ogg",

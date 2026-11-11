@@ -9,6 +9,8 @@
 [ext_resource type="Resource" path="res://especies/datos/libelula.tres" id="7_libelula"]
 [ext_resource type="Resource" path="res://especies/datos/zancudo.tres" id="8_zancudo"]
 [ext_resource type="Resource" path="res://especies/datos/tipula.tres" id="9_tipula"]
+[ext_resource type="Resource" path="res://especies/datos/playero_solitaria.tres" id="10_playero_solitaria"]
+[ext_resource type="Resource" path="res://especies/datos/coquito.tres" id="11_coquito"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
@@ -64,5 +66,5 @@ descripcion = "El espejo de agua del humedal, sin plantas encima. Aquí nadan y 
 color = Color(0.2, 0.5, 0.95, 1)
 posicion = Vector2(3.1, 6.7)
 radio = 5.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_tingua_pico_rojo"), ExtResource("5_garza_blanca"), ExtResource("6_lenteja_de_agua"), ExtResource("7_libelula"), ExtResource("8_zancudo"), ExtResource("9_tipula")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_tingua_pico_rojo"), ExtResource("5_garza_blanca"), ExtResource("6_lenteja_de_agua"), ExtResource("7_libelula"), ExtResource("8_zancudo"), ExtResource("9_tipula"), ExtResource("10_playero_solitaria"), ExtResource("11_coquito")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3"), SubResource("m4")])

@@ -11,6 +11,7 @@
 [ext_resource type="Resource" path="res://especies/datos/avispa.tres" id="9_avispa"]
 [ext_resource type="Resource" path="res://especies/datos/polilla_geometra.tres" id="10_polilla_geometra"]
 [ext_resource type="Resource" path="res://especies/datos/tijereta.tres" id="11_tijereta"]
+[ext_resource type="Resource" path="res://especies/datos/alcaravan.tres" id="12_alcaravan"]
 
 [sub_resource type="Resource" id="m1"]
 script = ExtResource("3_mis")
@@ -53,5 +54,5 @@ descripcion = "La franja de árboles y arbustos que rodea y protege el humedal. 
 color = Color(0.1, 0.55, 0.3, 1)
 posicion = Vector2(-20.3, -15.1)
 radio = 5.0
-especies = Array[ExtResource("2_esp")]([ExtResource("4_aliso"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_mariquita"), ExtResource("7_psocido"), ExtResource("8_crisomelido"), ExtResource("9_avispa"), ExtResource("10_polilla_geometra"), ExtResource("11_tijereta")])
+especies = Array[ExtResource("2_esp")]([ExtResource("4_aliso"), ExtResource("5_mirla_patiamarilla"), ExtResource("6_mariquita"), ExtResource("7_psocido"), ExtResource("8_crisomelido"), ExtResource("9_avispa"), ExtResource("10_polilla_geometra"), ExtResource("11_tijereta"), ExtResource("12_alcaravan")])
 misiones = Array[ExtResource("3_mis")]([SubResource("m1"), SubResource("m2"), SubResource("m3")])

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 51
+id = "espiguero_negriblanco"
+nombre_comun = "Espiguero negriblanco"
+nombre_cientifico = "Sporophila luctuosa"
+familia = "Thraupidae"
+orden = "Passeriformes"
+tipo = 0
+estado_conservacion = 6
+descripcion = "Ave semillera identificada en grabaciones realizadas en los senderos del Jaboque."
+importancia = "Su registro contribuye a documentar la diversidad de aves reportadas en el humedal."
+consejo_macro = "Obsérvala desde lejos y en silencio; no reproduzcas llamados para atraerla."
+horario = 1
+movimiento = 1
+suelos_habitat = PackedInt32Array(2, 5, 11)
+tamano_en_mapa = 0.65

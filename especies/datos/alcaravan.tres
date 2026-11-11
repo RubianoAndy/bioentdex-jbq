@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Especie" format=3]
+
+[ext_resource type="Script" path="res://especies/especie.gd" id="1_esp"]
+
+[resource]
+script = ExtResource("1_esp")
+numero = 49
+id = "alcaravan"
+nombre_comun = "Alcaraván"
+nombre_cientifico = "Vanellus chilensis"
+familia = "Charadriidae"
+orden = "Charadriiformes"
+tipo = 0
+estado_conservacion = 6
+descripcion = "Ave de espacios abiertos identificada en los paisajes sonoros del Jaboque."
+importancia = "Su registro contribuye a documentar la diversidad de aves reportadas en el humedal."
+consejo_macro = "Obsérvala desde lejos y en silencio; no reproduzcas llamados para atraerla."
+horario = 1
+movimiento = 1
+suelos_habitat = PackedInt32Array(1, 2, 5)
+tamano_en_mapa = 1.0
