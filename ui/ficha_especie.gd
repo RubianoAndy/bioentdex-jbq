@@ -238,7 +238,7 @@ func _habitat() -> String:
 
 
 func _texto_riesgo() -> String:
-	var codigo := Especie.Estado.keys()[_especie.estado_conservacion]
+	var codigo: String = Especie.Estado.keys()[_especie.estado_conservacion]
 	var texto := "Estado de conservación: %s · %s" % [codigo, _especie.nombre_estado()]
 	match _especie.estado_conservacion:
 		Especie.Estado.DD:
@@ -314,7 +314,7 @@ func _construir_tarjeta() -> void:
 		etiquetas.add_child(_pastilla("Capturable", Color(1, 0.8, 0.25), Color(0.3, 0.2, 0.02)))
 	else:
 		etiquetas.add_child(_pastilla("Solo observar", Color(0.62, 0.48, 0.85), Color.WHITE))
-	var codigo_estado := Especie.Estado.keys()[_especie.estado_conservacion]
+	var codigo_estado: String = Especie.Estado.keys()[_especie.estado_conservacion]
 	etiquetas.add_child(_pastilla("%s · %s" % [codigo_estado, _especie.nombre_estado()],
 		COLOR_ESTADO[_especie.estado_conservacion], Color.WHITE))
 	columna.add_child(etiquetas)

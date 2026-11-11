@@ -1,5 +1,5 @@
 extends Control
-## Personalizar el explorador: nombre, piel, ropa, sombrero y mochila (se guarda en el Perfil).
+## Personalizar el explorador: nombre, género, piel, cabello, ropa, sombrero y mochila (se guarda en el Perfil).
 
 @onready var explorador: Node3D = $Margen/VBox/Vista/SubViewport/Explorador
 @onready var opciones: VBoxContainer = $Margen/VBox/Scroll/Opciones
@@ -29,26 +29,31 @@ func _construir() -> void:
 	nombre.text_changed.connect(func(texto: String) -> void: Perfil.nombre = texto)
 	opciones.add_child(nombre)
 
+	_fila_botones("Género", Perfil.GENEROS, "genero")
 	_fila_colores("Piel", Perfil.PIELES, "piel")
+	_fila_colores("Cabello", Perfil.CABELLOS, "cabello")
 	_fila_colores("Camisa", Perfil.CAMISAS, "camisa")
 	_fila_colores("Pantalón", Perfil.PANTALONES, "pantalon")
 
-	opciones.add_child(_titulo("Sombrero"))
+	_fila_botones("Sombrero", Perfil.SOMBREROS, "sombrero")
+	_fila_colores("Color del sombrero", Perfil.COLORES_SOMBRERO, "color_sombrero")
+	_fila_colores("Mochila", Perfil.MOCHILAS, "mochila")
+
+
+func _fila_botones(titulo: String, textos: Array, propiedad: String) -> void:
+	opciones.add_child(_titulo(titulo))
 	var fila := HBoxContainer.new()
 	fila.add_theme_constant_override("separation", 10)
-	for i in Perfil.SOMBREROS.size():
+	for i in textos.size():
 		var boton := Button.new()
-		boton.text = Perfil.SOMBREROS[i]
+		boton.text = textos[i]
 		boton.custom_minimum_size = Vector2(0, 56)
 		boton.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		boton.toggle_mode = true
-		boton.button_pressed = Perfil.sombrero == i
-		boton.pressed.connect(_elegir.bind("sombrero", i))
+		boton.button_pressed = Perfil.get(propiedad) == i
+		boton.pressed.connect(_elegir.bind(propiedad, i))
 		fila.add_child(boton)
 	opciones.add_child(fila)
-
-	_fila_colores("Color del sombrero", Perfil.COLORES_SOMBRERO, "color_sombrero")
-	_fila_colores("Mochila", Perfil.MOCHILAS, "mochila")
 
 
 func _fila_colores(titulo: String, colores: Array, propiedad: String) -> void:
