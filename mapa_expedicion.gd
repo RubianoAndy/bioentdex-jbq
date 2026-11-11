@@ -3,6 +3,7 @@ extends Control
 
 const CAPTURA := preload("res://captura/CapturaAR.tscn")
 const ESCENA_MAPA := "res://MapaExpedicion.tscn"
+const FICHA_ESPECIE_SCRIPT := preload("res://ui/ficha_especie.gd")
 
 @onready var mundo: Node3D = $SubViewportContainer/SubViewport/Mundo3D
 @onready var fauna: Node3D = $SubViewportContainer/SubViewport/Mundo3D/Fauna
@@ -116,7 +117,7 @@ func _on_npc_seleccionado(especie: Especie) -> void:
 	FeedbackTactil.interaccion()
 	mundo.cancelar_toque()
 	var primera := RegistroEspecies.registrar_observacion(especie)
-	FichaEspecie.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
+	FICHA_ESPECIE_SCRIPT.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
 
 
 func _on_colibri_tocado(especie: Especie) -> void:

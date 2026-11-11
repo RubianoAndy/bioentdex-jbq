@@ -28,7 +28,7 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 | **Guía macrofotográfica** | La guía completa (121 páginas) dentro de la app, con zoom, índice y saltos a cada orden y familia. |
 | **Recompensas** | Experiencia y niveles (sobre todo por capturar), **semillas** como moneda (por misiones y por subir de nivel) y una **tienda** con *néctar atrayente* y 4 **organismos Plus**: especies raras que no aparecen en el mapa. |
 | **Personalización** | Nombre, piel, camisa, pantalón, sombrero o gorra y mochila del explorador. |
-| **Bioentdex** | Todas las especies (las que faltan aparecen como silueta), con tus fotos, y el historial de misiones. |
+| **Bioentdex** | Fichas consultables de todas las especies, con el estado de captura u observación, tus fotos y el historial de misiones. |
 | **Tarjeta de exploración** | Exporta localmente una imagen PNG con insignia, nivel, especies conocidas y una foto que elijas entre las guardadas en tu Bioentdex. |
 | **Analítica docente local** | Contadores agregados de aprendizaje con acceso por PIN local; la exportación JSON es manual y no usa red. |
 

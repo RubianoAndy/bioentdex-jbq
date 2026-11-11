@@ -73,6 +73,8 @@ func _ready() -> void:
 	forma.shape = cilindro
 	forma.position.y = 1.5
 	area.add_child(forma)
+	area.collision_layer = 2
+	area.collision_mask = 0
 	add_child(area)
 
 

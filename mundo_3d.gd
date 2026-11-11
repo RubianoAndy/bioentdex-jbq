@@ -5,6 +5,8 @@ extends Node3D
 signal zona_cercana_cambio(zona: Zona)   # null cuando el explorador sale de la zona
 
 const MARCADOR_ZONA := preload("res://marcador_zona.gd")
+const MASCARA_INTERACTIVOS := 1
+const MASCARA_MARCADORES_ZONA := 2
 
 ## Máscara de colores que define el humedal (ver mapa/paleta_mapa.gd). Se puede repintar en Paint.
 @export var mascara: Texture2D
@@ -168,7 +170,13 @@ func _tocar(posicion_pantalla: Vector2) -> void:
 	var consulta := PhysicsRayQueryParameters3D.create(origen, origen + direccion * 100.0)
 	consulta.collide_with_areas = true
 	consulta.collide_with_bodies = false
+	consulta.collision_mask = MASCARA_INTERACTIVOS
 	var choque := get_world_3d().direct_space_state.intersect_ray(consulta)
+	if choque and choque.collider.get_parent().has_method("al_tocar"):
+		choque.collider.get_parent().al_tocar(explorador)
+		return
+	consulta.collision_mask = MASCARA_MARCADORES_ZONA
+	choque = get_world_3d().direct_space_state.intersect_ray(consulta)
 	if choque and choque.collider.get_parent().has_method("al_tocar"):
 		choque.collider.get_parent().al_tocar(explorador)
 		return
