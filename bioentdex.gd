@@ -59,7 +59,8 @@ func _mostrar_ficha(especie: Especie) -> void:
 	var capturas := RegistroEspecies.capturas_de(especie.id)
 	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
 	var captura: Dictionary = capturas[-1] if not capturas.is_empty() else {}
-	FichaEspecie.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)
+	var ficha := FichaEspecie.new()
+	ficha.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)
 
 
 func _llenar_misiones() -> void:

@@ -83,7 +83,8 @@ func _construir() -> void:
 
 func _comprar_plus(especie: Especie) -> void:
 	if Recompensas.comprar_plus(especie):
-		FichaEspecie.mostrar(self, especie, "¡Organismo Plus obtenido!")
+		var ficha := FichaEspecie.new()
+		ficha.mostrar(self, especie, "¡Organismo Plus obtenido!")
 
 
 func _articulo(icono: Texture2D, nombre: String, descripcion: String, precio: int, obtenido: bool,
@@ -131,7 +132,9 @@ func _articulo(icono: Texture2D, nombre: String, descripcion: String, precio: in
 	comprar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	if obtenido:
 		comprar.text = "Ver"
-		comprar.pressed.connect(func() -> void: FichaEspecie.mostrar(self, especie))
+		comprar.pressed.connect(func() -> void:
+			var ficha := FichaEspecie.new()
+			ficha.mostrar(self, especie))
 	else:
 		comprar.text = str(precio)
 		comprar.icon = load("res://ui/semilla.svg")

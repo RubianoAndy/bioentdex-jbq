@@ -425,7 +425,8 @@ func _victoria() -> void:
 	_caja.add_child(_etiqueta("%s quedó registrado como observado en tu Bioentdex." % premio.nombre_comun, 28, Color.WHITE))
 	_caja.add_child(_espacio())
 	_caja.add_child(_boton("Ver la ficha de especie", func() -> void:
-		var ficha: FichaEspecie = FichaEspecie.mostrar(self, premio, "¡Nuevo avistamiento!")
+		var ficha := FichaEspecie.new()
+		ficha.mostrar(self, premio, "¡Nuevo avistamiento!")
 		ficha.cerrada.connect(_terminar.bind(true))))
 
 

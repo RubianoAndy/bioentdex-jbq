@@ -121,7 +121,8 @@ func _on_npc_seleccionado(especie: Especie) -> void:
 	FeedbackTactil.interaccion()
 	mundo.cancelar_toque()
 	var primera := RegistroEspecies.registrar_observacion(especie)
-	FichaEspecie.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
+	var ficha := FichaEspecie.new()
+	ficha.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
 
 
 func _on_colibri_tocado(especie: Especie) -> void:

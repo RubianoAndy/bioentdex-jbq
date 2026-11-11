@@ -2,16 +2,21 @@ extends Control
 ## Pantalla de inicio: el mapa ilustrado de fondo con un acercamiento lento, nubes y los botones.
 
 const ESCENA_MENU := "res://MenuPrincipal.tscn"
+const TOQUES_ADMIN := 5
+const VENTANA_TOQUES_ADMIN_MS := 2500
 
+var _toques_admin := 0
+var _ultimo_toque_admin := 0
 
 func _ready() -> void:
+	var titulo: Label = $Titulo/Nombre
+	titulo.gui_input.connect(_on_titulo_gui_input)
 	$Botones/BtnExpedicion.pressed.connect(_ir_a.bind("res://MapaExpedicion.tscn"))
 	$Botones/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
 	$Botones/BtnGuia.pressed.connect(_ir_a.bind("res://GuiaMacro.tscn"))
 	$Botones/BtnPersonalizar.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
 	$Saludo.text = "Hola, %s" % Perfil.nombre
 	$Botones/BtnTienda.pressed.connect(_ir_a.bind("res://Tienda.tscn"))
-	$Botones/BtnAnalitica.pressed.connect(_ir_a.bind("res://ui/analitica_docente.tscn"))
 	var insignia := InsigniaJugador.new()
 	insignia.position = Vector2(16, 16)
 	insignia.tocada.connect(_ir_a.bind("res://Tienda.tscn"))
@@ -33,6 +38,29 @@ func _ready() -> void:
 	var botones: Control = $Botones
 	botones.modulate.a = 0.0
 	entrada.tween_property(botones, "modulate:a", 1.0, 0.6).set_delay(0.3)
+
+
+func _on_titulo_gui_input(event: InputEvent) -> void:
+	var pulsacion := false
+	if event is InputEventMouseButton:
+		var clic := event as InputEventMouseButton
+		pulsacion = clic.pressed and clic.button_index == MOUSE_BUTTON_LEFT
+	elif event is InputEventScreenTouch:
+		pulsacion = (event as InputEventScreenTouch).pressed
+	if not pulsacion:
+		return
+
+	var ahora := Time.get_ticks_msec()
+	if ahora - _ultimo_toque_admin > VENTANA_TOQUES_ADMIN_MS:
+		_toques_admin = 0
+	_ultimo_toque_admin = ahora
+	_toques_admin += 1
+	if _toques_admin < TOQUES_ADMIN:
+		return
+
+	_toques_admin = 0
+	get_viewport().set_input_as_handled()
+	_ir_a("res://ui/analitica_docente.tscn")
 
 
 func _ir_a(escena: String) -> void:

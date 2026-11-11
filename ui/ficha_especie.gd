@@ -60,15 +60,14 @@ var _tiempo := 0.0
 var _fuente_negrita: SystemFont
 
 
-static func mostrar(padre: Node, especie: Especie, titulo := "", foto: Texture2D = null,
+func mostrar(padre: Node, especie: Especie, titulo := "", foto: Texture2D = null,
 		captura: Dictionary = {}) -> FichaEspecie:
-	var ficha := FichaEspecie.new()
-	ficha._especie = especie
-	ficha._titulo = titulo
-	ficha._foto = foto
-	ficha._captura = captura
-	padre.add_child(ficha)
-	return ficha
+	_especie = especie
+	_titulo = titulo
+	_foto = foto
+	_captura = captura
+	padre.add_child(self)
+	return self
 
 
 func _ready() -> void:

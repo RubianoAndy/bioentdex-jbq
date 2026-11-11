@@ -140,7 +140,8 @@ func _disparar() -> void:
 		AudioManager.reproducir_sfx("camara_obturador")
 		var foto := await _tomar_foto()
 		var captura := RegistroEspecies.registrar_captura(especie, zona_id, foto, calidad_foto)
-		var ficha: FichaEspecie = FichaEspecie.mostrar(self, especie, "¡Capturaste un insecto!",
+		var ficha := FichaEspecie.new()
+		ficha.mostrar(self, especie, "¡Capturaste un insecto!",
 			ImageTexture.create_from_image(foto), captura)
 		ficha.cerrada.connect(_terminar.bind(true))
 		return

@@ -120,7 +120,8 @@ func _ver_especie(especie: Especie) -> void:
 		return
 	var capturas := RegistroEspecies.capturas_de(especie.id)
 	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
-	FichaEspecie.mostrar(self, especie, "", foto)
+	var ficha := FichaEspecie.new()
+	ficha.mostrar(self, especie, "", foto)
 
 
 # --- Misiones ---------------------------------------------------------------------------------
