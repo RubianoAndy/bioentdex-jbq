@@ -11,6 +11,26 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 
 > Creado por Michelle Rodríguez.
 
+## Capturas
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/capturas/01_menu.jpg" width="230" alt="Pantalla de inicio"><br><sub>Pantalla de inicio</sub></td>
+    <td align="center"><img src="docs/capturas/02_mapa.jpg" width="230" alt="Mapa 3D del humedal"><br><sub>Mapa 3D del humedal</sub></td>
+    <td align="center"><img src="docs/capturas/03_captura.jpg" width="230" alt="Captura con cámara"><br><sub>Captura con cámara</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/capturas/04_ficha.jpg" width="230" alt="Ficha de la especie"><br><sub>Ficha de la especie</sub></td>
+    <td align="center"><img src="docs/capturas/05_bioentdex.jpg" width="230" alt="Bioentdex"><br><sub>Bioentdex</sub></td>
+    <td align="center"><img src="docs/capturas/06_zona.jpg" width="230" alt="Zona y misiones"><br><sub>Zona y misiones</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/capturas/07_guia.jpg" width="230" alt="Guía macrofotográfica"><br><sub>Guía macrofotográfica</sub></td>
+    <td align="center"><img src="docs/capturas/08_tienda.jpg" width="230" alt="Tienda del humedal"><br><sub>Tienda del humedal</sub></td>
+    <td align="center"><img src="docs/capturas/09_personalizar.jpg" width="230" alt="Personalizar explorador"><br><sub>Personalizar explorador</sub></td>
+  </tr>
+</table>
+
 ---
 
 ## Funcionalidades
@@ -27,7 +47,7 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 | **Misiones** | 37 misiones (preguntas, identificar especies, tomar fotos y escribir propuestas). 5 son **misiones especiales**, marcadas con bandera en la zona y en el mapa. |
 | **Guía macrofotográfica** | La guía completa (121 páginas) dentro de la app, con zoom, índice y saltos a cada orden y familia. |
 | **Recompensas** | Experiencia y niveles (sobre todo por capturar), **semillas** como moneda (por misiones y por subir de nivel) y una **tienda** con *néctar atrayente* y 4 **organismos Plus**: especies raras que no aparecen en el mapa. |
-| **Personalización** | Nombre, piel, camisa, pantalón, sombrero o gorra y mochila del explorador. |
+| **Personalización** | Nombre, género (explorador o exploradora), piel, color de cabello, camisa, pantalón, sombrero o gorra y mochila del explorador. |
 | **Bioentdex** | Fichas consultables de todas las especies, con el estado de captura u observación, tus fotos y el historial de misiones. |
 | **Tarjeta de exploración** | Disponible desde un botón compacto del mapa; exporta localmente una imagen PNG con insignia, nivel, especies conocidas y una foto que elijas entre las guardadas en tu Bioentdex. |
 | **Analítica docente local** | Contadores agregados de aprendizaje con acceso por PIN local; la exportación JSON es manual y no usa red. |
@@ -107,6 +127,8 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 ├── guia/
 │   ├── Guia.pdf                La guía original
 │   └── paginas/                Las 121 páginas en imagen (lo que muestra la app)
+│
+├── docs/capturas/            Capturas de pantalla que se muestran en este README
 │
 ├── perfil.gd                 Autoload: apariencia del explorador
 └── recompensas.gd            Autoload: experiencia, niveles, semillas y tienda
