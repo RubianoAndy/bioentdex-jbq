@@ -89,7 +89,7 @@ func _cargar_dialogos() -> void:
 				if typeof(zona_id) != TYPE_STRING:
 					push_error("El diálogo '%s' tiene un ID de zona inválido." % entrada["id"])
 					return
-			var dialogo := entrada.duplicate(true)
+			var dialogo: Dictionary = entrada.duplicate(true)
 			dialogo["categoria"] = categoria
 			_dialogos.append(dialogo)
 			ids[dialogo["id"]] = true
