@@ -1,0 +1,134 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://retos/duelo_combate_3d.gd" id="1_duel"]
+[ext_resource type="PackedScene" path="res://retos/duelo_arena.tscn" id="2_arena"]
+[ext_resource type="Script" path="res://retos/duelo_esquiva.gd" id="3_dodge"]
+
+[node name="DueloCombate3D" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_duel")
+
+[node name="Vista3D" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Vista3D"]
+handle_input_locally = false
+size = Vector2i(720, 1280)
+render_target_update_mode = 4
+
+[node name="Arena" parent="Vista3D/SubViewport" instance=ExtResource("2_arena")]
+
+[node name="HUD" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+grow_horizontal = 2
+theme_override_constants/separation = 12
+
+[node name="FilaRivales" type="HBoxContainer" parent="HUD"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="EtiquetaTurno" type="Label" parent="HUD"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Duelo educativo"
+horizontal_alignment = 1
+
+[node name="Pregunta" type="PanelContainer" parent="HUD"]
+visible = false
+layout_mode = 2
+
+[node name="Contenido" type="VBoxContainer" parent="HUD/Pregunta"]
+layout_mode = 2
+
+[node name="Acciones" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_left = 0.08
+anchor_top = 1.0
+anchor_right = 0.92
+anchor_bottom = 1.0
+offset_top = -300.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="HabilidadPolinizacion" type="Button" parent="Acciones"]
+custom_minimum_size = Vector2(210, 210)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Pulso\nde Polen\n0%"
+autowrap_mode = 2
+
+[node name="HabilidadRegulacion" type="Button" parent="Acciones"]
+custom_minimum_size = Vector2(210, 210)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Control\nBiológico\n0%"
+autowrap_mode = 2
+
+[node name="Esquivar" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.78
+anchor_right = 0.5
+anchor_bottom = 0.78
+offset_left = -150.0
+offset_top = -60.0
+offset_right = 150.0
+offset_bottom = 60.0
+grow_horizontal = 2
+text = "¡Esquivar! (toca o Espacio)"
+
+[node name="CargaEsquiva" type="ProgressBar" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.78
+anchor_right = 0.5
+anchor_bottom = 0.78
+offset_left = -180.0
+offset_top = 68.0
+offset_right = 180.0
+offset_bottom = 92.0
+grow_horizontal = 2
+max_value = 2.0
+show_percentage = false
+
+[node name="Feedback" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 890.0
+offset_right = -28.0
+offset_bottom = 980.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+text = "Simulación educativa: observa relaciones ecológicas."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DueloEsquiva" type="Node" parent="."]
+script = ExtResource("3_dodge")

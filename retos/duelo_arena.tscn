@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://retos/duelo_camara_3d.gd" id="1_camera"]
+
+[sub_resource type="Environment" id="Environment_arena"]
+background_mode = 1
+background_color = Color(0.12, 0.2, 0.19, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.6, 0.72, 0.67, 1)
+ambient_light_energy = 0.8
+
+[sub_resource type="PlaneMesh" id="Plane_arena"]
+size = Vector2(30, 30)
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.2, 0.36, 0.29, 1)
+roughness = 1.0
+
+[node name="Arena" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_arena")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.9, -0.55, 0)
+light_energy = 1.1
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.08, 0)
+mesh = SubResource("Plane_arena")
+surface_material_override/0 = SubResource("Material_ground")
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+position = Vector3(-1.7, 0, 1.1)
+
+[node name="OpponentSpawn" type="Marker3D" parent="."]
+position = Vector3(1.7, 0, -1.1)
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("1_camera")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+position = Vector3(0, 5.7, 9.2)
+rotation = Vector3(-0.45, 0, 0)
+current = true

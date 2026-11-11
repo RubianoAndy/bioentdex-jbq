@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Abejorro negro y peludo; su vellosidad atrapa el polen."
 importancia = "Su gran papel es la polinización de flores silvestres y cultivos."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Elige una flor y espera a que llegue; dispara en ráfaga."
 pagina_guia = 78
 horario = 1

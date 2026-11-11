@@ -19,6 +19,7 @@ opciones = PackedStringArray()
 correcta = 0
 especie_id = ""
 explicacion = "¡Gracias! Tu propuesta quedó guardada en tu Bioentdex. Las campañas funcionan mejor cuando invitan a los vecinos a participar."
+conceptos_obligatorios = PackedStringArray("vecinos", "limpieza", "nativas")
 
 [sub_resource type="Resource" id="m2"]
 script = ExtResource("3_mis")

@@ -19,6 +19,7 @@ opciones = PackedStringArray()
 correcta = 0
 especie_id = ""
 explicacion = "¡Gracias! Tu propuesta quedó guardada en tu Bioentdex. Retirar a mano, sembrar especies nativas y no tirar plantas de acuario al agua son buenas ideas."
+conceptos_obligatorios = PackedStringArray("invasoras", "nativas", "fauna")
 
 [sub_resource type="Resource" id="m2"]
 script = ExtResource("3_mis")

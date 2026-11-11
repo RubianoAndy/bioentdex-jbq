@@ -154,15 +154,15 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -270.0
-offset_top = -600.0
+offset_top = -595.0
 offset_right = 270.0
 offset_bottom = -90.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 16
+theme_override_constants/separation = 8
 
 [node name="BtnExpedicion" type="Button" parent="Botones"]
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 78)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.1, 0.22, 0.15, 1)
 theme_override_colors/font_hover_color = Color(0.1, 0.22, 0.15, 1)
@@ -174,24 +174,34 @@ theme_override_styles/pressed = SubResource("BotonPrincipalPresionado")
 text = "Iniciar expedición"
 
 [node name="BtnBioentdex" type="Button" parent="Botones"]
-custom_minimum_size = Vector2(0, 74)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "Bioentdex"
 
 [node name="BtnGuia" type="Button" parent="Botones"]
-custom_minimum_size = Vector2(0, 74)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "Guía macrofotográfica"
 
 [node name="BtnTienda" type="Button" parent="Botones"]
-custom_minimum_size = Vector2(0, 74)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "Tienda del humedal"
 
 [node name="BtnPersonalizar" type="Button" parent="Botones"]
-custom_minimum_size = Vector2(0, 74)
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "Personalizar explorador"
+
+[node name="BtnTarjeta" type="Button" parent="Botones"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+text = "Tarjeta de exploración"
+
+[node name="BtnAnalitica" type="Button" parent="Botones"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+text = "Analítica docente · local"
 
 [node name="Creditos" type="Label" parent="."]
 layout_mode = 1

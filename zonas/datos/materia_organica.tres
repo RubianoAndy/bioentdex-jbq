@@ -20,6 +20,7 @@ opciones = PackedStringArray()
 correcta = 0
 especie_id = ""
 explicacion = "¡Gracias! Tu propuesta quedó guardada en tu Bioentdex. Recuerda: solo residuos orgánicos (cáscaras, hojas, café), humedad y aire."
+conceptos_obligatorios = PackedStringArray("organicos", "humedad", "aire")
 
 [sub_resource type="Resource" id="m2"]
 script = ExtResource("3_mis")

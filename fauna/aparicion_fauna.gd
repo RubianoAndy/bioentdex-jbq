@@ -17,6 +17,7 @@ signal aviso(texto: String)
 
 const INSECTO := preload("res://fauna/insecto_mapa.gd")
 const NPC := preload("res://fauna/animal_npc.gd")
+const MAPA := preload("res://mundo_3d.gd")
 
 @export var intervalo := 6.0               # cada cuántos segundos se intenta hacer aparecer un insecto
 @export_range(0.0, 1.0) var prob_aparicion := 0.4
@@ -51,7 +52,7 @@ func _process(delta: float) -> void:
 	var origen := _pos_explorador()
 	for insecto in _insectos.duplicate():
 		insecto.vida -= delta
-		if insecto.vida <= 0.0 or origen.distance_to(_pos2d(insecto)) > distancia_desaparicion:
+		if insecto.vida <= 0.0 or MAPA.distancia_xz(origen, _pos2d(insecto)) > distancia_desaparicion:
 			quitar_insecto(insecto)
 
 	# Con el néctar atrayente de la tienda aparecen más insectos y más seguido
@@ -81,6 +82,7 @@ func _aparecer_insecto() -> void:
 			insecto.configurar(especie, lugar, randf_range(duracion_min, duracion_max))
 			add_child(insecto)
 			_insectos.append(insecto)
+			FeedbackTactil.aparicion_sorpresa()
 			return
 
 
@@ -89,11 +91,11 @@ func _buscar_lugar(especie: Especie):
 	if RegistroEspecies.esta_capturada(especie.id):
 		# Ya capturado: solo en sus zonas
 		for zona in zonas:
-			if not zona.especies.has(especie) or origen.distance_to(zona.posicion) > distancia_max + zona.radio + 4.0:
+			if not zona.especies.has(especie) or MAPA.distancia_xz(origen, zona.posicion) > distancia_max + zona.radio + 4.0:
 				continue
 			for intento in 12:
 				var p: Vector2 = zona.posicion + Vector2.from_angle(randf() * TAU) * randf_range(0.0, zona.radio + 4.0)
-				var d := origen.distance_to(p)
+				var d := MAPA.distancia_xz(origen, p)
 				if d >= 3.0 and d <= distancia_max and _cerca_de_tierra(p):
 					return p
 		return null
@@ -116,7 +118,7 @@ func _cerca_de_tierra(p: Vector2) -> bool:
 
 
 func insecto_tocado(insecto: Node3D) -> void:
-	if _pos_explorador().distance_to(_pos2d(insecto)) > distancia_captura:
+	if MAPA.distancia_xz(_pos_explorador(), _pos2d(insecto)) > distancia_captura:
 		explorador.ir_a(insecto.position)
 		aviso.emit("Acércate para fotografiarlo")
 	else:
@@ -132,7 +134,7 @@ func quitar_insecto(insecto: Node3D) -> void:
 
 func _actualizar_npcs(origen: Vector2) -> void:
 	for zona in zonas:
-		var distancia := origen.distance_to(zona.posicion)
+		var distancia := MAPA.distancia_xz(origen, zona.posicion)
 		if distancia < distancia_zona_activa and not _npcs.has(zona.id):
 			_npcs[zona.id] = _poblar_zona(zona)
 		elif distancia > distancia_zona_activa + 10.0 and _npcs.has(zona.id):

@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://ui/companero_colibri.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://animales/npc/colibri_chillon.svg" id="2_retrato"]
+
+[node name="CompaneroColibri" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 220)
+script = ExtResource("1_script")
+
+[node name="Margen" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Columna" type="VBoxContainer" parent="Margen"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Categoria" type="Label" parent="Margen/Columna"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Colibrí"
+
+[node name="Contenido" type="HBoxContainer" parent="Margen/Columna"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Retrato" type="TextureRect" parent="Margen/Columna/Contenido"]
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+texture = ExtResource("2_retrato")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Texto" type="Label" parent="Margen/Columna/Contenido"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 19
+autowrap_mode = 3
+
+[node name="BotonSiguiente" type="Button" parent="Margen/Columna"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "Siguiente dato"

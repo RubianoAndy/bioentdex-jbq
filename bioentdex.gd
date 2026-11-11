@@ -59,7 +59,8 @@ func _crear_tarjeta(especie: Especie) -> Button:
 func _mostrar_ficha(especie: Especie) -> void:
 	var capturas := RegistroEspecies.capturas_de(especie.id)
 	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
-	FichaEspecie.mostrar(self, especie, "Tu foto" if foto else "", foto)
+	var captura: Dictionary = capturas[-1] if not capturas.is_empty() else {}
+	FichaEspecie.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)
 
 
 func _llenar_misiones() -> void:
@@ -84,9 +85,14 @@ func _fila_mision(mision: Mision) -> Control:
 	if registro.is_empty():
 		texto.text = "Pendiente · " + mision.enunciado
 		texto.modulate.a = 0.6
+	elif mision.tipo == Mision.Tipo.PROPUESTA:
+		texto.text = ("Resuelta" if registro.correcta else "Sin resolver") + " · Participación registrada\n" + mision.enunciado
 	else:
 		var estado := "Resuelta" if registro.correcta else "Sin resolver"
 		texto.text = "%s · %s\nTu respuesta: %s (%s)" % [estado, mision.enunciado, registro.respuesta, registro.fecha.substr(0, 10)]
+		var muestra := Recompensas.resumen_muestra(mision.id)
+		if not muestra.is_empty():
+			texto.text += "\n" + muestra
 	if mision.especial and ResourceLoader.exists("res://ui/bandera.svg"):
 		var bandera := TextureRect.new()
 		bandera.texture = load("res://ui/bandera.svg")

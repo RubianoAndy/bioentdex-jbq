@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Insecto diminuto (1 a 10 mm) de cuerpo blando que vive en la corteza húmeda."
 importancia = "Descompone materia orgánica, controla hongos y es alimento de otros animales."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Ninfa", "Adulto")
 consejo_macro = "Revisa la corteza húmeda de los árboles con una lupa."
 pagina_guia = 59
 horario = 0

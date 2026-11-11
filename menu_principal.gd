@@ -11,6 +11,8 @@ func _ready() -> void:
 	$Botones/BtnPersonalizar.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
 	$Saludo.text = "Hola, %s" % Perfil.nombre
 	$Botones/BtnTienda.pressed.connect(_ir_a.bind("res://Tienda.tscn"))
+	$Botones/BtnTarjeta.pressed.connect(_ir_a.bind("res://comunidad/tarjeta_hallazgo.tscn"))
+	$Botones/BtnAnalitica.pressed.connect(_ir_a.bind("res://ui/analitica_docente.tscn"))
 	var insignia := InsigniaJugador.new()
 	insignia.position = Vector2(16, 16)
 	insignia.tocada.connect(_ir_a.bind("res://Tienda.tscn"))

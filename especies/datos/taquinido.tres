@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Mosca robusta llena de espinas que pone sus huevos sobre otros insectos."
 importancia = "Es un control biológico natural: regula a los insectos que dañan las plantas."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Fotografía las espinas de su cuerpo con luz lateral."
 pagina_guia = 49
 horario = 1

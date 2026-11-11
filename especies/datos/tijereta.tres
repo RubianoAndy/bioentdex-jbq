@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Insecto aplanado con pinzas (cercos) al final del abdomen; sale de noche. No se mete en los oídos: es un mito."
 importancia = "Controla plagas y ayuda a descomponer la materia orgánica."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Ninfa", "Adulto")
 consejo_macro = "Búscala bajo piedras y hojas secas; usa luz suave."
 pagina_guia = 103
 horario = 2

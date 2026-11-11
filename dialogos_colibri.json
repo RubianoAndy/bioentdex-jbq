@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "categorias": {
+    "biomas": [
+      {
+        "id": "bioma_freatobioma",
+        "texto": "Un freatobioma reúne ambientes cuya vida depende del agua subterránea, que circula bajo el suelo. No es lo mismo que el espejo de agua. Este mapa no mide el agua subterránea, así que no asigna esta etiqueta a una zona.",
+        "zonas": []
+      },
+      {
+        "id": "bioma_helobioma",
+        "texto": "Un helobioma es un ambiente donde el suelo permanece inundado o saturado de agua durante parte importante del año. El barro de la transición entre agua y tierra nos ayuda a imaginarlo, pero el mapa del juego no clasifica oficialmente los biomas.",
+        "zonas": ["transicion", "neofita", "materia_organica"]
+      },
+      {
+        "id": "bioma_limnobioma",
+        "texto": "Un limnobioma comprende ambientes de aguas continentales, como lagunas y humedales de agua dulce. El agua abierta del mapa ayuda a explorar esa idea; esta categoría no significa que todas las especies acuáticas vivan en cada humedal.",
+        "zonas": ["agua_abierta", "transicion", "avistamiento_aves"]
+      },
+      {
+        "id": "biomas_no_son_lista_especies",
+        "texto": "Freatobioma, helobioma y limnobioma describen condiciones del ambiente, no una lista de animales. Que una especie aparezca en la Bioentdex no demuestra que viva en todos los ambientes de ese tipo.",
+        "zonas": []
+      }
+    ],
+    "ecologia": [
+      {
+        "id": "ecologia_descomponedores",
+        "texto": "En la zona de materia orgánica, el juego destaca lombrices y otros pequeños animales que ayudan a deshacer restos de plantas. Así, parte de sus nutrientes vuelve al suelo y puede ser aprovechada por otros seres vivos.",
+        "zonas": ["materia_organica"]
+      },
+      {
+        "id": "ecologia_corredor",
+        "texto": "Un corredor verde conecta parches de vegetación y puede facilitar el desplazamiento de animales entre ellos. No es una garantía de que todos logren cruzar: también importan el ancho, la calidad del hábitat y las barreras.",
+        "zonas": ["corredor_ambiental"]
+      },
+      {
+        "id": "ecologia_polinizar",
+        "texto": "Al visitar flores para alimentarse, algunos insectos y aves pueden transportar polen entre flores. Ese traslado ayuda a la reproducción de muchas plantas, aunque no toda visita termina en polinización.",
+        "zonas": ["terrestre", "corredor_ambiental", "ronda_hidrica"]
+      },
+      {
+        "id": "ecologia_rana",
+        "texto": "La ficha de la rana sabanera cuenta que su piel sensible puede alertar sobre cambios en el ambiente. Observar una rana por sí sola no mide la calidad del agua: se necesitan más datos y cuidado al interpretar.",
+        "zonas": ["transicion"]
+      },
+      {
+        "id": "ecologia_cadenas",
+        "texto": "En una red alimentaria, una misma especie puede tener más de un papel: alimentarse de unos organismos y servir de alimento a otros. Por eso, perder especies puede alterar varias relaciones a la vez.",
+        "zonas": []
+      },
+      {
+        "id": "ecologia_observar",
+        "texto": "Mirar sin perseguir ni tocar también es una acción de cuidado. Las aves pueden descansar o alimentarse en el humedal; mantener distancia reduce las molestias y permite observar su conducta natural.",
+        "zonas": ["avistamiento_aves", "agua_abierta"]
+      }
+    ],
+    "biomimesis": [
+      {
+        "id": "biomimesis_velcro",
+        "texto": "El cierre de velcro se inspiró en frutos con pequeños ganchos que se pegan al pelo o a la ropa. La biomímesis toma ideas de la naturaleza para diseñar; no significa que una tecnología copie un ecosistema completo.",
+        "zonas": []
+      },
+      {
+        "id": "biomimesis_loto",
+        "texto": "Algunas superficies inspiradas en hojas de loto repelen gotas y dificultan que se adhiera la suciedad. Es una idea estudiada para materiales; no quiere decir que la enea o el junco del humedal tengan exactamente esa propiedad.",
+        "zonas": ["transicion", "neofita"]
+      },
+      {
+        "id": "biomimesis_aves",
+        "texto": "El vuelo de las aves inspira investigaciones sobre robots voladores con alas móviles. Son diseños de ingeniería en desarrollo: no todos vuelan como un ave ni resuelven los mismos problemas que ella.",
+        "zonas": ["avistamiento_aves", "corredor_ambiental"]
+      },
+      {
+        "id": "biomimesis_observar",
+        "texto": "Para crear una solución biomimética, primero se observa qué problema resuelve un organismo y cómo lo hace. Después se prueban ideas en materiales o máquinas, sin asumir que una solución sirve en cualquier lugar.",
+        "zonas": []
+      },
+      {
+        "id": "biomimesis_colibri",
+        "texto": "El vuelo suspendido de los colibríes interesa a quienes estudian el movimiento de alas pequeñas. Es una fuente de preguntas para la ingeniería, no una afirmación de que exista un aparato que reproduzca por completo su vuelo.",
+        "zonas": ["terrestre", "corredor_ambiental"]
+      }
+    ],
+    "arte_cultura": [
+      {
+        "id": "arte_merian",
+        "texto": "La naturalista y artista Maria Sibylla Merian dibujó insectos junto a las plantas donde encontraba sus etapas de vida. Sus láminas muestran cómo el arte puede ayudar a observar y comunicar la naturaleza.",
+        "zonas": []
+      },
+      {
+        "id": "arte_microcosmos",
+        "texto": "La película documental Microcosmos acerca al público a insectos y otros pequeños animales con primeros planos. Una cámara puede revelar detalles sorprendentes, aunque una película no reemplaza el registro científico.",
+        "zonas": ["materia_organica", "terrestre"]
+      },
+      {
+        "id": "arte_vuelo_moscardon",
+        "texto": "El vuelo del moscardón, de Nikolái Rimski-Kórsakov, es una pieza orquestal famosa por su ritmo veloz. La música evoca un insecto en vuelo: es una interpretación artística, no una grabación de su sonido.",
+        "zonas": []
+      },
+      {
+        "id": "arte_fabula",
+        "texto": "En la fábula de la cigarra y la hormiga, estos insectos representan distintas formas de actuar. Una fábula enseña mediante personajes e imaginación; no es una guía literal sobre la vida de las especies.",
+        "zonas": []
+      },
+      {
+        "id": "arte_dibujo_campo",
+        "texto": "Dibujar una planta o un ave con atención ayuda a notar formas, colores y diferencias. Anota también el lugar y la fecha: así una ilustración puede acompañar una observación sin reemplazarla.",
+        "zonas": ["avistamiento_aves", "transicion"]
+      }
+    ],
+    "interaccion_flora_fauna": [
+      {
+        "id": "interaccion_junco_tingua",
+        "texto": "La ficha del junco destaca sus raíces y su uso como refugio; la de la tingua bogotana dice que se esconde entre juncos y eneas. Esa relación hace valiosa la vegetación de orilla, aunque no todas las aves usan cada planta por igual.",
+        "zonas": ["transicion", "avistamiento_aves"]
+      },
+      {
+        "id": "interaccion_lenteja_aves",
+        "texto": "Según la ficha de la lenteja de agua, sus diminutas hojas flotantes sirven de alimento a patos y tinguas y absorben nutrientes del agua. En el juego esto describe una relación general; no confirma que todas esas aves coman aquí.",
+        "zonas": ["agua_abierta", "transicion"]
+      },
+      {
+        "id": "interaccion_enea",
+        "texto": "La ficha de la enea dice que ofrece refugio y sitios de anidación a las aves. En la zona de transición también aparecen la rana sabanera y la enea; compartir zona en el catálogo no prueba una interacción directa entre ellas.",
+        "zonas": ["transicion"]
+      },
+      {
+        "id": "interaccion_buchon",
+        "texto": "El buchón de agua puede crecer rápidamente. Su ficha advierte que, si cubre demasiado la superficie, reduce la luz y el oxígeno disponibles en el agua; por eso importa vigilar su expansión.",
+        "zonas": ["neofita", "agua_abierta"]
+      },
+      {
+        "id": "interaccion_aliso",
+        "texto": "La ficha del aliso lo describe como un árbol andino asociado a suelos húmedos y señala que puede fijar nitrógeno. El catálogo lo relaciona con la ronda; no significa que cada aliso del mapa esté en Jaboque.",
+        "zonas": ["ronda_hidrica", "corredor_ambiental"]
+      },
+      {
+        "id": "interaccion_colibri_flores",
+        "texto": "La ficha del colibrí chillón explica que visita flores para tomar néctar y puede polinizarlas. El recurso del juego no identifica una flor concreta de Jaboque que sea su compañera exclusiva.",
+        "zonas": ["terrestre", "corredor_ambiental", "ronda_hidrica"]
+      },
+      {
+        "id": "interaccion_libelula",
+        "texto": "Las fichas de la libélula y el caballito del diablo destacan sus ninfas acuáticas, que cazan pequeños organismos. El catálogo los incluye en la zona de transición, pero eso no demuestra que cada individuo esté presente en todo momento.",
+        "zonas": ["transicion", "agua_abierta"]
+      }
+    ]
+  }
+}

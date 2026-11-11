@@ -23,6 +23,7 @@ const SEMILLAS_BATALLA := 25
 const XP_BATALLA_PERDIDA := 30         # por intentarlo
 const DURACION_NECTAR := 180           # segundos
 const PRECIO_NECTAR := 15
+const ACTIVIDADES_PARA_MADURAR_MUESTRA := 3
 
 const DORADO := Color(1, 0.84, 0.3)
 
@@ -77,6 +78,18 @@ func tiene_plus(id: String) -> bool:
 	return RegistroEspecies.jugador().plus.has(id)
 
 
+func resumen_muestra(mision_id: String) -> String:
+	var muestras: Array = RegistroEspecies.jugador().muestras_digitales
+	for muestra in muestras:
+		if muestra.mision_id != mision_id:
+			continue
+		var nombre := "Muestra de campo digital" if muestra.tipo == Mision.RecompensaDigital.MUESTRA_CAMPO else "Ooteca digital"
+		if muestra.madura:
+			return "%s · madura" % nombre
+		return "%s · actividad %d/%d" % [nombre, muestra.progreso, ACTIVIDADES_PARA_MADURAR_MUESTRA]
+	return ""
+
+
 func nectar_activo() -> bool:
 	return segundos_nectar() > 0
 
@@ -108,9 +121,8 @@ func comprar_plus(especie: Especie) -> bool:
 
 # --- Batallas ---------------------------------------------------------------------------------
 
-## Premio de una batalla contra un depredador. Si gana, rescata al insecto especial:
-## un Plus queda como obtenido (igual que en la tienda) y uno normal queda como capturado.
-func premiar_batalla(gano: bool, premio: Especie, zona_id: String) -> void:
+## Premio de un duelo: registra conocimiento sobre la especie sin simular recolección física.
+func premiar_batalla(gano: bool, premio: Especie, _zona_id: String) -> void:
 	if not gano:
 		_ganar(XP_BATALLA_PERDIDA, 0, "¡Buen intento!")
 		return
@@ -118,8 +130,8 @@ func premiar_batalla(gano: bool, premio: Especie, zona_id: String) -> void:
 		RegistroEspecies.jugador().plus.append(premio.id)
 		_guardar()
 		RegistroEspecies.registrar_observacion(premio)
-	elif premio and not RegistroEspecies.esta_capturada(premio.id):
-		RegistroEspecies.registrar_captura(premio, zona_id, null)   # rescatado: sin foto
+	elif premio and not RegistroEspecies.esta_descubierta(premio.id):
+		RegistroEspecies.registrar_observacion(premio)
 	_ganar(XP_BATALLA, SEMILLAS_BATALLA, "¡Batalla ganada!")
 
 
@@ -133,26 +145,67 @@ func _pagar(precio: int) -> bool:
 # --- Ganancias --------------------------------------------------------------------------------
 
 func _on_capturada(especie: Especie, _captura: Dictionary) -> void:
+	_avanzar_muestras_digitales()
 	var nueva := RegistroEspecies.capturas_de(especie.id).size() == 1
 	_ganar(XP_CAPTURA + (XP_CAPTURA_NUEVA if nueva else 0), 0,
 		"¡Especie nueva capturada!" if nueva else "Captura")
 
 
 func _on_observada(especie: Especie, primera: bool) -> void:
+	_avanzar_muestras_digitales()
 	if especie.plus:
 		return   # los Plus se compran: no dan experiencia
 	_ganar(XP_OBSERVACION_NUEVA if primera else XP_OBSERVACION, 0, "Avistamiento")
 
 
 func _on_mision(mision: Mision, registro: Dictionary) -> void:
+	if not registro.get("intento_correcto", registro.correcta):
+		return
+	# Una misión vinculada registra también su observación; esa señal cuenta esta misma actividad.
+	var observacion_automatica := not mision.especie_id.is_empty() \
+		and RegistroEspecies.buscar(mision.especie_id) != null
+	if not observacion_automatica:
+		_avanzar_muestras_digitales()
+	var jugador := RegistroEspecies.jugador()
+	var misiones_muestras: Array = jugador.misiones_muestras
+	if mision.recompensa_digital != Mision.RecompensaDigital.NINGUNA and not misiones_muestras.has(mision.id):
+		misiones_muestras.append(mision.id)
+		jugador.muestras_digitales.append({
+			"mision_id": mision.id,
+			"tipo": mision.recompensa_digital,
+			"progreso": 0,
+			"madura": false,
+		})
+		var nombre := "Muestra de campo digital" if mision.recompensa_digital == Mision.RecompensaDigital.MUESTRA_CAMPO else "Ooteca digital"
+		mostrar_aviso("%s ganada: realiza %d actividades para que madure." % [
+			nombre, ACTIVIDADES_PARA_MADURAR_MUESTRA], DORADO)
 	var premiadas: Array = RegistroEspecies.jugador().misiones_premiadas
-	if not registro.correcta or premiadas.has(mision.id):
+	if premiadas.has(mision.id):
+		_guardar()
 		return   # cada misión se premia una sola vez
 	premiadas.append(mision.id)
 	if mision.especial:
 		_ganar(XP_MISION_ESPECIAL, SEMILLAS_MISION_ESPECIAL, "¡Misión especial cumplida!")
 	else:
 		_ganar(XP_MISION, SEMILLAS_MISION, "Misión cumplida")
+
+
+func _avanzar_muestras_digitales() -> void:
+	var muestras: Array = RegistroEspecies.jugador().muestras_digitales
+	var maduradas: Array[String] = []
+	var cambio_muestras := false
+	for muestra in muestras:
+		if muestra.madura:
+			continue
+		muestra.progreso = mini(int(muestra.progreso) + 1, ACTIVIDADES_PARA_MADURAR_MUESTRA)
+		cambio_muestras = true
+		if muestra.progreso >= ACTIVIDADES_PARA_MADURAR_MUESTRA:
+			muestra.madura = true
+			maduradas.append("Muestra de campo digital" if muestra.tipo == Mision.RecompensaDigital.MUESTRA_CAMPO else "Ooteca digital")
+	if cambio_muestras:
+		_guardar()
+		for nombre in maduradas:
+			mostrar_aviso("¡%s madura!" % nombre, DORADO)
 
 
 func _ganar(xp: int, nuevas_semillas: int, motivo: String) -> void:

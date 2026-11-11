@@ -10,6 +10,7 @@ const MARCADOR_ZONA := preload("res://marcador_zona.gd")
 @export var mascara: Texture2D
 @export var velocidad_teclado := 5.0       # con las flechas, para probar en el computador
 @export var sensibilidad_arrastre := 0.018  # unidades del mapa por cada píxel arrastrado
+@export var sensibilidad_camara := 8.0     # rapidez con que la cámara sigue al explorador
 @export var velocidad_arrastre := 9.0       # tope al arrastrar, para que el explorador no salga disparado
 @export var distancia_toque := 24.0        # píxeles: si el dedo se mueve menos, es un toque
 
@@ -26,6 +27,11 @@ var _es_arrastre := false
 var _dedo_abajo := false      # solo cuenta el arrastre si el mapa vio empezar el toque
 var _arrastre_pendiente := Vector3.ZERO   # lo arrastrado que el explorador aún no ha caminado
 var _toque_pendiente = null   # Vector2 o null; se procesa en _physics_process
+
+
+## Distancia en el plano horizontal del mapa (Vector2 representa X y Z).
+static func distancia_xz(origen: Vector2, destino: Vector2) -> float:
+	return origen.distance_to(destino)
 
 
 func _ready() -> void:
@@ -102,7 +108,7 @@ func _process(delta: float) -> void:
 		if _arrastre_pendiente.length() < 0.001:
 			_arrastre_pendiente = Vector3.ZERO
 
-	camara.position = camara.position.lerp(explorador.position + _offset_camara, minf(1.0, 8.0 * delta))
+	camara.position = camara.position.lerp(explorador.position + _offset_camara, minf(1.0, sensibilidad_camara * delta))
 	_revisar_zona_cercana()
 
 
@@ -177,7 +183,7 @@ func _revisar_zona_cercana() -> void:
 	var cercana: Zona = null
 	var pos := Vector2(explorador.position.x, explorador.position.z)
 	for zona in Expedicion.zonas:
-		if pos.distance_to(zona.posicion) <= zona.radio:
+		if distancia_xz(pos, zona.posicion) <= zona.radio:
 			cercana = zona
 			break
 	if cercana != zona_actual:

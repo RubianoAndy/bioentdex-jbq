@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Parece tener solo 4 patas porque el primer par está reducido; alas de borde redondeado."
 importancia = "Es bioindicadora de la salud del ecosistema y ayuda a polinizar."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Cuando abre las alas al sol, enfoca los ojos de sus alas."
 pagina_guia = 88
 horario = 1

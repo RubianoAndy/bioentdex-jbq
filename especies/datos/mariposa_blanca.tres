@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Mariposa blanca de bordes negros; su oruga come repollo."
 importancia = "Poliniza flores y es indicadora del clima y la flora del ecosistema."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Temprano en la mañana se mueve menos: aprovecha para acercarte."
 pagina_guia = 86
 horario = 1

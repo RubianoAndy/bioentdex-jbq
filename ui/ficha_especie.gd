@@ -50,6 +50,7 @@ void fragment() {
 var _especie: Especie
 var _titulo := ""
 var _foto: Texture2D
+var _captura: Dictionary = {}
 var _color: Color
 
 var _escena: Control
@@ -59,11 +60,13 @@ var _tiempo := 0.0
 var _fuente_negrita: SystemFont
 
 
-static func mostrar(padre: Node, especie: Especie, titulo := "", foto: Texture2D = null) -> FichaEspecie:
+static func mostrar(padre: Node, especie: Especie, titulo := "", foto: Texture2D = null,
+		captura: Dictionary = {}) -> FichaEspecie:
 	var ficha := FichaEspecie.new()
 	ficha._especie = especie
 	ficha._titulo = titulo
 	ficha._foto = foto
+	ficha._captura = captura
 	padre.add_child(ficha)
 	return ficha
 
@@ -71,6 +74,10 @@ static func mostrar(padre: Node, especie: Especie, titulo := "", foto: Texture2D
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	if _captura.is_empty():
+		var capturas := RegistroEspecies.capturas_de(_especie.id)
+		if not capturas.is_empty():
+			_captura = capturas[-1]
 	_color = COLOR_TIPO.get(_especie.tipo, Color(0.4, 0.6, 0.5))
 	_fuente_negrita = SystemFont.new()
 	_fuente_negrita.font_names = PackedStringArray(["Nunito", "Segoe UI", "Roboto", "Arial"])
@@ -232,7 +239,19 @@ func _habitat() -> String:
 
 
 func _texto_riesgo() -> String:
-	return "Riesgo de extinción: %s" % _especie.nombre_estado().to_lower()
+	var codigo := Especie.Estado.keys()[_especie.estado_conservacion]
+	var texto := "Estado de conservación: %s · %s" % [codigo, _especie.nombre_estado()]
+	match _especie.estado_conservacion:
+		Especie.Estado.DD:
+			texto += " · Datos insuficientes; no significa mayor amenaza."
+		Especie.Estado.NE:
+			texto += " · No evaluada."
+		_:
+			if _especie.fuente_estado_conservacion.is_empty() or _especie.alcance_estado_conservacion.is_empty():
+				texto += " · Fuente o alcance geográfico no indicados."
+			else:
+				texto += " · %s (%s)." % [_especie.fuente_estado_conservacion, _especie.alcance_estado_conservacion]
+	return texto
 
 
 # --- Tarjeta blanca ---------------------------------------------------------------------------
@@ -296,8 +315,14 @@ func _construir_tarjeta() -> void:
 		etiquetas.add_child(_pastilla("Capturable", Color(1, 0.8, 0.25), Color(0.3, 0.2, 0.02)))
 	else:
 		etiquetas.add_child(_pastilla("Solo observar", Color(0.62, 0.48, 0.85), Color.WHITE))
-	etiquetas.add_child(_pastilla(_especie.nombre_estado(), COLOR_ESTADO[_especie.estado_conservacion], Color.WHITE))
+	var codigo_estado := Especie.Estado.keys()[_especie.estado_conservacion]
+	etiquetas.add_child(_pastilla("%s · %s" % [codigo_estado, _especie.nombre_estado()],
+		COLOR_ESTADO[_especie.estado_conservacion], Color.WHITE))
 	columna.add_child(etiquetas)
+	var nota_estado := "DD significa que faltan datos; NE significa que no fue evaluada. Ninguna de las dos categorías confirma amenaza."
+	if _especie.estado_conservacion not in [Especie.Estado.DD, Especie.Estado.NE]:
+		nota_estado = "La fuente y el alcance geográfico solo se muestran si están documentados en la ficha."
+	columna.add_child(_etiqueta(nota_estado, 16, TEXTO_SUAVE))
 	columna.add_child(_separador())
 
 	# Clasificación: familia | ícono / guía | orden
@@ -317,11 +342,70 @@ func _construir_tarjeta() -> void:
 	columna.add_child(cuadricula)
 	columna.add_child(_separador())
 
+	if _especie.es_capturable():
+		columna.add_child(_seccion_atributos_ecologicos())
+		columna.add_child(_separador())
+
 	# Para aprender
 	columna.add_child(_seccion("¿POR QUÉ ES IMPORTANTE?", _especie.importancia, _color))
 	columna.add_child(_seccion("DESCRIPCIÓN", _especie.descripcion, Color(0.25, 0.6, 0.85)))
+	var ciclo := RegistroEspecies.progreso_ciclo_vida(_especie)
+	if not ciclo.is_empty():
+		columna.add_child(_seccion("CICLO DE VIDA (MODELO EDUCATIVO)", _texto_ciclo_vida(ciclo), Color(0.35, 0.68, 0.48)))
 	if not _especie.consejo_macro.is_empty():
 		columna.add_child(_seccion("CONSEJO PARA FOTOGRAFIARLO", _especie.consejo_macro, Color(0.98, 0.72, 0.2)))
+
+
+func _seccion_atributos_ecologicos() -> Control:
+	var caja := VBoxContainer.new()
+	caja.add_theme_constant_override("separation", 10)
+	var titulo := _etiqueta("ATRIBUTOS ECOLÓGICOS", 20, _color)
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caja.add_child(titulo)
+
+	var tiene_puntaje := _captura.has("atributos") and _captura.has("puntos_biodiversidad")
+	var atributos: Dictionary = _captura.get("atributos", {
+		"ia": _especie.impacto_ecologico,
+		"rh": _especie.resistencia_habitat,
+		"vp": _especie.vitalidad_poblacional,
+	})
+
+	var cuadricula := GridContainer.new()
+	cuadricula.columns = 2
+	cuadricula.add_theme_constant_override("h_separation", 16)
+	cuadricula.add_theme_constant_override("v_separation", 10)
+	cuadricula.add_child(_dato("%.1f" % float(atributos.get("ia", 0.0)), "IA · IMPACTO ECOLÓGICO", Color(0.3, 0.68, 0.36)))
+	cuadricula.add_child(_dato("%.1f" % float(atributos.get("rh", 0.0)), "RH · RESISTENCIA AL HÁBITAT", Color(0.25, 0.6, 0.85)))
+	cuadricula.add_child(_dato("%.1f" % float(atributos.get("vp", 0.0)), "VP · VITALIDAD POBLACIONAL", Color(0.86, 0.42, 0.58)))
+	if tiene_puntaje:
+		cuadricula.add_child(_dato("%d PB" % int(_captura.get("puntos_biodiversidad", 0)),
+			"PUNTOS DE BIODIVERSIDAD", Color(0.95, 0.66, 0.15)))
+	caja.add_child(cuadricula)
+
+	var formula_texto := "Valores base del modelo educativo; no son mediciones de campo."
+	if tiene_puntaje:
+		formula_texto = "PB = promedio de IA, RH y VP × calidad de foto (×%.2f) × conservación (×%.2f)." % [
+			float(_captura.get("multiplicador_calidad", 1.0)),
+			float(_captura.get("factor_conservacion", 1.0))]
+	var formula := _etiqueta(formula_texto, 15, TEXTO_SUAVE)
+	formula.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caja.add_child(formula)
+	return caja
+
+
+func _texto_ciclo_vida(ciclo: Dictionary) -> String:
+	var texto := ""
+	if ciclo.completado:
+		texto = "Fase de referencia: %s. Secuencia completada con %d registros." % [
+			ciclo.fase_actual.to_lower(), ciclo.registros]
+	elif ciclo.fase_actual.is_empty():
+		texto = "Siguiente fase de referencia: %s (%d/%d registros)." % [
+			ciclo.fase_siguiente.to_lower(), ciclo.progreso, ciclo.umbral]
+	else:
+		texto = "Fase de referencia: %s. Siguiente: %s (%d/%d registros)." % [
+			ciclo.fase_actual.to_lower(), ciclo.fase_siguiente.to_lower(), ciclo.progreso, ciclo.umbral]
+	texto += "\nEs un modelo de la especie: tus registros no describen la metamorfosis de un mismo individuo."
+	return texto
 
 
 func _barra_registro() -> Control:

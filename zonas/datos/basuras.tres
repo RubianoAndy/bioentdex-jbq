@@ -17,6 +17,7 @@ opciones = PackedStringArray()
 correcta = 0
 especie_id = ""
 explicacion = "¡Gracias! Tu propuesta quedó guardada en tu Bioentdex. Separar en la fuente, reciclar, reducir el plástico y organizar jornadas de limpieza son buenas ideas."
+conceptos_obligatorios = PackedStringArray("separar", "reciclar", "plastico")
 
 [sub_resource type="Resource" id="m2"]
 script = ExtResource("3_mis")

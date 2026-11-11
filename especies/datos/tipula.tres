@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Parece un zancudo gigante (hasta 6 cm), de patas largas y finas, pero no pica."
 importancia = "Sus larvas viven en el agua del humedal y descomponen la materia orgánica; es alimento de aves y peces."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Si la atrapa un depredador puede soltar una pata y huir: acércate con calma."
 pagina_guia = 39
 horario = 0

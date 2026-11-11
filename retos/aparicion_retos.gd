@@ -5,10 +5,9 @@ extends Node3D
 ##   - Toma una misión de foto de las zonas (o un reto general) y abre la cámara del teléfono.
 ##   - Las fotos quedan en la base de datos de la Bioentdex.
 ##
-## EMBOSCADA (globo de los depredadores)
-##   - Un globo baja del cielo con un depredador (aves, ranas, ratas...) que tiene atrapado un
-##     insecto especial. Para rescatarlo hay que ganarle una batalla de preguntas con los
-##     insectos capturados (si aún no tiene, la guía le presta uno).
+## ENCUENTRO (globo de observación)
+##   - Un globo presenta un depredador del humedal y una especie por conocer para el duelo educativo.
+##     Se practica con insectos fotografiados (si aún no tiene, la guía presta un modelo de práctica).
 
 signal reto_foto_seleccionado(marcador: Node3D)
 signal batalla_seleccionada(globo: Node3D)
@@ -16,6 +15,7 @@ signal aviso(texto: String)
 
 const MARCADOR_FOTO := preload("res://retos/marcador_reto_foto.gd")
 const GLOBO := preload("res://retos/globo_depredador.gd")
+const MAPA := preload("res://mundo_3d.gd")
 
 ## Depredadores que comen insectos y pueden llegar en el globo
 const DEPREDADORES := ["mirla_patiamarilla", "copeton", "garza_blanca", "monjita_bogotana",
@@ -79,7 +79,7 @@ func _process(delta: float) -> void:
 		if reto == null:
 			continue
 		reto.vida -= delta
-		if reto.vida <= 0.0 or _pos_explorador().distance_to(_pos2d(reto)) > distancia_desaparicion:
+		if reto.vida <= 0.0 or MAPA.distancia_xz(_pos_explorador(), _pos2d(reto)) > distancia_desaparicion:
 			quitar(reto)
 
 	_reloj -= delta
@@ -115,7 +115,19 @@ func _aparecer_reto_foto() -> void:
 					candidatos.append(mision)
 	candidatos.append_array(_retos_generales)
 	var pendientes := candidatos.filter(func(m: Mision) -> bool: return not RegistroEspecies.mision_resuelta(m.id))
-	var mision: Mision = (pendientes if not pendientes.is_empty() else candidatos).pick_random()
+	var banco: Array = pendientes if not pendientes.is_empty() else candidatos
+	var ids: Array[String] = []
+	for candidata in banco:
+		ids.append(_id_reto_foto(candidata, zona_id))
+	var fase := "pendientes" if not pendientes.is_empty() else "repeticion"
+	var id_mision := RegistroEspecies.siguiente_id_sin_repetir(
+		"reto_foto:%s:%s" % [zona_id, fase], ids)
+	var indice := ids.find(id_mision)
+	if indice < 0:
+		push_warning("Retos de foto: no se encontró el ID seleccionado '%s' en el banco '%s'." %
+			[id_mision, zona_id])
+		return
+	var mision: Mision = banco[indice]
 
 	_reto_foto = MARCADOR_FOTO.new()
 	_reto_foto.configurar(mision, zona_id, lugar, randf_range(duracion_min, duracion_max))
@@ -142,13 +154,13 @@ func _aparecer_globo() -> void:
 	aviso.emit("¡Un globo de depredadores está bajando cerca de ti!")
 
 
-## El insecto especial que trae atrapado: primero los Plus que no tiene, luego los que no ha capturado.
+## La especie del encuentro: primero las Plus que no conoce, luego las que aún no ha fotografiado.
 func _elegir_premio() -> Especie:
 	var insectos := RegistroEspecies.especies.filter(func(e: Especie) -> bool: return e.es_capturable())
 	var plus := insectos.filter(func(e: Especie) -> bool: return e.plus and not Recompensas.tiene_plus(e.id))
 	if not plus.is_empty():
 		return plus.pick_random()
-	var nuevos := insectos.filter(func(e: Especie) -> bool: return not e.plus and not RegistroEspecies.esta_capturada(e.id))
+	var nuevos := insectos.filter(func(e: Especie) -> bool: return not e.plus and not RegistroEspecies.esta_descubierta(e.id))
 	if not nuevos.is_empty():
 		return nuevos.pick_random()
 	return insectos.pick_random() if not insectos.is_empty() else null
@@ -163,7 +175,7 @@ func globo_tocado(globo: Node3D) -> void:
 
 ## true si el explorador está cerca; si no, camina hacia el reto y avisa.
 func _acercarse(reto: Node3D, texto: String) -> bool:
-	if _pos_explorador().distance_to(_pos2d(reto)) <= distancia_interaccion:
+	if MAPA.distancia_xz(_pos_explorador(), _pos2d(reto)) <= distancia_interaccion:
 		return true
 	explorador.ir_a(reto.position)
 	aviso.emit(texto)
@@ -183,7 +195,7 @@ func _zona_cercana(p: Vector2) -> String:
 	var mejor := "mapa"
 	var menor := INF
 	for zona in zonas:
-		var d: float = p.distance_to(zona.posicion) - zona.radio
+		var d: float = MAPA.distancia_xz(p, zona.posicion) - zona.radio
 		if d < 12.0 and d < menor:
 			menor = d
 			mejor = zona.id
@@ -192,6 +204,15 @@ func _zona_cercana(p: Vector2) -> String:
 
 func _pos_explorador() -> Vector2:
 	return Vector2(explorador.position.x, explorador.position.z)
+
+
+func _id_reto_foto(mision: Mision, zona_id: String) -> String:
+	var id := mision.id
+	if id.is_empty():
+		id = mision.resource_path
+	if id.is_empty():
+		id = "%d:%s" % [mision.tipo, str(mision.explicacion.hash())]
+	return "%s:%s" % [zona_id, id]
 
 
 func _pos2d(nodo: Node3D) -> Vector2:

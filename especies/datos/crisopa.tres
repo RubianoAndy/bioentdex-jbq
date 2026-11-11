@@ -14,6 +14,7 @@ tipo = 1
 estado_conservacion = 6
 descripcion = "Insecto verde de ojos dorados y alas transparentes más largas que su cuerpo."
 importancia = "Sus larvas devoran plagas de las plantas; de adulta también poliniza."
+etapas_ciclo_vida = PackedStringArray("Huevo", "Larva", "Pupa", "Adulto")
 consejo_macro = "Enfoca sus ojos dorados con un fondo oscuro."
 pagina_guia = 108
 horario = 0

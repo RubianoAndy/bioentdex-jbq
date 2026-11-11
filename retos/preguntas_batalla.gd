@@ -91,14 +91,46 @@ const PREGUNTAS := [
 		"correcta": 1, "explicacion": "La chucha es nocturna: de día duerme escondida entre árboles o techos."},
 ]
 
+## Preguntas de relaciones ecológicas; la habilidad elegida decide qué concepto se practica.
+const RELACIONES_ECOLOGICAS := [
+	{"habilidad": "polen", "pregunta": "¿Qué relación ayuda a explicar que el abejorro visite flores y que la planta produzca semillas?",
+		"opciones": ["El abejorro protege a la planta del agua", "Al buscar néctar, el abejorro transporta polen entre flores", "La flor se alimenta de las alas del abejorro"],
+		"correcta": 1, "tema": "polinizacion", "explicacion": "La polinización conecta el alimento del polinizador con la reproducción de la planta."},
+	{"habilidad": "polen", "pregunta": "Si disminuyen las flores nativas de la ronda, ¿qué efecto puede tener en abejorros y colibríes?",
+		"opciones": ["Pueden perder fuentes de néctar y polen", "Aumenta el oxígeno del agua de forma inmediata", "No cambia su acceso al alimento"],
+		"correcta": 0, "tema": "polinizacion", "explicacion": "La flora ofrece alimento; conservar diversidad vegetal sostiene a quienes la visitan."},
+	{"habilidad": "polen", "pregunta": "¿Por qué un corredor con flores y arbustos puede ayudar a los polinizadores?",
+		"opciones": ["Impide que cualquier insecto se mueva", "Reemplaza todas las plantas del humedal", "Conecta lugares de alimentación y refugio"],
+		"correcta": 2, "tema": "conectividad", "explicacion": "Los corredores conectan parches de hábitat y recursos a través del paisaje."},
+	{"habilidad": "control", "pregunta": "¿Cómo se relacionan las mariquitas, los pulgones y las plantas?",
+		"opciones": ["La planta caza mariquitas para obtener agua", "La mariquita depreda pulgones que consumen savia", "El pulgón poliniza a la mariquita"],
+		"correcta": 1, "tema": "biodiversidad_humedal", "explicacion": "La depredación puede regular poblaciones de herbívoros; es una interacción de la red trófica."},
+	{"habilidad": "control", "pregunta": "Si desaparecen insectos acuáticos que comen las ninfas de libélula, ¿qué cambia primero en esa relación?",
+		"opciones": ["Las plantas dejan de necesitar luz", "Las aves se convierten en plantas", "Las ninfas pierden parte de su alimento y la red trófica se altera"],
+		"correcta": 2, "tema": "biodiversidad_humedal", "explicacion": "Los organismos se conectan por alimentación; un cambio puede propagarse a otros niveles."},
+	{"habilidad": "control", "pregunta": "¿Por qué encontrar ninfas de libélula puede aportar información sobre el humedal?",
+		"opciones": ["Demuestra que el agua nunca cambia", "Su ciclo incluye una fase acuática sensible a las condiciones del agua", "Solo viven en árboles secos"],
+		"correcta": 1, "tema": "agua_ecosistemas", "explicacion": "Las observaciones de organismos y su hábitat aportan indicios, pero no son por sí solas un diagnóstico completo."},
+	{"habilidad": "control", "pregunta": "¿Qué resultado puede tener la basura en un microhábitat de orilla?",
+		"opciones": ["Alterar refugios y afectar organismos que usan agua y vegetación", "Crear siempre sitios seguros para toda la fauna", "Mejorar automáticamente la calidad del agua"],
+		"correcta": 0, "tema": "residuos_humedal", "explicacion": "La contaminación puede modificar las condiciones del microhábitat y afectar varias especies."},
+]
+
+
+static func relacionales() -> Array:
+	var preguntas := RELACIONES_ECOLOGICAS.duplicate(true)
+	var anterior := RegistroEspecies.ultima_pregunta_batalla()
+	if preguntas.size() > 1 and not anterior.is_empty():
+		var sin_anterior := preguntas.filter(func(p: Dictionary) -> bool:
+			return p.pregunta != anterior and id_estable(p) != anterior)
+		if not sin_anterior.is_empty():
+			preguntas = sin_anterior
+	return preguntas
+
 
 ## Preguntas para una batalla contra ese depredador: primero las de su tema, mezcladas con generales.
 static func para(depredador: Especie) -> Array:
-	var tema := "general"
-	match depredador.tipo:
-		Especie.Tipo.AVE: tema = "ave"
-		Especie.Tipo.ANFIBIO: tema = "anfibio"
-		Especie.Tipo.MAMIFERO: tema = "mamifero"
+	var tema := tema_de(depredador)
 	var propias := PREGUNTAS.filter(func(p: Dictionary) -> bool: return p.tema == tema and tema != "general")
 	var generales := PREGUNTAS.filter(func(p: Dictionary) -> bool: return p.tema == "general")
 	propias.shuffle()
@@ -110,4 +142,30 @@ static func para(depredador: Especie) -> Array:
 			lista.append(propias.pop_back())
 		if not generales.is_empty():
 			lista.append(generales.pop_back())
+	var anterior := RegistroEspecies.ultima_pregunta_batalla()
+	if lista.size() > 1 and not anterior.is_empty():
+		var sin_anterior := lista.filter(func(p: Dictionary) -> bool:
+			return p.pregunta != anterior and id_estable(p) != anterior)
+		if not sin_anterior.is_empty():
+			lista = sin_anterior
 	return lista
+
+
+static func tema_de(depredador: Especie) -> String:
+	match depredador.tipo:
+		Especie.Tipo.AVE: return "ave"
+		Especie.Tipo.ANFIBIO: return "anfibio"
+		Especie.Tipo.MAMIFERO: return "mamifero"
+	return "general"
+
+
+## El ID usa el tema y el contenido de respuesta/explicación, nunca el enunciado visible.
+static func id_estable(pregunta: Dictionary) -> String:
+	var id := str(pregunta.get("id", ""))
+	if not id.is_empty():
+		return id
+	var opciones: Array = pregunta.get("opciones", [])
+	var indice_correcto := int(pregunta.get("correcta", -1))
+	var tema := str(pregunta.get("tema", "general"))
+	var clave := "%s|%d|%s|%s" % [tema, indice_correcto, str(opciones), str(pregunta.get("explicacion", ""))]
+	return "pregunta:%s:%s" % [tema, str(clave.hash())]
