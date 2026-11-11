@@ -9,8 +9,8 @@ var _toques_admin := 0
 var _ultimo_toque_admin := 0
 
 func _ready() -> void:
-	var titulo: Label = $Titulo/Nombre
-	titulo.gui_input.connect(_on_titulo_gui_input)
+	var etiqueta_titulo: Label = $Titulo/Nombre
+	etiqueta_titulo.gui_input.connect(_on_titulo_gui_input)
 	$Botones/BtnExpedicion.pressed.connect(_ir_a.bind("res://MapaExpedicion.tscn"))
 	$Botones/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
 	$Botones/BtnGuia.pressed.connect(_ir_a.bind("res://GuiaMacro.tscn"))
