@@ -29,6 +29,9 @@ var _pregunta_actual := {}
 var _estado := DueloEstado.new()
 var _actor_jugador: Node3D
 var _actor_oponente: Node3D
+var _modelo_jugador: Node3D
+var _modelo_oponente: Node3D
+var _tiempo_reposo := 0.0
 var _barra_jugador: ProgressBar
 var _barra_oponente: ProgressBar
 var _etiqueta_jugador: Label
@@ -69,6 +72,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	_tiempo_reposo += _delta
+	_animar_reposo(_modelo_jugador, 0.0)
+	_animar_reposo(_modelo_oponente, 1.4)
 	if _boton_esquiva.visible:
 		_carga_esquiva.value = _esquiva.restante
 		_etiqueta_turno.text = "Ventana de evasión · %.1f s" % _esquiva.restante
@@ -84,17 +90,49 @@ func _configurar_actores() -> void:
 	var punto_oponente: Marker3D = _arena.get_node("OpponentSpawn")
 	_actor_jugador = _instanciar_actor(modelo_jugador, punto_jugador, Color.WHITE)
 	_actor_oponente = _instanciar_actor(modelo_oponente, punto_oponente, Color(1.0, 0.72, 0.62))
+	_modelo_jugador = _actor_jugador.get_node("MovimientoSuave")
+	_modelo_oponente = _actor_oponente.get_node("MovimientoSuave")
 	_actualizar_tinte_ecologico()
 
 
+func _animar_reposo(modelo: Node3D, fase: float) -> void:
+	if not is_instance_valid(modelo):
+		return
+	modelo.position.y = sin(_tiempo_reposo * 1.7 + fase) * 0.035
+	modelo.rotation.z = sin(_tiempo_reposo * 0.9 + fase) * 0.035
+	modelo.rotation.y = sin(_tiempo_reposo * 0.65 + fase) * 0.06
+
+
 func _instanciar_actor(escena: PackedScene, punto: Marker3D, tinte: Color) -> Node3D:
-	var actor := (escena if escena else MODELO_PROTOTIPO).instantiate() as Node3D
-	if actor == null:
-		push_error("El modelo del duelo debe tener una raíz Node3D.")
-		return Node3D.new()
+	var actor := Node3D.new()
+	actor.name = "ActorDuelo"
 	punto.add_child(actor)
-	actor.position = Vector3.ZERO
-	for nodo in actor.find_children("*", "MeshInstance3D", true, false):
+	var sombra := MeshInstance3D.new()
+	var forma_sombra := CylinderMesh.new()
+	forma_sombra.top_radius = 0.46
+	forma_sombra.bottom_radius = 0.46
+	forma_sombra.height = 0.012
+	forma_sombra.radial_segments = 16
+	sombra.mesh = forma_sombra
+	sombra.position.y = 0.07
+	sombra.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var material_sombra := StandardMaterial3D.new()
+	material_sombra.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material_sombra.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material_sombra.albedo_color = Color(0.08, 0.12, 0.07, 0.32)
+	sombra.material_override = material_sombra
+	actor.add_child(sombra)
+	var movimiento := Node3D.new()
+	movimiento.name = "MovimientoSuave"
+	actor.add_child(movimiento)
+
+	var actor_modelo := (escena if escena else MODELO_PROTOTIPO).instantiate() as Node3D
+	if actor_modelo == null:
+		push_error("El modelo del duelo debe tener una raíz Node3D.")
+		return actor
+	actor_modelo.position = Vector3.ZERO
+	movimiento.add_child(actor_modelo)
+	for nodo in actor_modelo.find_children("*", "MeshInstance3D", true, false):
 		var malla := nodo as MeshInstance3D
 		var material := StandardMaterial3D.new()
 		material.albedo_color = tinte
@@ -307,7 +345,7 @@ func _ejecutar_habilidad(indice: int) -> void:
 	_estado.cambiar(DueloEstado.Estado.ANIMACION)
 	_etiqueta_turno.text = "%s ejecuta %s" % [equipo[equipo_actual].nombre_comun, NOMBRES_HABILIDAD[indice]]
 	_feedback.text = "¡Habilidad ecológica activada!"
-	await _animar_ataque()
+	await _animar_ataque(indice)
 	if not _estado.activo():
 		return
 	vida_oponente = maxi(0, vida_oponente - 1)
@@ -318,33 +356,96 @@ func _ejecutar_habilidad(indice: int) -> void:
 	_contraataque_oponente()
 
 
-func _animar_ataque() -> void:
-	var origen := _actor_jugador.global_position
-	var destino := _actor_oponente.global_position
-	_camara.enfocar(_actor_jugador, _actor_oponente)
-	var tween := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(_actor_jugador, "global_position", destino + Vector3(-0.7, 0, 0.6), 0.35)
-	tween.tween_callback(_crear_particulas.bind(_actor_oponente.global_position + Vector3(0, 1.2, 0)))
-	tween.tween_property(_actor_oponente, "scale", Vector3(0.84, 1.12, 0.84), 0.14)
-	tween.tween_property(_actor_oponente, "scale", Vector3.ONE, 0.18)
-	tween.tween_property(_actor_jugador, "global_position", origen, 0.3)
-	await tween.finished
+func _animar_ataque(indice: int) -> void:
+	await _animar_rafaga(_actor_jugador, _actor_oponente, equipo[equipo_actual], indice)
+
+
+func _animar_rafaga(atacante: Node3D, defensor: Node3D, especie: Especie, habilidad: int) -> void:
+	if atacante == _actor_oponente:
+		_camara.reaccionar(atacante, defensor)
+	else:
+		_camara.enfocar(atacante, defensor)
+	var color := _color_rafaga(especie, habilidad)
+	var origen := atacante.global_position + Vector3(0, 1.2, 0)
+	var destino := defensor.global_position + Vector3(0, 1.2, 0)
+	var proyectil := _crear_proyectil(color)
+	_arena.add_child(proyectil)
+	proyectil.global_position = origen
+	var recorrido := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	recorrido.tween_property(proyectil, "global_position", destino, 0.52)
+	recorrido.parallel().tween_property(proyectil, "rotation:y", TAU, 0.52)
+	await recorrido.finished
+	proyectil.queue_free()
+	_crear_particulas(destino, color)
+	var escala_original := defensor.scale
+	var impacto := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	impacto.tween_property(defensor, "scale", escala_original * Vector3(1.08, 0.92, 1.08), 0.1)
+	impacto.tween_property(defensor, "scale", escala_original, 0.14)
+	await impacto.finished
 	_camara.restablecer()
 
 
-func _crear_particulas(posicion: Vector3) -> void:
+func _crear_proyectil(color: Color) -> Node3D:
+	var proyectil := Node3D.new()
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = color
+	material.emission_enabled = true
+	material.emission = color
+
+	var nucleo := MeshInstance3D.new()
+	var esfera_nucleo := SphereMesh.new()
+	esfera_nucleo.radius = 0.17
+	esfera_nucleo.height = 0.34
+	esfera_nucleo.radial_segments = 8
+	esfera_nucleo.rings = 4
+	nucleo.mesh = esfera_nucleo
+	nucleo.material_override = material
+	proyectil.add_child(nucleo)
+
+	for indice in 5:
+		var perla := MeshInstance3D.new()
+		var esfera_perla := SphereMesh.new()
+		esfera_perla.radius = 0.065
+		esfera_perla.height = 0.13
+		esfera_perla.radial_segments = 6
+		esfera_perla.rings = 3
+		perla.mesh = esfera_perla
+		perla.material_override = material
+		var angulo := TAU * float(indice) / 5.0
+		perla.position = Vector3(cos(angulo) * 0.22, sin(angulo) * 0.18, 0)
+		proyectil.add_child(perla)
+	return proyectil
+
+
+func _color_rafaga(especie: Especie, habilidad: int) -> Color:
+	if habilidad == 0:
+		return Color(1.0, 0.74, 0.22)
+	if habilidad == 1:
+		return Color(0.35, 0.92, 0.58)
+	match especie.tipo:
+		Especie.Tipo.PEZ, Especie.Tipo.ANFIBIO:
+			return Color(0.25, 0.78, 1.0)
+		Especie.Tipo.AVE:
+			return Color(0.68, 0.88, 1.0)
+		Especie.Tipo.INSECTO:
+			return Color(1.0, 0.64, 0.24)
+		Especie.Tipo.MAMIFERO:
+			return Color(1.0, 0.47, 0.3)
+		Especie.Tipo.REPTIL:
+			return Color(0.68, 0.9, 0.3)
+	return Color(0.92, 0.84, 0.55)
+
+
+func _crear_particulas(posicion: Vector3, color: Color) -> void:
 	var particulas := GPUParticles3D.new()
 	var material := ParticleProcessMaterial.new()
-	var especie := equipo[equipo_actual]
-	material.color = Color(
-		especie.impacto_ecologico / 100.0,
-		especie.resistencia_habitat / 100.0,
-		especie.vitalidad_poblacional / 100.0, 1.0)
+	material.color = color
 	material.direction = Vector3(0, 1, 0)
 	material.spread = 180.0
-	material.initial_velocity_min = 1.4
-	material.initial_velocity_max = 4.0
-	material.gravity = Vector3(0, -2.0, 0)
+	material.initial_velocity_min = 0.8
+	material.initial_velocity_max = 2.8
+	material.gravity = Vector3.ZERO
 	particulas.process_material = material
 	var esfera := SphereMesh.new()
 	esfera.radius = 0.08
@@ -352,9 +453,10 @@ func _crear_particulas(posicion: Vector3) -> void:
 	esfera.radial_segments = 6
 	esfera.rings = 3
 	var brillo := StandardMaterial3D.new()
-	brillo.albedo_color = material.color
+	brillo.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	brillo.albedo_color = color
 	brillo.emission_enabled = true
-	brillo.emission = material.color
+	brillo.emission = color
 	esfera.material = brillo
 	particulas.draw_pass_1 = esfera
 	particulas.amount = 40
@@ -371,13 +473,7 @@ func _contraataque_oponente() -> void:
 	if vida_oponente <= 0:
 		_finalizar(true)
 		return
-	_camara.reaccionar(_actor_oponente, _actor_jugador)
-	var origen := _actor_oponente.global_position
-	var embestida := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	embestida.tween_property(_actor_oponente, "global_position",
-		_actor_jugador.global_position + Vector3(0.6, 0, -0.5), 0.3)
-	embestida.tween_property(_actor_oponente, "global_position", origen, 0.25)
-	await embestida.finished
+	await _animar_rafaga(_actor_oponente, _actor_jugador, depredador, -1)
 	if not _estado.activo():
 		return
 	_etiqueta_turno.text = "Atención: ventana de evasión"
@@ -419,6 +515,7 @@ func _resolver_esquiva(esquivo: bool) -> void:
 		_actor_jugador.queue_free()
 		var punto: Marker3D = _arena.get_node("PlayerSpawn")
 		_actor_jugador = _instanciar_actor(modelo_jugador, punto, Color.WHITE)
+		_modelo_jugador = _actor_jugador.get_node("MovimientoSuave")
 		_actualizar_tinte_ecologico()
 		_etiqueta_jugador.text = equipo[equipo_actual].nombre_comun
 		_atributos_jugador.text = "IA %d · RH %d · VP %d" % [
@@ -455,7 +552,7 @@ func _actualizar_tinte_ecologico() -> void:
 		especie.resistencia_habitat / 100.0,
 		especie.vitalidad_poblacional / 100.0)
 	var color := base.lerp(Color.WHITE, 0.35)
-	for malla in _actor_jugador.find_children("*", "MeshInstance3D", true, false):
+	for malla in _modelo_jugador.find_children("*", "MeshInstance3D", true, false):
 		var material := StandardMaterial3D.new()
 		material.albedo_color = color
 		malla.material_override = material

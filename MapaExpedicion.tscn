@@ -108,12 +108,14 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="CompaneroColibri" parent="." instance=ExtResource("11_comp")]
+visible = false
 anchor_right = 0.68
 offset_left = 16.0
 offset_top = 88.0
 offset_right = -8.0
 offset_bottom = 320.0
 mostrar_retrato = false
+mostrar_boton_siguiente = false
 
 [node name="BtnRegresar" type="Button" parent="." unique_id=84325627]
 layout_mode = 1
@@ -143,6 +145,12 @@ text = "Bioentdex"
 [node name="BtnExplorador" type="Button" parent="BotonesDerecha"]
 layout_mode = 2
 text = "Explorador"
+
+[node name="BtnTarjeta" type="Button" parent="BotonesDerecha"]
+custom_minimum_size = Vector2(76, 52)
+layout_mode = 2
+text = "Tarjeta"
+tooltip_text = "Tarjeta de exploración"
 
 [node name="PanelZona" type="PanelContainer" parent="."]
 visible = false

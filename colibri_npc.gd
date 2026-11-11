@@ -3,17 +3,20 @@ extends Node3D
 ## Es un NPC (no se captura): al tocarlo se abre su ficha y sale volando.
 
 signal tocado(especie: Especie)
+signal vuelo_cercano
 
 @export var especie: Especie
 @export var velocidad := 9.0
 @export var altura := 2.2
 @export_range(0.0, 1.0) var prob_cerca_explorador := 0.5   # para que de vez en cuando pase cerca
+@export var radio_avistamiento := 8.0
 
 var limites := Rect2(-10, -10, 20, 20)   # el mapa lo ajusta al tamaño del suelo
 var explorador: Node3D
 var _objetivo := Vector3.ZERO
 var _espera := 0.0
 var _tiempo := 0.0
+var _estaba_cerca := false
 
 @onready var sprite: Sprite3D = $Sprite3D
 @onready var sombra: MeshInstance3D = $Sombra
@@ -45,6 +48,20 @@ func _process(delta: float) -> void:
 	# Aleteo: sube y baja rápido; la sombra se queda pegada al suelo
 	sprite.position.y = sin(_tiempo * 9.0) * 0.08
 	sombra.position.y = -position.y + 0.02
+	_detectar_vuelo_cercano()
+
+
+func _detectar_vuelo_cercano() -> void:
+	if not is_instance_valid(explorador):
+		_estaba_cerca = false
+		return
+
+	var posicion_colibri := Vector2(global_position.x, global_position.z)
+	var posicion_explorador := Vector2(explorador.global_position.x, explorador.global_position.z)
+	var esta_cerca := posicion_colibri.distance_to(posicion_explorador) <= radio_avistamiento
+	if esta_cerca and not _estaba_cerca:
+		vuelo_cercano.emit()
+	_estaba_cerca = esta_cerca
 
 
 func al_tocar(_quien: Node3D) -> void:

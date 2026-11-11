@@ -294,9 +294,21 @@ func guardar() -> void:
 func _guardar_foto(foto: Image, nombre: String) -> String:
 	if foto == null:
 		return ""
-	DirAccess.make_dir_recursive_absolute(CARPETA_FOTOS)
-	var ruta := "%s%s_%d.jpg" % [CARPETA_FOTOS, nombre, Time.get_unix_time_from_system()]
-	foto.save_jpg(ruta, 0.85)
+	var error_directorio := DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(CARPETA_FOTOS))
+	if error_directorio != OK and error_directorio != ERR_ALREADY_EXISTS:
+		push_error("No se pudo crear la carpeta de fotos (%s)." % error_string(error_directorio))
+		return ""
+	var base := "%s%s_%d" % [CARPETA_FOTOS, nombre, Time.get_unix_time_from_system()]
+	var ruta := base + ".jpg"
+	var indice := 1
+	while FileAccess.file_exists(ruta):
+		ruta = "%s_%d.jpg" % [base, indice]
+		indice += 1
+	var error_foto := foto.save_jpg(ruta, 0.85)
+	if error_foto != OK:
+		push_error("No se pudo guardar la foto de '%s' (%s)." % [nombre, error_string(error_foto)])
+		return ""
 	return ruta
 
 
@@ -374,5 +386,8 @@ func _cargar_bd() -> void:
 
 func _guardar_bd() -> void:
 	var archivo := FileAccess.open(ARCHIVO_BD, FileAccess.WRITE)
-	if archivo:
-		archivo.store_string(JSON.stringify(_bd, "\t"))
+	if archivo == null:
+		push_error("No se pudo guardar la base de datos de la Bioentdex (%s)." %
+			error_string(FileAccess.get_open_error()))
+		return
+	archivo.store_string(JSON.stringify(_bd, "\t"))
