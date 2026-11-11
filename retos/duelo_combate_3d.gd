@@ -221,7 +221,7 @@ func _mostrar_pregunta(indice: int) -> void:
 	var ids: Array[String] = []
 	for candidata in candidatas:
 		ids.append(PreguntasBatalla.id_estable(candidata))
-	var tema_banco := HABILIDADES[indice] if candidatas.size() > 0 else "general"
+	var tema_banco: String = str(HABILIDADES[indice]) if not candidatas.is_empty() else "general"
 	var id_pregunta := RegistroEspecies.siguiente_id_sin_repetir(
 		"preguntas_batalla:duelo:%s" % tema_banco, ids)
 	_pregunta_actual = {}
