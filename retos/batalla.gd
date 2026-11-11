@@ -18,7 +18,6 @@ const MAX_EQUIPO := 3
 const GUIA := "Guía del humedal"
 const PRESTADO := "mariquita"   # insecto que presta la guía si el jugador aún no tiene ninguno
 const DUELO_3D := preload("res://retos/DueloCombate3D.tscn")
-const FICHA_ESPECIE_SCRIPT := preload("res://ui/ficha_especie.gd")
 
 ## Poder que lanza cada insecto al acertar (los demás usan "Ataque sorpresa")
 const PODERES := {
@@ -426,7 +425,7 @@ func _victoria() -> void:
 	_caja.add_child(_etiqueta("%s quedó registrado como observado en tu Bioentdex." % premio.nombre_comun, 28, Color.WHITE))
 	_caja.add_child(_espacio())
 	_caja.add_child(_boton("Ver la ficha de especie", func() -> void:
-		var ficha: FichaEspecie = FICHA_ESPECIE_SCRIPT.mostrar(self, premio, "¡Nuevo avistamiento!")
+		var ficha: FichaEspecie = FichaEspecie.mostrar(self, premio, "¡Nuevo avistamiento!")
 		ficha.cerrada.connect(_terminar.bind(true))))
 
 

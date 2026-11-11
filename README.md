@@ -29,7 +29,7 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 | **Recompensas** | Experiencia y niveles (sobre todo por capturar), **semillas** como moneda (por misiones y por subir de nivel) y una **tienda** con *néctar atrayente* y 4 **organismos Plus**: especies raras que no aparecen en el mapa. |
 | **Personalización** | Nombre, piel, camisa, pantalón, sombrero o gorra y mochila del explorador. |
 | **Bioentdex** | Fichas consultables de todas las especies, con el estado de captura u observación, tus fotos y el historial de misiones. |
-| **Tarjeta de exploración** | Exporta localmente una imagen PNG con insignia, nivel, especies conocidas y una foto que elijas entre las guardadas en tu Bioentdex. |
+| **Tarjeta de exploración** | Disponible desde un botón compacto del mapa; exporta localmente una imagen PNG con insignia, nivel, especies conocidas y una foto que elijas entre las guardadas en tu Bioentdex. |
 | **Analítica docente local** | Contadores agregados de aprendizaje con acceso por PIN local; la exportación JSON es manual y no usa red. |
 
 ---
@@ -80,7 +80,7 @@ En el preset de exportación **activa el permiso `Camera`**: la vista de captura
 ├── Tienda.tscn               Tienda (néctar y organismos Plus)
 ├── Personalizar.tscn         Personalización del explorador
 ├── Explorador.tscn           Personaje del jugador
-├── Colibri.tscn              Colibrí NPC que vuela por todo el humedal
+├── Colibri.tscn              Colibrí NPC que vuela por el humedal y comparte datos al acercarse
 │
 ├── especies/                 Especies: especie.gd (ficha) y datos/*.tres (una por especie)
 │   └── registro_especies.gd    Autoload: catálogo + base de datos del jugador

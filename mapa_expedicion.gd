@@ -3,7 +3,6 @@ extends Control
 
 const CAPTURA := preload("res://captura/CapturaAR.tscn")
 const ESCENA_MAPA := "res://MapaExpedicion.tscn"
-const FICHA_ESPECIE_SCRIPT := preload("res://ui/ficha_especie.gd")
 
 @onready var mundo: Node3D = $SubViewportContainer/SubViewport/Mundo3D
 @onready var fauna: Node3D = $SubViewportContainer/SubViewport/Mundo3D/Fauna
@@ -19,12 +18,13 @@ func _ready() -> void:
 	$PanelZona/Margen/HBox/BtnEntrar.pressed.connect(_on_entrar_pressed)
 	$BotonesDerecha/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
 	$BotonesDerecha/BtnExplorador.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
+	$BotonesDerecha/BtnTarjeta.pressed.connect(_ir_a.bind("res://comunidad/tarjeta_hallazgo.tscn"))
 	fauna.insecto_seleccionado.connect(_on_insecto_seleccionado)
 	fauna.npc_seleccionado.connect(_on_npc_seleccionado)
 	mundo.colibri.tocado.connect(_on_colibri_tocado)
+	mundo.colibri.vuelo_cercano.connect(_on_colibri_vuelo_cercano)
 	retos.reto_foto_seleccionado.connect(_on_reto_foto_seleccionado)
 	retos.batalla_seleccionada.connect(_on_batalla_seleccionada)
-	$CompaneroColibri.establecer_contexto("")
 
 	var insignia := InsigniaJugador.new()
 	insignia.position = Vector2(16, 86)
@@ -52,9 +52,13 @@ func _exit_tree() -> void:
 func _on_zona_cercana_cambio(zona: Zona) -> void:
 	# Al llegar a una zona aparece el panel de abajo con el botón "Entrar"
 	panel_zona.visible = zona != null
-	$CompaneroColibri.establecer_contexto(zona.id if zona else "")
 	if zona:
 		nombre_zona.text = zona.nombre
+
+
+func _on_colibri_vuelo_cercano() -> void:
+	var zona_id: String = mundo.zona_actual.id if mundo.zona_actual else ""
+	$CompaneroColibri.mostrar_dato_temporal(zona_id)
 
 
 ## En el PC: Enter entra a la zona cercana (las flechas mueven al explorador, ver mundo_3d.gd).
@@ -117,7 +121,7 @@ func _on_npc_seleccionado(especie: Especie) -> void:
 	FeedbackTactil.interaccion()
 	mundo.cancelar_toque()
 	var primera := RegistroEspecies.registrar_observacion(especie)
-	FICHA_ESPECIE_SCRIPT.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
+	FichaEspecie.mostrar(self, especie, "¡Nuevo avistamiento!" if primera else "Avistamiento")
 
 
 func _on_colibri_tocado(especie: Especie) -> void:

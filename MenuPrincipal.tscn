@@ -193,11 +193,6 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 text = "Personalizar explorador"
 
-[node name="BtnTarjeta" type="Button" parent="Botones"]
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-text = "Tarjeta de exploración"
-
 [node name="BtnAnalitica" type="Button" parent="Botones"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2

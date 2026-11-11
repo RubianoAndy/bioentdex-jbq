@@ -4,7 +4,6 @@ extends Control
 
 const CAPTURA := preload("res://captura/CapturaAR.tscn")
 const VALIDADOR_MISION := preload("res://zonas/validador_mision.gd")
-const FICHA_ESPECIE_SCRIPT := preload("res://ui/ficha_especie.gd")
 const NOMBRES_TIPO := ["Pregunta", "¿Quién es?", "Foto", "Propuesta"]
 const DORADO := Color(1, 0.84, 0.3)
 ## Fondo simulado de la cámara para las misiones de foto de cada zona
@@ -121,7 +120,7 @@ func _ver_especie(especie: Especie) -> void:
 		return
 	var capturas := RegistroEspecies.capturas_de(especie.id)
 	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
-	FICHA_ESPECIE_SCRIPT.mostrar(self, especie, "", foto)
+	FichaEspecie.mostrar(self, especie, "", foto)
 
 
 # --- Misiones ---------------------------------------------------------------------------------

@@ -3,7 +3,6 @@ extends Control
 ## fotos) y pestaña "Misiones" (sus respuestas).
 
 const TAMANO_TARJETA := Vector2(212, 270)
-const FICHA_ESPECIE_SCRIPT := preload("res://ui/ficha_especie.gd")
 
 @onready var cuadricula: GridContainer = $Margen/VBox/Pestanas/Especies/Cuadricula
 @onready var lista_misiones: VBoxContainer = $Margen/VBox/Pestanas/Misiones/Lista
@@ -60,7 +59,7 @@ func _mostrar_ficha(especie: Especie) -> void:
 	var capturas := RegistroEspecies.capturas_de(especie.id)
 	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
 	var captura: Dictionary = capturas[-1] if not capturas.is_empty() else {}
-	FICHA_ESPECIE_SCRIPT.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)
+	FichaEspecie.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)
 
 
 func _llenar_misiones() -> void:
