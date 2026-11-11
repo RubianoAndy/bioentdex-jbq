@@ -10,6 +10,7 @@ signal foto_tomada(foto: Image)
 
 const INTENTOS := 3
 const RADIO_VISOR := 150.0
+const FICHA_ESPECIE_SCRIPT := preload("res://ui/ficha_especie.gd")
 ## Qué tan rápido revolotea cada insecto (1 = normal)
 const RAPIDEZ := {"mosca_metalica": 1.6, "zancudo": 1.5, "libelula": 1.3, "sirfido": 1.2, "caballito_del_diablo": 1.1, "mariquita": 0.6, "hormiga": 0.6, "psocido": 0.5, "pececillo_plata": 0.8, "tijereta": 0.6}
 
@@ -140,7 +141,7 @@ func _disparar() -> void:
 		AudioManager.reproducir_sfx("camara_obturador")
 		var foto := await _tomar_foto()
 		var captura := RegistroEspecies.registrar_captura(especie, zona_id, foto, calidad_foto)
-		var ficha := FichaEspecie.mostrar(self, especie, "¡Capturaste un insecto!",
+		var ficha: FichaEspecie = FICHA_ESPECIE_SCRIPT.mostrar(self, especie, "¡Capturaste un insecto!",
 			ImageTexture.create_from_image(foto), captura)
 		ficha.cerrada.connect(_terminar.bind(true))
 		return

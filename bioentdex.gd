@@ -1,8 +1,9 @@
 extends Control
-## Bioentdex: la base de datos del jugador. Pestaña "Especies" (insectos capturados con su foto,
-## animales y plantas observados, y siluetas de lo que falta) y pestaña "Misiones" (sus respuestas).
+## Bioentdex: la base de datos del jugador. Pestaña "Especies" (fichas consultables, registros y
+## fotos) y pestaña "Misiones" (sus respuestas).
 
 const TAMANO_TARJETA := Vector2(212, 270)
+const FICHA_ESPECIE_SCRIPT := preload("res://ui/ficha_especie.gd")
 
 @onready var cuadricula: GridContainer = $Margen/VBox/Pestanas/Especies/Cuadricula
 @onready var lista_misiones: VBoxContainer = $Margen/VBox/Pestanas/Misiones/Lista
@@ -42,10 +43,9 @@ func _crear_tarjeta(especie: Especie) -> Button:
 	elif RegistroEspecies.esta_observada(especie.id):
 		tarjeta.text = "#%03d %s\nObservado" % [especie.numero, especie.nombre_comun]
 	else:
-		tarjeta.text = "#%03d ???%s" % [especie.numero, "\nPlus · tienda" if especie.plus else ("\nInsecto" if especie.es_capturable() else "")]
-		tarjeta.disabled = true
-		# La imagen se pinta de negro: queda solo la silueta
-		tarjeta.add_theme_color_override("icon_disabled_color", Color.BLACK)
+		var estado_registro := "Organismo Plus" if especie.plus else (
+			"Pendiente de captura" if especie.es_capturable() else "Pendiente de observación")
+		tarjeta.text = "#%03d %s\n%s" % [especie.numero, especie.nombre_comun, estado_registro]
 	if especie.plus:
 		for estado in ["normal", "hover", "pressed", "disabled"]:
 			var estilo: StyleBoxFlat = tarjeta.get_theme_stylebox(estado).duplicate()
@@ -60,7 +60,7 @@ func _mostrar_ficha(especie: Especie) -> void:
 	var capturas := RegistroEspecies.capturas_de(especie.id)
 	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
 	var captura: Dictionary = capturas[-1] if not capturas.is_empty() else {}
-	FichaEspecie.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)
+	FICHA_ESPECIE_SCRIPT.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)
 
 
 func _llenar_misiones() -> void:
