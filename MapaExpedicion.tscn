@@ -119,7 +119,7 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -380.0
+offset_left = -520.0
 offset_top = 16.0
 offset_right = -16.0
 offset_bottom = 72.0
@@ -140,6 +140,12 @@ custom_minimum_size = Vector2(76, 52)
 layout_mode = 2
 text = "Tarjeta"
 tooltip_text = "Tarjeta de exploración"
+
+[node name="BtnModo" type="Button" parent="BotonesDerecha"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 52)
+text = "Normal"
+tooltip_text = "Cambiar modo: Normal → RA → RV"
 
 [node name="PanelZona" type="PanelContainer" parent="."]
 visible = false
