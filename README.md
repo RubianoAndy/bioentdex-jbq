@@ -9,7 +9,7 @@ El contenido de los insectos se basa en la **Guía macrofotográfica sobre insec
 (Michelle Valentina Rodríguez Cordero, Universidad Pedagógica Nacional, Grupo de Investigación Enseñanza de la
 Biología y Diversidad Cultural), que viene incluida en la app.
 
-> Creado por Michelle Rodríguez.
+> Creado por Michelle Valentina Rodríguez Cordero.
 
 ## Capturas
 
