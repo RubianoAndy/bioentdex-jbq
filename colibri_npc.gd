@@ -1,25 +1,39 @@
 extends Node3D
-## Colibrí NPC: vuela por todo el humedal con vuelos rápidos y pausas flotando.
-## Es un NPC (no se captura): al tocarlo se abre su ficha y sale volando.
+## Colibrí NPC, el amigo acompañante del explorador.
+## Cada cierto tiempo llega volando desde fuera de la pantalla, se queda revoloteando junto al
+## explorador mientras cuenta un dato curioso (lo muestra la burbuja del mapa) y luego sigue
+## volando hasta perderse de vista. Es un NPC (no se captura): al tocarlo se abre su ficha.
 
 signal tocado(especie: Especie)
-signal vuelo_cercano
+signal vuelo_cercano      # llegó junto al explorador: empieza el dato curioso
+signal se_despide         # terminó la visita: la burbuja debe cerrarse
+
+enum Estado { AUSENTE, LLEGANDO, ACOMPANANDO, SALIENDO }
 
 @export var especie: Especie
 @export var velocidad := 9.0
 @export var altura := 2.2
-@export_range(0.0, 1.0) var prob_cerca_explorador := 0.5   # para que de vez en cuando pase cerca
-@export var radio_avistamiento := 8.0
+@export var duracion_visita := 20.0                        # segundos que dura el dato curioso
+@export var espera_entre_visitas := Vector2(35.0, 70.0)    # segundos (mínimo, máximo) sin colibrí
+@export var espera_primera_visita := Vector2(6.0, 10.0)
+@export var distancia_aparicion := 15.0                    # nace fuera de la pantalla
+@export var distancia_salida := 22.0
 
 var limites := Rect2(-10, -10, 20, 20)   # el mapa lo ajusta al tamaño del suelo
 var explorador: Node3D
+var estado := Estado.AUSENTE
+
 var _objetivo := Vector3.ZERO
-var _espera := 0.0
+var _lado := 1.0               # a qué lado del explorador revolotea
+var _hueco := Vector3.ZERO     # posición relativa al explorador mientras lo acompaña
+var _cambio_hueco := 0.0
+var _cuenta := 0.0             # tiempo restante del estado actual
 var _tiempo := 0.0
-var _estaba_cerca := false
+var _capa_toque := 0
 
 @onready var sprite: Sprite3D = $Sprite3D
 @onready var sombra: MeshInstance3D = $Sombra
+@onready var area: Area3D = $Area3D
 
 
 func _ready() -> void:
@@ -28,57 +42,119 @@ func _ready() -> void:
 	if textura:
 		sprite.texture = textura
 		sprite.pixel_size = 1.2 / textura.get_width()
-	_elegir_objetivo()
+	# Siempre visible, aunque pase detrás de un árbol: es el compañero del explorador
+	sprite.no_depth_test = true
+	sprite.render_priority = 10
+	_capa_toque = area.collision_layer
+	_ausentarse(randf_range(espera_primera_visita.x, espera_primera_visita.y))
+
+
+## Segundos que le quedan al dato curioso (0 si no está acompañando).
+func tiempo_restante_visita() -> float:
+	return _cuenta if estado == Estado.ACOMPANANDO else 0.0
+
+
+## Termina la visita antes de tiempo (por ejemplo, al tocar la burbuja).
+func despedirse() -> void:
+	if estado == Estado.LLEGANDO or estado == Estado.ACOMPANANDO:
+		_salir()
 
 
 func _process(delta: float) -> void:
 	_tiempo += delta
-	if _espera > 0.0:
-		_espera -= delta   # flotando en el sitio, como liba una flor
-	else:
-		var hacia := _objetivo - position
-		if hacia.length() < 0.1:
-			_espera = randf_range(0.8, 2.5)
-			_elegir_objetivo()
-		else:
-			position += hacia.limit_length(velocidad * delta)
-			if absf(hacia.x) > 0.05:
-				sprite.flip_h = hacia.x < 0.0   # la imagen mira a la derecha
+	match estado:
+		Estado.AUSENTE:
+			_cuenta -= delta
+			if _cuenta <= 0.0 and is_instance_valid(explorador):
+				_llegar()
+		Estado.LLEGANDO:
+			_objetivo = _junto_al_explorador()
+			if _volar_hacia(_objetivo, velocidad * 1.3, delta):
+				estado = Estado.ACOMPANANDO
+				_cuenta = duracion_visita
+				vuelo_cercano.emit()
+		Estado.ACOMPANANDO:
+			_cuenta -= delta
+			_cambio_hueco -= delta
+			if _cambio_hueco <= 0.0:
+				_nuevo_hueco()
+			# Lo sigue con suavidad, como si revoloteara a su lado
+			_volar_hacia(_junto_al_explorador(), velocidad, delta, 0.05)
+			sprite.flip_h = _lado > 0.0   # mira hacia el explorador mientras le habla
+			if _cuenta <= 0.0:
+				_salir()
+		Estado.SALIENDO:
+			_cuenta -= delta
+			if _volar_hacia(_objetivo, velocidad * 1.4, delta) or _cuenta <= 0.0:
+				_ausentarse(randf_range(espera_entre_visitas.x, espera_entre_visitas.y))
 
 	# Aleteo: sube y baja rápido; la sombra se queda pegada al suelo
 	sprite.position.y = sin(_tiempo * 9.0) * 0.08
 	sombra.position.y = -position.y + 0.02
-	_detectar_vuelo_cercano()
-
-
-func _detectar_vuelo_cercano() -> void:
-	if not is_instance_valid(explorador):
-		_estaba_cerca = false
-		return
-
-	var posicion_colibri := Vector2(global_position.x, global_position.z)
-	var posicion_explorador := Vector2(explorador.global_position.x, explorador.global_position.z)
-	var esta_cerca := posicion_colibri.distance_to(posicion_explorador) <= radio_avistamiento
-	if esta_cerca and not _estaba_cerca:
-		vuelo_cercano.emit()
-	_estaba_cerca = esta_cerca
 
 
 func al_tocar(_quien: Node3D) -> void:
+	if estado == Estado.AUSENTE:
+		return
 	tocado.emit(especie)
-	# Se asusta y sale volando lejos
-	_espera = 0.0
-	_elegir_objetivo(false)
+	_salir()   # se asusta y sigue su vuelo
 
 
-func _elegir_objetivo(puede_ir_cerca := true) -> void:
-	var punto: Vector2
-	if puede_ir_cerca and explorador and randf() < prob_cerca_explorador:
-		punto = Vector2(explorador.position.x, explorador.position.z) \
-			+ Vector2.from_angle(randf() * TAU) * randf_range(2.0, 6.0)
-	else:
-		punto = Vector2(
-			randf_range(limites.position.x, limites.end.x),
-			randf_range(limites.position.y, limites.end.y))
-	punto = punto.clamp(limites.position, limites.end)
-	_objetivo = Vector3(punto.x, altura, punto.y)
+# --- Estados ------------------------------------------------------------------------------------
+
+func _llegar() -> void:
+	_lado = -1.0 if randf() < 0.5 else 1.0
+	_nuevo_hueco()
+	# Entra por el costado de la pantalla del lado donde se va a quedar
+	var desde := Vector2(explorador.position.x, explorador.position.z) \
+		+ Vector2(_lado, randf_range(-0.6, 0.4)).normalized() * distancia_aparicion
+	desde = desde.clamp(limites.position, limites.end)
+	position = Vector3(desde.x, altura, desde.y)
+	_mostrar(true)
+	estado = Estado.LLEGANDO
+
+
+func _salir() -> void:
+	if estado == Estado.ACOMPANANDO or estado == Estado.LLEGANDO:
+		se_despide.emit()
+	estado = Estado.SALIENDO
+	_cuenta = 6.0   # por si el destino queda fuera del mapa
+	# Sigue volando hacia el lado contrario por donde llegó, un poco hacia arriba del mapa
+	var direccion := Vector2(-_lado, randf_range(-0.9, -0.2)).normalized()
+	var hasta := Vector2(position.x, position.z) + direccion * distancia_salida
+	_objetivo = Vector3(hasta.x, altura + 1.0, hasta.y)
+	area.collision_layer = 0   # mientras se va, ya no se puede tocar
+
+
+func _ausentarse(segundos: float) -> void:
+	estado = Estado.AUSENTE
+	_cuenta = segundos
+	_mostrar(false)
+
+
+func _mostrar(si: bool) -> void:
+	visible = si
+	area.collision_layer = _capa_toque if si else 0
+
+
+# --- Movimiento ---------------------------------------------------------------------------------
+
+func _nuevo_hueco() -> void:
+	# Un punto a un costado del explorador, algo adelante, para no taparlo
+	_hueco = Vector3(_lado * randf_range(1.4, 2.2), 0.0, randf_range(-1.2, 0.2))
+	_cambio_hueco = randf_range(1.5, 3.0)
+
+
+func _junto_al_explorador() -> Vector3:
+	return Vector3(explorador.position.x, altura, explorador.position.z) + _hueco
+
+
+## Avanza hacia el punto; devuelve true al llegar (a menos de "margen").
+func _volar_hacia(punto: Vector3, rapidez: float, delta: float, margen := 0.1) -> bool:
+	var hacia := punto - position
+	if hacia.length() <= margen:
+		return true
+	position += hacia.limit_length(rapidez * delta)
+	if absf(hacia.x) > 0.05:
+		sprite.flip_h = hacia.x < 0.0   # la imagen mira a la derecha
+	return hacia.length() <= rapidez * delta

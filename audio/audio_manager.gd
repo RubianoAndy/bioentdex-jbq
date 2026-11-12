@@ -165,6 +165,21 @@ func _asegurar_buses() -> void:
 	_asegurar_bus(BUS_MUSICA)
 	_asegurar_bus(BUS_AMBIENTE)
 	_asegurar_bus(BUS_SFX)
+	_salida_mono()
+
+
+## Todo el sonido sale en mono: igual por ambos audífonos, aunque el archivo sea estéreo.
+## StereoEnhance con pan_pullout = 0 mezcla izquierda y derecha en un solo canal centrado.
+func _salida_mono() -> void:
+	var master := AudioServer.get_bus_index(BUS_MASTER)
+	for i in AudioServer.get_bus_effect_count(master):
+		if AudioServer.get_bus_effect(master, i) is AudioEffectStereoEnhance:
+			return
+	var mono := AudioEffectStereoEnhance.new()
+	mono.pan_pullout = 0.0
+	mono.time_pullout_ms = 0.0
+	mono.surround = 0.0
+	AudioServer.add_bus_effect(master, mono)
 
 
 func _asegurar_bus(nombre: String) -> void:

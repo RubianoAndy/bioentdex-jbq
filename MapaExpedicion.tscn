@@ -9,7 +9,6 @@
 [ext_resource type="Script" path="res://retos/aparicion_retos.gd" id="10_ret"]
 [ext_resource type="PackedScene" path="res://Explorador.tscn" id="5_expl"]
 [ext_resource type="PackedScene" path="res://Colibri.tscn" id="6_coli"]
-[ext_resource type="PackedScene" path="res://ui/companero_colibri.tscn" id="11_comp"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_w0vpx"]
 size = Vector2(200, 200)
@@ -106,16 +105,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="CompaneroColibri" parent="." instance=ExtResource("11_comp")]
-visible = false
-anchor_right = 0.68
-offset_left = 16.0
-offset_top = 88.0
-offset_right = -8.0
-offset_bottom = 320.0
-mostrar_retrato = false
-mostrar_boton_siguiente = false
 
 [node name="BtnRegresar" type="Button" parent="." unique_id=84325627]
 layout_mode = 1

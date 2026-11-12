@@ -10,6 +10,8 @@ const ESCENA_MAPA := "res://MapaExpedicion.tscn"
 @onready var panel_zona: PanelContainer = $PanelZona
 @onready var nombre_zona: Label = $PanelZona/Margen/HBox/NombreZona
 
+var _burbuja_colibri: BurbujaColibri
+
 
 func _ready() -> void:
 	AudioManager.conectar_botones(self)
@@ -23,6 +25,7 @@ func _ready() -> void:
 	fauna.npc_seleccionado.connect(_on_npc_seleccionado)
 	mundo.colibri.tocado.connect(_on_colibri_tocado)
 	mundo.colibri.vuelo_cercano.connect(_on_colibri_vuelo_cercano)
+	mundo.colibri.se_despide.connect(func() -> void: _burbuja_colibri.cerrar())
 	retos.reto_foto_seleccionado.connect(_on_reto_foto_seleccionado)
 	retos.batalla_seleccionada.connect(_on_batalla_seleccionada)
 
@@ -31,6 +34,12 @@ func _ready() -> void:
 	insignia.tocada.connect(_ir_a.bind("res://Tienda.tscn"))
 	add_child(insignia)
 	move_child(insignia, $PanelZona.get_index())
+
+	# Burbuja del colibrí: sigue al colibrí cuando llega junto al explorador
+	_burbuja_colibri = BurbujaColibri.new()
+	_burbuja_colibri.configurar(mundo.colibri, mundo.camara, $SubViewportContainer)
+	add_child(_burbuja_colibri)
+	move_child(_burbuja_colibri, $PanelZona.get_index())
 
 	# Capa para los avisos: queda debajo de la cámara y de las fichas (que se agregan después)
 	var avisos := Control.new()
@@ -58,7 +67,7 @@ func _on_zona_cercana_cambio(zona: Zona) -> void:
 
 func _on_colibri_vuelo_cercano() -> void:
 	var zona_id: String = mundo.zona_actual.id if mundo.zona_actual else ""
-	$CompaneroColibri.mostrar_dato_temporal(zona_id)
+	_burbuja_colibri.mostrar(DialogosColibri.siguiente(zona_id))
 
 
 ## En el PC: Enter entra a la zona cercana (las flechas mueven al explorador, ver mundo_3d.gd).

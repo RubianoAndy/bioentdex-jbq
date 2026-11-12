@@ -9,6 +9,13 @@ const CATEGORIAS := [
 	"arte_cultura",
 	"interaccion_flora_fauna",
 ]
+const NOMBRES_CATEGORIA := {
+	"biomas": "Biomas",
+	"ecologia": "Ecología",
+	"biomimesis": "Biomímesis",
+	"arte_cultura": "Arte y cultura",
+	"interaccion_flora_fauna": "Flora y fauna",
+}
 
 var _dialogos: Array[Dictionary] = []
 var _vistos: Dictionary = {}
@@ -16,6 +23,11 @@ var _vistos: Dictionary = {}
 
 func _ready() -> void:
 	_cargar_dialogos()
+
+
+## Nombre bonito de una categoría, para mostrarlo en pantalla.
+func nombre_categoria(categoria: String) -> String:
+	return NOMBRES_CATEGORIA.get(categoria, categoria.replace("_", " ").capitalize())
 
 
 func siguiente(zona_id: String) -> Dictionary:
