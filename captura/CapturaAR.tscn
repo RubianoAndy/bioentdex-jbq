@@ -104,6 +104,14 @@ offset_right = 186.0
 offset_bottom = 124.0
 text = "← Volver"
 
+[node name="BtnRA" type="Button" parent="HUD"]
+layout_mode = 0
+offset_left = 202.0
+offset_top = 64.0
+offset_right = 402.0
+offset_bottom = 124.0
+text = "Desactivar RA"
+
 [node name="Cartel" type="PanelContainer" parent="HUD"]
 layout_mode = 1
 anchors_preset = 10
