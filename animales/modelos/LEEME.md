@@ -19,6 +19,20 @@ El id es el campo `id` de la ficha en `especies/datos/<id>.tres` (sin tildes ni 
 3. Si tiene animaciones, nómbralas `idle` (reposo) o `volar`; la app reproduce una en bucle.
 4. Copia el `.glb` en esta carpeta y abre el proyecto en Godot para que lo importe.
 
+## Fases del ciclo de vida ("evoluciones")
+
+Cada fase de un insecto puede tener su propio modelo, con el nombre de la fase al final:
+
+```
+animales/modelos/mariquita_huevo.glb
+animales/modelos/mariquita_larva.glb
+animales/modelos/mariquita_pupa.glb
+animales/modelos/libelula_ninfa.glb
+```
+
+El adulto es el archivo sin sufijo (`mariquita.glb`). Las fases de cada especie están en
+`etapas_ciclo_vida` de su ficha (`especies/datos/<id>.tres`).
+
 El tamaño no importa: la app lo escala y centra sola. Mientras una especie no tenga modelo
 aquí, la app usa uno generado con figuras simples (`especies/modelo_procedural.gd`).
 

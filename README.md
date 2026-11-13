@@ -31,6 +31,7 @@ Biología y Diversidad Cultural), que viene incluida en la app.
   </tr>
   <tr>
     <td align="center"><img src="docs/capturas/10_batalla.jpg" width="230" alt="Batalla en 3D"><br><sub>Batalla en 3D</sub></td>
+    <td align="center"><img src="docs/capturas/11_evoluciones.jpg" width="230" alt="Evoluciones del ciclo de vida"><br><sub>Evoluciones del ciclo de vida</sub></td>
   </tr>
 </table>
 
@@ -52,6 +53,7 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 | **Recompensas** | Experiencia y niveles (sobre todo por capturar), **semillas** como moneda (por misiones y por subir de nivel) y una **tienda** con *néctar atrayente* y 4 **organismos Plus**: especies raras que no aparecen en el mapa. |
 | **Personalización** | Nombre, género (explorador o exploradora), piel, color de cabello, camisa, pantalón, sombrero o gorra y mochila del explorador. |
 | **Modelos 3D** | Cada animal tiene modelo 3D en la cámara y en las batallas. Los modelos hechos a mano van en `animales/modelos/<id>.glb` (ver el `LEEME.md` de esa carpeta); mientras falten, la app usa uno generado con figuras y los colores de la especie. |
+| **Evoluciones** | Cada insecto avanza por las fases de su ciclo de vida (huevo, larva, pupa, adulto o huevo, ninfa, adulto) a medida que se registra. Al desbloquear una fase aparece una celebración en 3D con la transformación; la ficha muestra todas las fases en 3D (las que faltan como silueta). Michelle puede reemplazar cada fase con su modelo: `animales/modelos/<id>_larva.glb`, etc. |
 | **Sonido** | Botón de parlante en el inicio, el mapa y las zonas para quitar o devolver el sonido; la app lo recuerda. |
 | **Bioentdex** | Fichas consultables de todas las especies, con el estado de captura u observación, tus fotos y el historial de misiones. |
 | **Tarjeta de exploración** | Disponible desde un botón compacto del mapa; exporta localmente una imagen PNG con insignia, nivel, especies conocidas y una foto que elijas entre las guardadas en tu Bioentdex. |

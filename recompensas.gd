@@ -21,6 +21,8 @@ const SEMILLAS_POR_NIVEL := 20
 const XP_BATALLA := 150
 const SEMILLAS_BATALLA := 25
 const XP_BATALLA_PERDIDA := 30         # por intentarlo
+const XP_EVOLUCION := 50              # al desbloquear una fase del ciclo de vida
+const SEMILLAS_EVOLUCION := 5
 const DURACION_NECTAR := 180           # segundos
 const PRECIO_NECTAR := 15
 const ACTIVIDADES_PARA_MADURAR_MUESTRA := 3
@@ -28,6 +30,8 @@ const ACTIVIDADES_PARA_MADURAR_MUESTRA := 3
 const DORADO := Color(1, 0.84, 0.3)
 
 var _capa: CanvasLayer
+var _capa_evolucion: CanvasLayer   # encima de los avisos, para que no tapen la celebración
+var _evoluciones_pendientes := []  # si se desbloquean dos fases seguidas, se muestran una tras otra
 var _avisos_activos := 0
 
 
@@ -35,9 +39,13 @@ func _ready() -> void:
 	_capa = CanvasLayer.new()
 	_capa.layer = 60
 	add_child(_capa)
+	_capa_evolucion = CanvasLayer.new()
+	_capa_evolucion.layer = 61
+	add_child(_capa_evolucion)
 	RegistroEspecies.especie_capturada.connect(_on_capturada)
 	RegistroEspecies.especie_observada.connect(_on_observada)
 	RegistroEspecies.mision_registrada.connect(_on_mision)
+	RegistroEspecies.etapa_alcanzada.connect(_on_etapa_alcanzada)
 
 
 # --- Consultas --------------------------------------------------------------------------------
@@ -158,6 +166,25 @@ func _on_observada(especie: Especie, primera: bool) -> void:
 	_ganar(XP_OBSERVACION_NUEVA if primera else XP_OBSERVACION, 0, "Avistamiento")
 
 
+## "Evolución": un registro desbloqueó otra fase del ciclo de vida de la especie.
+func _on_etapa_alcanzada(especie: Especie, anterior: String, nueva: String) -> void:
+	_ganar(XP_EVOLUCION, SEMILLAS_EVOLUCION, "¡Evolución a %s!" % nueva.to_lower())
+	_evoluciones_pendientes.append([especie, anterior, nueva])
+	if _evoluciones_pendientes.size() == 1:
+		_mostrar_siguiente_evolucion()
+
+
+func _mostrar_siguiente_evolucion() -> void:
+	if _evoluciones_pendientes.is_empty():
+		return
+	var datos: Array = _evoluciones_pendientes[0]
+	var celebracion := CelebracionEvolucion.new().configurar(datos[0], datos[1], datos[2])
+	celebracion.tree_exited.connect(func() -> void:
+		_evoluciones_pendientes.pop_front()
+		_mostrar_siguiente_evolucion.call_deferred())
+	_capa_evolucion.add_child(celebracion)
+
+
 func _on_mision(mision: Mision, registro: Dictionary) -> void:
 	if not registro.get("intento_correcto", registro.correcta):
 		return
@@ -237,6 +264,7 @@ func _guardar() -> void:
 ## exportada como la tarjeta de exploración).
 func ocultar_avisos(ocultar: bool) -> void:
 	_capa.visible = not ocultar
+	_capa_evolucion.visible = not ocultar
 
 
 ## Texto que sube y se desvanece en la parte de arriba de la pantalla (sobre cualquier escena).

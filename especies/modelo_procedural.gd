@@ -332,7 +332,13 @@ static func _insecto(raiz: Node3D, d: Dictionary) -> void:
 			_cil(raiz, cadera, rodilla, 0.035, patas)
 			_cil(raiz, rodilla, pie, 0.03, patas)
 
-	_alas(raiz, alas, ala_color, d, alto)
+	if d.get("sin_alas", false):
+		# Ninfa / pupa con forma de adulto: solo "esbozos" de alas sobre el tórax
+		if not alas.is_empty():
+			for lado in [1.0, -1.0]:
+				_esf(raiz, Vector3(0.14 * lado, alto + 0.2, -0.05), Vector3(0.16, 0.05, 0.35), _mat(Color(d.get("torax", d.cuerpo)).darkened(0.15)))
+	else:
+		_alas(raiz, alas, ala_color, d, alto)
 
 
 static func _alas(raiz: Node3D, forma: String, color: Color, d: Dictionary, alto: float) -> void:
@@ -673,3 +679,249 @@ static func _bisagra(padre: Node3D, nombre: String, pos: Vector3, amplitud: floa
 	bisagra.set_meta("rapidez", rapidez)
 	padre.add_child(bisagra)
 	return bisagra
+
+
+# --- Etapas del ciclo de vida ("evoluciones") ---------------------------------------------------
+
+## Modelo de una fase del ciclo de vida: "Huevo", "Larva", "Pupa", "Ninfa" o "Adulto".
+static func crear_etapa(especie: Especie, etapa: String) -> Node3D:
+	var fase := etapa.to_lower()
+	if fase.is_empty() or fase == "adulto" or not INSECTOS.has(especie.id):
+		return crear(especie)
+	_preparar_mallas()
+	var d: Dictionary = INSECTOS[especie.id]
+	var raiz := Node3D.new()
+	raiz.name = "%s_%s" % [especie.id.capitalize().replace(" ", ""), etapa]
+	match fase:
+		"huevo": _huevos(raiz, especie.id, d)
+		"larva": _larva(raiz, especie.id, d)
+		"pupa": _pupa(raiz, especie.id, d)
+		"ninfa": _insecto(raiz, _apagado(d, 0.35, especie.id in ["libelula", "caballito_del_diablo"]))
+		_:
+			raiz.free()
+			return crear(especie)
+	raiz.set_script(ANIMACION)
+	return raiz
+
+
+## Colores de adulto apagados (ninfas y pupas con forma de adulto) y sin alas.
+static func _apagado(d: Dictionary, cuanto: float, acuatica := false) -> Dictionary:
+	var copia := d.duplicate()
+	var tono := Color(0.4, 0.36, 0.22) if acuatica else Color(0.55, 0.5, 0.4)
+	for clave in ["cuerpo", "torax", "cabeza", "bandas"]:
+		if copia.has(clave):
+			copia[clave] = Color(copia[clave]).lerp(tono, cuanto + (0.35 if acuatica else 0.0))
+	copia["sin_alas"] = true
+	copia.erase("metal")
+	return copia
+
+
+static func _hoja(raiz: Node3D) -> void:
+	_esf(raiz, Vector3(0, 0.03, 0), Vector3(2.0, 0.06, 1.2), _mat(Color(0.32, 0.6, 0.25)))
+	_cil(raiz, Vector3(0, 0.07, -0.55), Vector3(0, 0.07, 0.55), 0.015, _mat(Color(0.5, 0.75, 0.4)))
+
+
+static func _huevos(raiz: Node3D, id: String, d: Dictionary) -> void:
+	var plan: String = d.plan
+	if plan in ["libelula", "caballito"]:
+		# En un tallo junto al agua
+		_cil(raiz, Vector3(0, 0, 0), Vector3(0, 1.6, 0), 0.07, _mat(Color(0.35, 0.55, 0.25)))
+		for i in 8:
+			_esf(raiz, Vector3(0.08, 0.3 + i * 0.13, 0.02), Vector3(0.07, 0.1, 0.07), _mat(Color(0.95, 0.93, 0.75)))
+		return
+	_hoja(raiz)
+	var color := Color(0.97, 0.95, 0.85)
+	var cantidad := 9
+	var forma := Vector3(0.14, 0.24, 0.14)   # óvalo de pie
+	match plan:
+		"escarabajo":
+			color = Color(1.0, 0.85, 0.2) if id == "mariquita" else Color(1.0, 0.75, 0.25)
+			cantidad = 14
+		"mariposa", "polilla":
+			color = Color(0.98, 0.95, 0.75) if id != "mariposa_blanca" else Color(1.0, 0.9, 0.4)
+			cantidad = 3
+			forma = Vector3(0.18, 0.3, 0.18)
+		"chinche":
+			color = Color(0.85, 0.95, 0.7)
+			forma = Vector3(0.16, 0.2, 0.16)
+		"zancudo":
+			color = Color(0.15, 0.15, 0.15)   # balsa de huevos flotando
+			cantidad = 20
+			forma = Vector3(0.07, 0.2, 0.07)
+		"crisopa":
+			# Cada huevo en la punta de un hilo de seda
+			for i in 5:
+				var base := Vector3((i - 2) * 0.25, 0.06, 0.0)
+				_cil(raiz, base, base + Vector3(0, 0.6, 0), 0.006, _mat(BLANCO))
+				_esf(raiz, base + Vector3(0, 0.65, 0), Vector3(0.08, 0.13, 0.08), _mat(Color(0.75, 0.9, 0.6)))
+			return
+	var columnas := ceili(sqrt(cantidad))
+	for i in cantidad:
+		var x := (i % columnas - (columnas - 1) / 2.0) * forma.x * 1.25
+		var z := (i / columnas - (columnas - 1) / 2.0) * forma.z * 1.25
+		_esf(raiz, Vector3(x, 0.06 + forma.y / 2.0, z), forma, _mat(color))
+		_esf(raiz, Vector3(x - 0.02, 0.06 + forma.y * 0.75, z + 0.03), forma * 0.25, _mat(BLANCO, false, 0.0, true))
+
+
+static func _larva(raiz: Node3D, id: String, d: Dictionary) -> void:
+	var plan: String = d.plan
+	match plan:
+		"mariposa", "polilla":
+			var colores: Array = [Color(0.45, 0.75, 0.3)]
+			var espinas := false
+			match id:
+				"mariposa_monarca":
+					colores = [Color(1.0, 0.85, 0.15), NEGRO, BLANCO, NEGRO]
+				"mariposa_blanca":
+					colores = [Color(0.45, 0.72, 0.3), Color(0.5, 0.78, 0.32)]
+				"ninfalida":
+					colores = [Color(0.2, 0.15, 0.12), Color(0.25, 0.18, 0.12)]
+					espinas = true
+				"polilla_geometra":
+					colores = [Color(0.55, 0.5, 0.3), Color(0.5, 0.45, 0.28)]
+			var arqueada := id == "polilla_geometra"   # el "medidor" camina arqueado
+			for i in 10:
+				var z := 0.95 - i * 0.2
+				var y := 0.2 + (sin(i / 9.0 * PI) * 0.45 if arqueada else 0.0)
+				var p := Vector3(sin(i * 0.6) * 0.06, y, z)
+				_esf(raiz, p, Vector3(0.36, 0.34, 0.26), _mat(colores[i % colores.size()]))
+				if espinas:
+					for lado in [1.0, -1.0]:
+						_cono_entre(raiz, p + Vector3(0.12 * lado, 0.12, 0), p + Vector3(0.25 * lado, 0.32, 0), 0.03, _mat(Color(0.95, 0.6, 0.2)))
+				if i % 3 == 1 and id == "mariposa_blanca":
+					_esf(raiz, p + Vector3(0, 0.15, 0), Vector3(0.08, 0.04, 0.2), _mat(Color(1.0, 0.9, 0.3)))
+				if i < 3 or i > 6:   # patitas
+					for lado in [1.0, -1.0]:
+						_cil(raiz, p + Vector3(0.1 * lado, -0.1, 0), Vector3(p.x + 0.14 * lado, 0.0, z), 0.03, _mat(Color(colores[0]).darkened(0.3)))
+			if id == "mariposa_monarca":   # filamentos negros
+				for z in [1.0, -0.85]:
+					for lado in [1.0, -1.0]:
+						_cil(raiz, Vector3(0.08 * lado, 0.32, z), Vector3(0.18 * lado, 0.7, z + 0.15 * signf(z)), 0.018, _mat(NEGRO))
+			_cara_larva(raiz, Vector3(0, 0.22, 1.08), Color(colores[0]))
+		"escarabajo":
+			var cuerpo := Color(0.2, 0.2, 0.25) if id == "mariquita" else Color(0.95, 0.85, 0.4)
+			var manchas := Color(1.0, 0.5, 0.1) if id == "mariquita" else NEGRO
+			for i in 8:
+				var ancho := 0.55 - absf(i - 2.5) * 0.05
+				var p := Vector3(0, 0.25, 0.7 - i * 0.2)
+				_esf(raiz, p, Vector3(ancho, 0.3, 0.26), _mat(cuerpo))
+				if i in [2, 4]:
+					for lado in [1.0, -1.0]:
+						_esf(raiz, p + Vector3(0.15 * lado, 0.13, 0), Vector3.ONE * 0.11, _mat(manchas))
+			for i in 3:
+				for lado in [1.0, -1.0]:
+					var cadera := Vector3(0.2 * lado, 0.2, 0.6 - i * 0.18)
+					_cil(raiz, cadera, cadera + Vector3(0.25 * lado, -0.2, 0.05), 0.03, _mat(NEGRO))
+			_cara_larva(raiz, Vector3(0, 0.3, 0.88), cuerpo)
+		"abeja", "avispa", "hormiga", "mosca", "tipula":
+			# Gusanito sin patas (blanco en abejas, avispas y moscas; grisáceo en la típula)
+			var color := Color(0.97, 0.94, 0.85)
+			if id == "sirfido":
+				color = Color(0.7, 0.8, 0.55)
+			elif plan == "tipula":
+				color = Color(0.5, 0.45, 0.38)
+			var curva := plan in ["abeja", "avispa", "hormiga"]
+			for i in 9:
+				var t := i / 8.0
+				var p := Vector3(0, 0.3, 0.8 - i * 0.2)
+				if curva:   # en forma de "C", como en su celda
+					p = Vector3(0, 0.35 + sin(t * PI * 1.2) * 0.45, 0.6 - sin(t * PI * 0.9) * 1.1)
+				var grosor := 0.42 - absf(t - 0.55) * 0.3
+				_esf(raiz, p, Vector3(grosor, grosor, 0.28), _mat(color, false, 0.25))
+			_cara_larva(raiz, Vector3(0, 0.4, 0.75) if curva else Vector3(0, 0.35, 0.88), color)
+		"zancudo":
+			# Larva acuática: tórax ancho, abdomen fino y sifón para respirar
+			var oscuro := _mat(Color(0.3, 0.3, 0.28))
+			_esf(raiz, Vector3(0, 0.3, 0.5), Vector3(0.45, 0.4, 0.45), oscuro)
+			for i in 7:
+				_esf(raiz, Vector3(0, 0.3, 0.2 - i * 0.18), Vector3(0.18, 0.18, 0.22), oscuro)
+			_cil(raiz, Vector3(0, 0.3, -0.95), Vector3(0.1, 0.65, -1.15), 0.04, oscuro)
+			for lado in [1.0, -1.0]:
+				for k in 3:
+					_cil(raiz, Vector3(0.18 * lado, 0.3, 0.5 - k * 0.1), Vector3(0.45 * lado, 0.4, 0.55 - k * 0.15), 0.008, oscuro)
+			_cara_larva(raiz, Vector3(0, 0.32, 0.78), Color(0.3, 0.3, 0.28))
+		"crisopa":
+			# "León de áfidos": cuerpo moteado con mandíbulas curvas
+			var crema := Color(0.85, 0.75, 0.55)
+			for i in 6:
+				_esf(raiz, Vector3(0, 0.25, 0.5 - i * 0.2), Vector3(0.5 - i * 0.05, 0.25, 0.26), _mat(crema if i % 2 == 0 else Color(0.7, 0.55, 0.35)))
+			for lado in [1.0, -1.0]:
+				_cil(raiz, Vector3(0.08 * lado, 0.27, 0.72), Vector3(0.22 * lado, 0.28, 1.0), 0.025, _mat(Color(0.55, 0.35, 0.2)))
+				_cil(raiz, Vector3(0.22 * lado, 0.28, 1.0), Vector3(0.08 * lado, 0.28, 1.15), 0.02, _mat(Color(0.55, 0.35, 0.2)))
+				for i in 3:
+					var cadera := Vector3(0.18 * lado, 0.2, 0.45 - i * 0.15)
+					_cil(raiz, cadera, cadera + Vector3(0.25 * lado, -0.2, 0.05), 0.025, _mat(Color(0.55, 0.45, 0.3)))
+			_cara_larva(raiz, Vector3(0, 0.3, 0.68), crema)
+		_:
+			_insecto(raiz, _apagado(d, 0.5))
+
+
+## Cabecita con ojos pequeños para las larvas.
+static func _cara_larva(raiz: Node3D, pos: Vector3, color: Color) -> void:
+	_esf(raiz, pos, Vector3(0.34, 0.32, 0.26), _mat(color.darkened(0.15)))
+	for lado in [1.0, -1.0]:
+		var ojo := pos + Vector3(0.09 * lado, 0.05, 0.12)
+		_esf(raiz, ojo, Vector3.ONE * 0.08, _mat(NEGRO, false, 0.1))
+		_esf(raiz, ojo + Vector3(0.01 * lado, 0.02, 0.03), Vector3.ONE * 0.025, _mat(BLANCO, false, 0.0, true))
+
+
+static func _pupa(raiz: Node3D, id: String, d: Dictionary) -> void:
+	var plan: String = d.plan
+	match plan:
+		"mariposa":
+			# Crisálida colgando de una ramita
+			_cil(raiz, Vector3(-0.8, 1.9, 0), Vector3(0.8, 1.9, 0), 0.06, _mat(Color(0.45, 0.32, 0.2)))
+			_cil(raiz, Vector3(0, 1.88, 0), Vector3(0, 1.65, 0), 0.025, _mat(NEGRO))
+			var color := Color(0.5, 0.38, 0.25)
+			if id == "mariposa_monarca":
+				color = Color(0.45, 0.78, 0.45)
+			elif id == "mariposa_blanca":
+				color = Color(0.6, 0.75, 0.4)
+			var cuerpo := _mat(color, false, 0.2)
+			_esf(raiz, Vector3(0, 1.2, 0), Vector3(0.55, 0.95, 0.5), cuerpo)
+			_esf(raiz, Vector3(0, 0.65, 0), Vector3(0.3, 0.35, 0.3), cuerpo)
+			if id == "mariposa_monarca":   # banda negra con puntos dorados
+				_esf(raiz, Vector3(0, 1.45, 0), Vector3(0.57, 0.06, 0.52), _mat(NEGRO))
+				for i in 6:
+					var a := TAU * i / 6.0
+					_esf(raiz, Vector3(cos(a) * 0.22, 1.5, sin(a) * 0.2), Vector3.ONE * 0.06, _mat(Color(1.0, 0.8, 0.2), true))
+		"polilla":
+			_hoja(raiz)
+			_esf(raiz, Vector3(0, 0.3, 0), Vector3(0.45, 0.4, 1.0), _mat(Color(0.5, 0.32, 0.18), false, 0.2))
+			for i in 4:
+				_esf(raiz, Vector3(0, 0.3, 0.3 - i * 0.2), Vector3(0.47, 0.42, 0.04), _mat(Color(0.4, 0.25, 0.15)))
+		"escarabajo":
+			_hoja(raiz)
+			var color := Color(1.0, 0.55, 0.15) if id == "mariquita" else Color(0.95, 0.85, 0.4)
+			_esf(raiz, Vector3(0, 0.35, 0), Vector3(0.8, 0.55, 0.9), _mat(color, false, 0.25))
+			for p in [Vector3(0.2, 0.6, 0.1), Vector3(-0.2, 0.6, 0.1), Vector3(0, 0.62, -0.2), Vector3(0.25, 0.5, -0.25), Vector3(-0.25, 0.5, -0.25)]:
+				_esf(raiz, p, Vector3(0.12, 0.05, 0.12), _mat(NEGRO))
+			_esf(raiz, Vector3(0, 0.22, -0.48), Vector3(0.4, 0.2, 0.3), _mat(Color(0.25, 0.25, 0.25)))
+		"abeja", "avispa", "hormiga":
+			# Pupa blanca con forma de adulto dentro de su celda
+			var blanco := d.duplicate()
+			for clave in ["cuerpo", "torax", "cabeza", "bandas"]:
+				if blanco.has(clave):
+					blanco[clave] = Color(0.96, 0.93, 0.85)
+			blanco["sin_alas"] = true
+			blanco["ojos"] = Color(0.75, 0.6, 0.6)
+			_insecto(raiz, blanco)
+		"mosca", "tipula":
+			# Pupario: barrilito café
+			_esf(raiz, Vector3(0, 0.32, 0), Vector3(0.6, 0.6, 1.3 if plan == "tipula" else 1.0), _mat(Color(0.5, 0.3, 0.15), false, 0.25))
+			for i in 5:
+				_esf(raiz, Vector3(0, 0.32, 0.4 - i * 0.2), Vector3(0.62, 0.62, 0.03), _mat(Color(0.4, 0.22, 0.1)))
+		"zancudo":
+			# Pupa en forma de "coma" con trompetas para respirar
+			var oscuro := _mat(Color(0.3, 0.3, 0.32))
+			_esf(raiz, Vector3(0, 0.55, 0.2), Vector3(0.75, 0.7, 0.7), oscuro)
+			for i in 5:
+				var t := i / 4.0
+				_esf(raiz, Vector3(0, 0.45 - t * 0.3, -0.15 - t * 0.5), Vector3.ONE * (0.25 - t * 0.12), oscuro)
+			for lado in [1.0, -1.0]:
+				_cono_entre(raiz, Vector3(0.12 * lado, 0.8, 0.25), Vector3(0.2 * lado, 1.1, 0.3), 0.06, oscuro)
+		"crisopa":
+			_hoja(raiz)
+			_esf(raiz, Vector3(0, 0.38, 0), Vector3.ONE * 0.65, _mat(Color(0.97, 0.97, 0.92), false, 0.6))
+		_:
+			_insecto(raiz, _apagado(d, 0.5))

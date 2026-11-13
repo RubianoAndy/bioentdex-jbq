@@ -14,7 +14,7 @@ enum ModoVisualizacion { ESTUDIO_NORMAL, REALIDAD_AUMENTADA, REALIDAD_VIRTUAL }
 @onready var entorno_mundo: WorldEnvironment = $SubViewportContainer/SubViewport/Mundo3D/WorldEnvironment
 @onready var modelo_organismo: Node3D = $SubViewportContainer/SubViewport/Mundo3D/Fauna
 @onready var entorno_virtual_rv: Node3D = $SubViewportContainer/SubViewport/Mundo3D
-@onready var ui_boton_modo: Button = $BotonesDerecha/BtnModo
+@onready var ui_boton_modo: Button = $BotonesSecundarios/BtnModo
 @onready var subviewport: SubViewport = $SubViewportContainer/SubViewport
 @onready var nubes: Control = $Nubes
 
@@ -35,21 +35,22 @@ func _ready() -> void:
 	_entorno_virtual_base = entorno_mundo.environment.duplicate()
 	add_child(_camara_mapa)
 	AudioManager.reproducir_paisaje_humedal()
+	ModelosEspecies.precalentar(self)   # compila los materiales 3D antes de la primera captura
 	mundo.zona_cercana_cambio.connect(_on_zona_cercana_cambio)
 	ui_boton_modo.pressed.connect(_ciclar_modo_visualizacion)
 	$PanelZona/Margen/HBox/BtnEntrar.pressed.connect(_on_entrar_pressed)
-	$BotonesDerecha/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
-	$BotonesDerecha/BtnExplorador.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
-	# Sonido: debajo de los botones de la derecha (en la fila no cabe sin tapar "← Menú")
+	$BarraSuperior/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
+	$BarraSuperior/BtnExplorador.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
+	# Arriba, repartidos a lo ancho y del mismo tamaño: Menú, Bioentdex, Explorador y Tarjeta.
+	# Segunda fila: la insignia a la izquierda y, a la derecha, el modo de vista y el sonido.
+	# (Los botones van compactos para que quepan en el celular, ver _compactar_boton.)
 	var sonido := BotonSonido.new()
-	sonido.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	sonido.offset_left = -72
-	sonido.offset_right = -16
-	sonido.offset_top = 86
-	sonido.offset_bottom = 142
-	add_child(sonido)
-	move_child(sonido, $BotonesDerecha.get_index() + 1)
-	$BotonesDerecha/BtnTarjeta.pressed.connect(_ir_a.bind("res://comunidad/tarjeta_hallazgo.tscn"))
+	sonido.lado = 46.0
+	$BotonesSecundarios.add_child(sonido)
+	for boton in $BarraSuperior.get_children() + $BotonesSecundarios.get_children():
+		if boton is Button and not boton is BotonSonido:
+			_compactar_boton(boton)
+	$BarraSuperior/BtnTarjeta.pressed.connect(_ir_a.bind("res://comunidad/tarjeta_hallazgo.tscn"))
 	fauna.insecto_seleccionado.connect(_on_insecto_seleccionado)
 	fauna.npc_seleccionado.connect(_on_npc_seleccionado)
 	mundo.colibri.tocado.connect(_on_colibri_tocado)
@@ -93,6 +94,20 @@ func _exit_tree() -> void:
 	_camara_mapa.detener()
 	_detener_openxr()
 	AudioManager.detener_paisaje_humedal()
+
+
+## Botones de la barra de arriba un poco más pequeños que los del tema, para que quepan bien.
+func _compactar_boton(boton: Button) -> void:
+	boton.add_theme_font_size_override("font_size", 21)
+	boton.custom_minimum_size.y = 46
+	for estado in ["normal", "hover", "pressed", "focus", "disabled"]:
+		var estilo := boton.get_theme_stylebox(estado).duplicate() as StyleBox
+		if estilo:
+			estilo.content_margin_left = 14
+			estilo.content_margin_right = 14
+			estilo.content_margin_top = 4
+			estilo.content_margin_bottom = 6
+			boton.add_theme_stylebox_override(estado, estilo)
 
 
 func verificar_permisos_movil() -> void:

@@ -13,6 +13,8 @@ signal especie_capturada(especie: Especie, captura: Dictionary)
 signal especie_observada(especie: Especie, primera: bool)
 signal mision_registrada(mision: Mision, registro: Dictionary)
 signal batalla_registrada(registro: Dictionary)
+## Un registro nuevo desbloqueó otra fase del ciclo de vida ("evolución"). anterior = "" si es la primera.
+signal etapa_alcanzada(especie: Especie, anterior: String, nueva: String)
 
 const CARPETA_ESPECIES := "res://especies/datos/"
 const ARCHIVO_BD := "user://bioentdex.json"
@@ -90,6 +92,7 @@ static func cargar_foto(ruta: String) -> Texture2D:
 ## calidad_foto va de 0 (borde del visor) a 1 (centro); 0.5 equivale al multiplicador neutro x1.
 func registrar_captura(especie: Especie, zona_id: String, foto: Image, calidad_foto: float = 0.5) -> Dictionary:
 	var primera := not esta_descubierta(especie.id)
+	var etapa_antes := etapa_actual(especie)
 	var capturas_fotograficas := capturas_de(especie.id).filter(
 		func(c: Dictionary) -> bool: return not c.get("foto", "").is_empty())
 	var puntaje := PUNTAJE_ECOLOGICO.calcular(especie, calidad_foto, not capturas_fotograficas.is_empty()) \
@@ -106,15 +109,18 @@ func registrar_captura(especie: Especie, zona_id: String, foto: Image, calidad_f
 	especie_capturada.emit(especie, captura)
 	if primera:
 		especie_descubierta.emit(especie)
+	_revisar_evolucion(especie, etapa_antes)
 	return captura
 
 
 ## Marca una especie como observada. Devuelve true solo la primera vez.
 func registrar_observacion(especie: Especie) -> bool:
+	var etapa_antes := etapa_actual(especie)
 	if esta_observada(especie.id):
 		_bd.observaciones[especie.id].veces += 1
 		_guardar_bd()
 		especie_observada.emit(especie, false)
+		_revisar_evolucion(especie, etapa_antes)
 		return false
 	var primera := not esta_descubierta(especie.id)
 	_bd.observaciones[especie.id] = {"primera_vez": Time.get_datetime_string_from_system(), "veces": 1}
@@ -122,7 +128,20 @@ func registrar_observacion(especie: Especie) -> bool:
 	especie_observada.emit(especie, true)
 	if primera:
 		especie_descubierta.emit(especie)
+	_revisar_evolucion(especie, etapa_antes)
 	return true
+
+
+## Fase del ciclo de vida que ya desbloqueó el jugador ("" si aún ninguna o la especie no tiene).
+func etapa_actual(especie: Especie) -> String:
+	var ciclo := progreso_ciclo_vida(especie)
+	return ciclo.get("fase_actual", "")
+
+
+func _revisar_evolucion(especie: Especie, antes: String) -> void:
+	var ahora := etapa_actual(especie)
+	if ahora != antes and not ahora.is_empty():
+		etapa_alcanzada.emit(especie, antes, ahora)
 
 
 ## Guarda la respuesta a una misión (y la foto, si la misión es de tomar foto).

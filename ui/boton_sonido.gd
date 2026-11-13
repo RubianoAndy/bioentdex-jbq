@@ -5,9 +5,11 @@ extends Button
 
 const TAMANO := 56.0
 
+var lado := TAMANO   # se puede achicar antes de agregarlo (por ejemplo en la barra del mapa)
+
 
 func _ready() -> void:
-	custom_minimum_size = Vector2(TAMANO, TAMANO)
+	custom_minimum_size = Vector2(lado, lado)
 	size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	focus_mode = Control.FOCUS_NONE
 	pressed.connect(AudioManager.alternar_silencio)

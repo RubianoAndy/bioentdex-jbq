@@ -350,7 +350,9 @@ func _construir_tarjeta() -> void:
 	columna.add_child(_seccion("DESCRIPCIÓN", _especie.descripcion, Color(0.25, 0.6, 0.85)))
 	var ciclo := RegistroEspecies.progreso_ciclo_vida(_especie)
 	if not ciclo.is_empty():
-		columna.add_child(_seccion("CICLO DE VIDA (MODELO EDUCATIVO)", _texto_ciclo_vida(ciclo), Color(0.35, 0.68, 0.48)))
+		var seccion_ciclo := _seccion("EVOLUCIONES · CICLO DE VIDA (MODELO EDUCATIVO)", _texto_ciclo_vida(ciclo), Color(0.35, 0.68, 0.48))
+		seccion_ciclo.get_child(0).add_child(_tira_evolucion(ciclo))
+		columna.add_child(seccion_ciclo)
 	if not _especie.consejo_macro.is_empty():
 		columna.add_child(_seccion("CONSEJO PARA FOTOGRAFIARLO", _especie.consejo_macro, Color(0.98, 0.72, 0.2)))
 
@@ -520,6 +522,41 @@ func _dato(valor: String, leyenda: String, color_punto) -> VBoxContainer:
 	abajo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	caja.add_child(abajo)
 	return caja
+
+
+## Fases del ciclo de vida en 3D: las desbloqueadas a color (la actual con borde dorado) y las
+## que faltan como silueta. Cada fase se desbloquea con más registros de la especie.
+func _tira_evolucion(ciclo: Dictionary) -> Control:
+	var fila := HBoxContainer.new()
+	fila.alignment = BoxContainer.ALIGNMENT_CENTER
+	fila.add_theme_constant_override("separation", 4)
+	var etapas := _especie.etapas_ciclo_vida
+	var actual := etapas.find(ciclo.get("fase_actual", ""))
+	var tamano := 112.0 if etapas.size() > 3 else 140.0
+	for i in etapas.size():
+		if i > 0:
+			var flecha := _etiqueta("›", 30, TEXTO_SUAVE)
+			flecha.autowrap_mode = TextServer.AUTOWRAP_OFF
+			flecha.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			fila.add_child(flecha)
+		var tarjeta := VBoxContainer.new()
+		tarjeta.add_theme_constant_override("separation", 2)
+		var marco := PanelContainer.new()
+		var estilo := StyleBoxFlat.new()
+		estilo.bg_color = Color(1, 1, 1, 0.75)
+		estilo.set_corner_radius_all(14)
+		if i == actual:
+			estilo.border_color = Color(1, 0.75, 0.2)
+			estilo.set_border_width_all(4)
+		marco.add_theme_stylebox_override("panel", estilo)
+		marco.add_child(VistaModelo3D.new().configurar(_especie, etapas[i], tamano, i > actual))
+		tarjeta.add_child(marco)
+		var nombre := _etiqueta(etapas[i] if i <= actual else "???", 15, TEXTO if i <= actual else TEXTO_SUAVE)
+		nombre.autowrap_mode = TextServer.AUTOWRAP_OFF
+		nombre.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tarjeta.add_child(nombre)
+		fila.add_child(tarjeta)
+	return fila
 
 
 func _seccion(titulo: String, texto: String, color: Color) -> Control:

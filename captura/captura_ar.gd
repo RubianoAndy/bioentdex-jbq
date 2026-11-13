@@ -123,7 +123,18 @@ func _mostrar_en_3d() -> bool:
 	_modelo_3d = modelo
 	vista.add_child(modelo)
 	insecto.texture = vista.get_texture()
+	_aparecer_cuando_listo()
 	return true
+
+
+## Hasta que el SubViewport dibuja su primer cuadro su textura se ve negra: el insecto aparece
+## (con un fundido) solo cuando ya está listo.
+func _aparecer_cuando_listo() -> void:
+	insecto.modulate.a = 0.0
+	for i in 2:
+		await RenderingServer.frame_post_draw
+	if is_instance_valid(insecto):
+		create_tween().tween_property(insecto, "modulate:a", 1.0, 0.25)
 
 
 func _gui_input(event: InputEvent) -> void:

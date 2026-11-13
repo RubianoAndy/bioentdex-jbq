@@ -4,8 +4,6 @@
 [ext_resource type="Script" path="res://retos/duelo_arena.gd" id="2_arena"]
 
 [sub_resource type="Environment" id="Environment_arena"]
-background_mode = 1
-background_color = Color(0.12, 0.2, 0.19, 1)
 ambient_light_source = 3
 ambient_light_color = Color(0.6, 0.72, 0.67, 1)
 ambient_light_energy = 0.8
@@ -31,6 +29,7 @@ light_energy = 1.1
 shadow_enabled = true
 
 [node name="Ground" type="MeshInstance3D" parent="."]
+visible = false
 position = Vector3(0, -0.08, 0)
 mesh = SubResource("Plane_arena")
 surface_material_override/0 = SubResource("Material_ground")

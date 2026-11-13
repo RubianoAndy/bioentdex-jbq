@@ -53,6 +53,8 @@ var _tarjeta_insecto: VBoxContainer
 var _nombre_insecto: Label
 var _barra_insecto: ProgressBar
 var _caja: VBoxContainer   # contenido del panel de abajo (diálogos, preguntas...)
+var _paisaje: Array = []      # fondo del hábitat y tinte: se ven también durante el duelo
+var _visibles_antes := {}     # visibilidad de cada elemento al ocultarlos para el duelo
 
 
 static func mostrar(padre: Node, nuevo_depredador: Especie, nuevo_premio: Especie, nueva_zona_id: String, fondo: String) -> Batalla:
@@ -89,6 +91,7 @@ func _construir() -> void:
 	tinte.color = Color(0.3, 0.04, 0.1, 0.35)   # ambiente de emboscada
 	tinte.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(tinte)
+	_paisaje = [fondo, tinte]
 
 	var titulo := _etiqueta("¡Emboscada!", 40, ROJO)
 	titulo.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -289,6 +292,9 @@ func _empezar_combate() -> void:
 	# (con premio doble al terminar)
 	_limpiar()
 	get_viewport().gui_release_focus()
+	# El duelo 3D es transparente: detrás se ve el paisaje del hábitat, pero no el resto de esta
+	# pantalla (imagen del depredador, burbuja del premio, panel), que vuelve al terminar
+	_mostrar_interfaz(false)
 	var duelo: DueloCombate3D = DUELO_3D.instantiate()
 	duelo.equipo = _equipo.duplicate()
 	duelo.depredador = depredador
@@ -299,6 +305,7 @@ func _empezar_combate() -> void:
 
 
 func _resultado_duelo(gano: bool, nuevos_aciertos: int, nuevos_errores: int, equipo_final: int) -> void:
+	_mostrar_interfaz(true)
 	_aciertos += nuevos_aciertos
 	_errores += nuevos_errores
 	_actual = equipo_final
@@ -560,6 +567,20 @@ func _imagen(textura: Texture2D, tamano: Vector2) -> TextureRect:
 	imagen.size = tamano
 	imagen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return imagen
+
+
+## Muestra u oculta todo menos el paisaje de fondo (y los duelos que se agregan encima).
+func _mostrar_interfaz(mostrar: bool) -> void:
+	if mostrar:
+		for hijo in _visibles_antes:
+			if is_instance_valid(hijo):
+				hijo.visible = _visibles_antes[hijo]
+		_visibles_antes.clear()
+		return
+	for hijo in get_children():
+		if hijo is CanvasItem and not hijo in _paisaje and not hijo is DueloCombate3D:
+			_visibles_antes[hijo] = hijo.visible
+			hijo.visible = false
 
 
 func _limpiar() -> void:
