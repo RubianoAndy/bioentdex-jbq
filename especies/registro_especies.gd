@@ -154,8 +154,9 @@ func registrar_mision(mision: Mision, zona_id: String, respuesta: String, correc
 	_bd.misiones[mision.id] = registro
 	_guardar_bd()
 	mision_registrada.emit(mision, registro)
-	# Resolver una misión relacionada con una especie cuenta como haberla conocido
-	if correcta and not mision.especie_id.is_empty():
+	# Resolver una misión relacionada con una especie cuenta como haberla conocido (solo la
+	# primera vez: repetir una misión ya resuelta no debe dar experiencia otra vez)
+	if correcta and not anterior.get("correcta", false) and not mision.especie_id.is_empty():
 		var especie := buscar(mision.especie_id)
 		if especie:
 			registrar_observacion(especie)
@@ -372,9 +373,16 @@ func _advertir_catalogo(clave: String, mensaje: String) -> void:
 
 
 func _cargar_bd() -> void:
-	if not FileAccess.file_exists(ARCHIVO_BD):
-		return
-	var datos = JSON.parse_string(FileAccess.get_file_as_string(ARCHIVO_BD))
+	var datos = _leer_json(ARCHIVO_BD)
+	if not datos is Dictionary:
+		# Archivo dañado (por ejemplo, la app se cerró mientras guardaba): se intenta con el
+		# temporal de la última escritura y se conserva una copia del dañado para recuperarlo.
+		var temporal = _leer_json(ARCHIVO_BD + ".tmp")
+		if FileAccess.file_exists(ARCHIVO_BD) and not FileAccess.get_file_as_string(ARCHIVO_BD).is_empty():
+			DirAccess.copy_absolute(ARCHIVO_BD, ARCHIVO_BD.replace(".json", ".danado.json"))
+		if temporal is Dictionary:
+			push_warning("La base de datos estaba dañada; se recuperó la última copia guardada.")
+			datos = temporal
 	if datos is Dictionary:
 		for clave in _bd:
 			if datos.has(clave):
@@ -384,10 +392,27 @@ func _cargar_bd() -> void:
 					_bd[clave] = datos[clave]
 
 
+## Lee un JSON; devuelve null si no existe o no se puede interpretar.
+func _leer_json(ruta: String):
+	if not FileAccess.file_exists(ruta):
+		return null
+	return JSON.parse_string(FileAccess.get_file_as_string(ruta))
+
+
+## Guarda primero en un archivo temporal y luego lo pone en lugar del bueno: si la app se cierra a
+## mitad de la escritura (pasa en Android), el archivo anterior queda intacto.
 func _guardar_bd() -> void:
-	var archivo := FileAccess.open(ARCHIVO_BD, FileAccess.WRITE)
+	var temporal := ARCHIVO_BD + ".tmp"
+	var archivo := FileAccess.open(temporal, FileAccess.WRITE)
 	if archivo == null:
 		push_error("No se pudo guardar la base de datos de la Bioentdex (%s)." %
 			error_string(FileAccess.get_open_error()))
 		return
 	archivo.store_string(JSON.stringify(_bd, "\t"))
+	archivo.close()
+	if DirAccess.rename_absolute(temporal, ARCHIVO_BD) != OK:
+		# Si el sistema no deja reemplazar al renombrar, se copia y se borra el temporal
+		if DirAccess.copy_absolute(temporal, ARCHIVO_BD) == OK:
+			DirAccess.remove_absolute(temporal)
+		else:
+			push_error("No se pudo reemplazar la base de datos de la Bioentdex.")

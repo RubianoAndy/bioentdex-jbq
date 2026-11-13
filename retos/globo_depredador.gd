@@ -151,6 +151,8 @@ func al_tocar(_quien: Node3D) -> void:
 
 ## Se va volando (al terminar la batalla o si pasa el tiempo).
 func desaparecer() -> void:
+	for area in find_children("*", "Area3D", true, false):
+		(area as Area3D).collision_layer = 0   # mientras se va ya no se puede tocar
 	_anillo.visible = false
 	_aterrizado = false
 	var subida := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)

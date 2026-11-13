@@ -10,6 +10,7 @@ var _ultimo_toque_admin := 0
 
 func _ready() -> void:
 	var etiqueta_titulo: Label = $Titulo/Nombre
+	etiqueta_titulo.mouse_filter = Control.MOUSE_FILTER_STOP   # un Label ignora los toques por defecto
 	etiqueta_titulo.gui_input.connect(_on_titulo_gui_input)
 	$Botones/BtnExpedicion.pressed.connect(_ir_a.bind("res://MapaExpedicion.tscn"))
 	$Botones/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
@@ -50,12 +51,12 @@ func _ready() -> void:
 
 
 func _on_titulo_gui_input(event: InputEvent) -> void:
+	# Solo el clic: en el celular el toque también llega como clic (y en el PC el clic como toque),
+	# así que contar los dos sumaba cada toque dos veces.
 	var pulsacion := false
 	if event is InputEventMouseButton:
 		var clic := event as InputEventMouseButton
 		pulsacion = clic.pressed and clic.button_index == MOUSE_BUTTON_LEFT
-	elif event is InputEventScreenTouch:
-		pulsacion = (event as InputEventScreenTouch).pressed
 	if not pulsacion:
 		return
 

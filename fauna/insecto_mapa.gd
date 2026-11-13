@@ -102,6 +102,8 @@ func al_tocar(_quien: Node3D) -> void:
 
 
 func desaparecer() -> void:
+	for area in find_children("*", "Area3D", true, false):
+		(area as Area3D).collision_layer = 0   # mientras se va ya no se puede tocar
 	var tween := create_tween()
 	tween.tween_property(self, "scale", Vector3.ONE * 0.01, 0.3)
 	tween.tween_callback(queue_free)

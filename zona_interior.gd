@@ -120,7 +120,7 @@ func _ver_especie(especie: Especie) -> void:
 		Aviso.mostrar(self, "Aún no la conoces. " + como)
 		return
 	var capturas := RegistroEspecies.capturas_de(especie.id)
-	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
+	var foto := RegistroEspecies.cargar_foto(capturas[-1].get("foto", "")) if not capturas.is_empty() else null
 	var ficha := FichaEspecie.new()
 	ficha.mostrar(self, especie, "", foto)
 
@@ -196,6 +196,9 @@ func _abrir_mision(mision: Mision) -> void:
 			botones[i].pressed.connect(_responder.bind(mision, i, botones, resultado))
 	if RegistroEspecies.mision_resuelta(mision.id):
 		resultado.text = "Ya resolviste esta misión. " + mision.explicacion
+		for boton in caja.find_children("*", "Button", true, false):
+			if boton.text in mision.opciones:   # las opciones quedan como referencia, sin poder responder otra vez
+				boton.disabled = true
 	caja.add_child(resultado)
 
 	var espacio := Control.new()
@@ -218,6 +221,7 @@ func _responder(mision: Mision, elegida: int, botones: Array[Button], resultado:
 		botones[elegida].modulate = Color(0.5, 1.0, 0.55)
 		for boton in botones:
 			boton.disabled = boton != botones[elegida]
+			boton.mouse_filter = Control.MOUSE_FILTER_IGNORE   # ya respondida: no se puede volver a tocar
 		resultado.text = "¡Correcto! " + mision.explicacion
 	else:
 		AnaliticaPedagogica.registrar_error_tema(AnaliticaPedagogica.tema_de_mision(mision.id))

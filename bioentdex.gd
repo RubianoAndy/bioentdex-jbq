@@ -13,13 +13,18 @@ func _ready() -> void:
 	$Margen/VBox/Encabezado/BtnVolver.pressed.connect(_on_volver_pressed)
 	var insectos := RegistroEspecies.especies.filter(func(e: Especie) -> bool: return e.es_capturable())
 	var capturados := insectos.filter(func(e: Especie) -> bool: return RegistroEspecies.esta_capturada(e.id))
+	# Solo las misiones de las zonas (los retos de foto del mapa no entran en el total)
 	var total_misiones := 0
+	var resueltas := 0
 	for zona in Expedicion.zonas:
 		total_misiones += zona.misiones.size()
+		for mision in zona.misiones:
+			if RegistroEspecies.mision_resuelta(mision.id):
+				resueltas += 1
 	contador.text = "Insectos capturados %d/%d  ·  Especies conocidas %d/%d  ·  Misiones %d/%d" % [
 		capturados.size(), insectos.size(),
 		RegistroEspecies.cantidad_descubiertas(), RegistroEspecies.especies.size(),
-		RegistroEspecies.cantidad_misiones_resueltas(), total_misiones]
+		resueltas, total_misiones]
 
 	for especie in RegistroEspecies.especies:
 		cuadricula.add_child(_crear_tarjeta(especie))
@@ -57,7 +62,7 @@ func _crear_tarjeta(especie: Especie) -> Button:
 
 func _mostrar_ficha(especie: Especie) -> void:
 	var capturas := RegistroEspecies.capturas_de(especie.id)
-	var foto := RegistroEspecies.cargar_foto(capturas[-1].foto) if not capturas.is_empty() else null
+	var foto := RegistroEspecies.cargar_foto(capturas[-1].get("foto", "")) if not capturas.is_empty() else null
 	var captura: Dictionary = capturas[-1] if not capturas.is_empty() else {}
 	var ficha := FichaEspecie.new()
 	ficha.mostrar(self, especie, "Tu foto" if foto else "", foto, captura)

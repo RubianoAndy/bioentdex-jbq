@@ -161,6 +161,8 @@ func _on_observada(especie: Especie, primera: bool) -> void:
 func _on_mision(mision: Mision, registro: Dictionary) -> void:
 	if not registro.get("intento_correcto", registro.correcta):
 		return
+	if RegistroEspecies.jugador().misiones_premiadas.has(mision.id):
+		return   # repetir una misión ya cumplida no da experiencia, semillas ni avance de muestras
 	# Una misión vinculada registra también su observación; esa señal cuenta esta misma actividad.
 	var observacion_automatica := not mision.especie_id.is_empty() \
 		and RegistroEspecies.buscar(mision.especie_id) != null
@@ -180,10 +182,7 @@ func _on_mision(mision: Mision, registro: Dictionary) -> void:
 		mostrar_aviso("%s ganada: realiza %d actividades para que madure." % [
 			nombre, ACTIVIDADES_PARA_MADURAR_MUESTRA], DORADO)
 	var premiadas: Array = RegistroEspecies.jugador().misiones_premiadas
-	if premiadas.has(mision.id):
-		_guardar()
-		return   # cada misión se premia una sola vez
-	premiadas.append(mision.id)
+	premiadas.append(mision.id)   # cada misión se premia una sola vez
 	if mision.especial:
 		_ganar(XP_MISION_ESPECIAL, SEMILLAS_MISION_ESPECIAL, "¡Misión especial cumplida!")
 	else:
@@ -233,6 +232,12 @@ func _guardar() -> void:
 
 
 # --- Avisos en pantalla -----------------------------------------------------------------------
+
+## Oculta o muestra los avisos y celebraciones (por ejemplo, para que no salgan en una imagen
+## exportada como la tarjeta de exploración).
+func ocultar_avisos(ocultar: bool) -> void:
+	_capa.visible = not ocultar
+
 
 ## Texto que sube y se desvanece en la parte de arriba de la pantalla (sobre cualquier escena).
 func mostrar_aviso(texto: String, color: Color) -> void:

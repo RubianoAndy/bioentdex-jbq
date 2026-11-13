@@ -1,7 +1,7 @@
 extends Node
 ## Autoload "DesplazamientoTactil": en el celular, las listas llenas de botones (tarjetas de
 ## especies, misiones, tienda...) no se podían deslizar porque el botón se quedaba con el dedo.
-## Aquí, todo botón que esté dentro de un ScrollContainer deja pasar el toque a la lista, así se
+## Aquí, todo botón o panel dentro de un ScrollContainer deja pasar el toque a la lista, así se
 ## puede deslizar empezando sobre una tarjeta y el botón igual responde al tocarlo.
 ## Además, cada lista solo empieza a deslizarse cuando el dedo se mueve ZONA_MUERTA píxeles: al
 ## empezar a deslizar se cancela el botón tocado, y como el dedo siempre tiembla un poco, sin esto
@@ -18,7 +18,8 @@ func _on_nodo_agregado(nodo: Node) -> void:
 	if nodo is ScrollContainer and nodo.scroll_deadzone < ZONA_MUERTA:
 		nodo.scroll_deadzone = ZONA_MUERTA
 		return
-	if not nodo is BaseButton:
+	# Botones y paneles (tarjetas de la tienda, secciones de la ficha) dejan pasar el toque
+	if not (nodo is BaseButton or nodo is PanelContainer or nodo is Panel):
 		return
 	var padre := nodo.get_parent()
 	while padre:

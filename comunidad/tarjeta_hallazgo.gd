@@ -167,9 +167,11 @@ func _exportar_tarjeta() -> void:
 		_estado.text = "Elige una foto guardada antes de exportar."
 		return
 	_acciones.hide()
-	await get_tree().process_frame
+	Recompensas.ocultar_avisos(true)   # que los avisos de arriba no queden en la imagen
+	await RenderingServer.frame_post_draw   # esperar a que el cuadro ya se dibuje sin los botones
 	var imagen := get_viewport().get_texture().get_image()
 	_acciones.show()
+	Recompensas.ocultar_avisos(false)
 	if imagen == null or imagen.is_empty():
 		_estado.text = "No se pudo capturar la tarjeta."
 		return

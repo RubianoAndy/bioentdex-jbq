@@ -44,6 +44,7 @@ var _desplazamiento := Vector2.ZERO
 var _toques := {}             # índice del dedo -> posición
 var _arrastre_x := 0.0
 var _ultimo_toque := 0.0
+var _precargadas: Array[String] = []   # páginas vecinas pedidas en segundo plano
 
 @onready var area: Control = $VBox/Area
 @onready var hoja: TextureRect = $VBox/Area/Pagina
@@ -71,7 +72,14 @@ func _ready() -> void:
 
 func ir_a(nueva: int) -> void:
 	pagina = clampi(nueva, 1, TOTAL_PAGINAS)
-	hoja.texture = load(CARPETA % pagina)
+	var ruta := CARPETA % pagina
+	# Las precargas que no se recogen quedan retenidas en memoria (cada página pesa ~7 MB en la
+	# GPU): se recoge la de esta página y se sueltan las demás antes de pedir las nuevas vecinas.
+	hoja.texture = ResourceLoader.load_threaded_get(ruta) if ruta in _precargadas else load(ruta)
+	for anterior in _precargadas:
+		if anterior != ruta:
+			ResourceLoader.load_threaded_get(anterior)
+	_precargadas.clear()
 	numero.text = "Página %d de %d" % [pagina, TOTAL_PAGINAS]
 	$VBox/Barra/BtnAnterior.disabled = pagina == 1
 	$VBox/Barra/BtnSiguiente.disabled = pagina == TOTAL_PAGINAS
@@ -82,6 +90,7 @@ func ir_a(nueva: int) -> void:
 	for vecina in [pagina - 1, pagina + 1]:
 		if vecina >= 1 and vecina <= TOTAL_PAGINAS:
 			ResourceLoader.load_threaded_request(CARPETA % vecina)
+			_precargadas.append(CARPETA % vecina)
 
 
 func _unhandled_key_input(event: InputEvent) -> void:

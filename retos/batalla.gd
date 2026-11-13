@@ -282,7 +282,13 @@ func _elegir_equipo() -> void:
 # --- 3. Combate -------------------------------------------------------------------------------
 
 func _empezar_combate() -> void:
+	if not find_children("*", "DueloCombate3D", true, false).is_empty():
+		return   # ya hay un duelo en curso
 	_actual = 0
+	# Sin esto "¡A pelear!" queda detrás del duelo con el foco, y Enter abría un segundo duelo
+	# (con premio doble al terminar)
+	_limpiar()
+	get_viewport().gui_release_focus()
 	var duelo: DueloCombate3D = DUELO_3D.instantiate()
 	duelo.equipo = _equipo.duplicate()
 	duelo.depredador = depredador

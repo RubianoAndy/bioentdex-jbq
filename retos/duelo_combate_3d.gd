@@ -63,6 +63,10 @@ func _ready() -> void:
 	_esquiva.resuelta.connect(_resolver_esquiva)
 	_boton_esquiva.pressed.connect(_esquiva.esquivar)
 	_botones_habilidad = [$Acciones/HabilidadPolinizacion, $Acciones/HabilidadRegulacion]
+	# Sin foco de teclado: si no, Espacio "presiona" el último botón tocado y la esquiva no llega
+	_boton_esquiva.focus_mode = Control.FOCUS_NONE
+	for boton in _botones_habilidad:
+		boton.focus_mode = Control.FOCUS_NONE
 	for indice in _botones_habilidad.size():
 		_botones_habilidad[indice].pressed.connect(_pulsar_habilidad.bind(indice))
 		_estilizar_habilidad(_botones_habilidad[indice], indice)
@@ -87,6 +91,7 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_SPACE:
 		_esquiva.esquivar()
+		get_viewport().set_input_as_handled()   # Espacio también es "aceptar": que no llegue al mapa
 
 
 func _configurar_actores() -> void:
@@ -353,6 +358,8 @@ func _ejecutar_habilidad(indice: int) -> void:
 		return
 	_cargas[indice] = 0
 	_actualizar_cargas()
+	_panel_pregunta.hide()   # si había otra pregunta abierta, se cierra al usar la habilidad
+	_vaciar_pregunta()
 	_estado.cambiar(DueloEstado.Estado.ANIMACION)
 	_etiqueta_turno.text = "%s ejecuta %s" % [equipo[equipo_actual].nombre_comun, NOMBRES_HABILIDAD[indice]]
 	_feedback.text = "¡Habilidad ecológica activada!"

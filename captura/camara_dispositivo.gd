@@ -82,8 +82,10 @@ func identificador_feed() -> int:
 func solicitar_permiso_android(permiso: String) -> bool:
 	if OS.get_granted_permissions().has(permiso):
 		return true
-	if not OS.request_permission(permiso):
-		return OS.get_granted_permissions().has(permiso)
+	# request_permission devuelve true si ya estaba concedido; si devuelve false es porque Android
+	# acaba de mostrar el diálogo, y hay que esperar la respuesta (antes se tomaba como "negado").
+	if OS.request_permission(permiso):
+		return true
 	while true:
 		var respuesta: Array = await get_tree().on_request_permissions_result
 		if respuesta.size() >= 2 and respuesta[0] == permiso:
@@ -96,6 +98,11 @@ func detener() -> void:
 		if _feed.frame_changed.is_connected(_on_cuadro):
 			_feed.frame_changed.disconnect(_on_cuadro)
 		_feed.feed_is_active = false
+		# Todas las pantallas comparten el mismo CameraFeed: se suelta para que un segundo detener()
+		# (por ejemplo en _exit_tree al cerrar la captura) no apague la cámara que otra pantalla
+		# (el modo RA del mapa) acaba de encender.
+		_feed = null
+		_tipo = -1
 
 
 ## Convierte la velocidad angular del giroscopio en movimiento de apuntado en píxeles.

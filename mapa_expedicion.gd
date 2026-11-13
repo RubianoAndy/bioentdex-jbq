@@ -34,9 +34,6 @@ func _ready() -> void:
 	AudioManager.conectar_botones(self)
 	_entorno_virtual_base = entorno_mundo.environment.duplicate()
 	add_child(_camara_mapa)
-	_cambiando_modo = true
-	await verificar_permisos_movil()
-	_cambiando_modo = false
 	AudioManager.reproducir_paisaje_humedal()
 	mundo.zona_cercana_cambio.connect(_on_zona_cercana_cambio)
 	ui_boton_modo.pressed.connect(_ciclar_modo_visualizacion)
@@ -80,6 +77,12 @@ func _ready() -> void:
 	add_child(avisos)
 	fauna.aviso.connect(func(texto: String) -> void: Aviso.mostrar(avisos, texto))
 	retos.aviso.connect(func(texto: String) -> void: Aviso.mostrar(avisos, texto))
+
+	# Permisos del celular al final: si se piden antes de conectar las señales, mientras se
+	# responde el diálogo el mapa no reacciona (y se pierde el aviso de "zona cercana").
+	_cambiando_modo = true
+	await verificar_permisos_movil()
+	_cambiando_modo = false
 
 	if RegistroEspecies.cantidad_descubiertas() == 0:
 		await get_tree().create_timer(1.5).timeout
@@ -177,7 +180,9 @@ func _ocultar_entorno_virtual() -> void:
 	# Mundo3D también es el padre de Fauna; se ocultan sus capas para mantener visible el organismo.
 	_visibilidad_entorno.clear()
 	for nodo in entorno_virtual_rv.get_children():
-		if nodo in [modelo_organismo, mundo.camara, entorno_mundo] or nodo.name == "Luz":
+		# Retos y colibrí también quedan: ocultos se podían tocar igual (globo invisible), y el
+		# colibrí maneja su propia visibilidad (restaurarla lo dejaba "fantasma" en el mapa).
+		if nodo in [modelo_organismo, mundo.camara, entorno_mundo, retos, mundo.colibri] or nodo.name == "Luz":
 			continue
 		if nodo is Node3D:
 			_visibilidad_entorno[nodo] = nodo.visible
@@ -250,6 +255,8 @@ func _on_colibri_vuelo_cercano() -> void:
 
 ## En el PC: Enter entra a la zona cercana (las flechas mueven al explorador, ver mundo_3d.gd).
 func _unhandled_input(event: InputEvent) -> void:
+	if $SubViewportContainer.process_mode == Node.PROCESS_MODE_DISABLED:
+		return   # hay una pantalla encima (batalla, cámara, reto): Enter/Espacio son para ella
 	if event.is_action_pressed("ui_accept") and panel_zona.visible and mundo.zona_actual:
 		get_viewport().set_input_as_handled()
 		_on_entrar_pressed()
@@ -262,6 +269,8 @@ func _on_entrar_pressed() -> void:
 
 ## Abre la cámara para capturar el insecto. El mapa se pausa mientras tanto.
 func _on_insecto_seleccionado(insecto: Node3D) -> void:
+	if _cambiando_modo:
+		return   # la RA está encendiendo la cámara: abrir la captura ahora las pondría a pelear por ella
 	FeedbackTactil.interaccion()
 	var reanudar_ra := _suspender_ra_para_captura()
 	var captura := CAPTURA.instantiate()
@@ -278,6 +287,8 @@ func _on_insecto_seleccionado(insecto: Node3D) -> void:
 
 ## Reto de foto del mapa: abre la cámara y guarda la foto en la base de datos.
 func _on_reto_foto_seleccionado(marcador: Node3D) -> void:
+	if _cambiando_modo:
+		return   # (igual que con los insectos)
 	FeedbackTactil.interaccion()
 	var reanudar_ra := _suspender_ra_para_captura()
 	_pausar_mapa(true)

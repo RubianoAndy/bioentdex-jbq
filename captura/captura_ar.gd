@@ -241,10 +241,12 @@ func _actualizar_boton_ra() -> void:
 func _tomar_foto() -> Image:
 	hud.hide()
 	visor.hide()
+	Recompensas.ocultar_avisos(true)   # que un aviso en pantalla no quede dentro de la foto
 	await RenderingServer.frame_post_draw
 	var img := get_viewport().get_texture().get_image()
 	hud.show()
 	visor.show()
+	Recompensas.ocultar_avisos(false)
 	flash.color.a = 0.9
 	create_tween().tween_property(flash, "color:a", 0.0, 0.4)
 
