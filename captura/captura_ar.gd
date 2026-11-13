@@ -33,6 +33,8 @@ var _semilla := randf() * 100.0
 var _apuntar := Vector2.ZERO    # desplazamiento de la escena al mover la cámara
 var _apuntar_objetivo := Vector2.ZERO
 var _bloqueado := false
+var _camara_activa := false
+var _cambiando_camara := false
 var _camara := CamaraDispositivo.new()
 var _modelo_3d: Node3D          # el insecto en 3D (null si se usa la imagen del dataset)
 
@@ -50,11 +52,10 @@ func _ready() -> void:
 	AudioManager.conectar_botones(self)
 	visor.draw.connect(_dibujar_visor)
 	$HUD/BtnVolver.pressed.connect(_terminar.bind(false))
+	$HUD/BtnRA.pressed.connect(_alternar_camara)
 	$HUD/BtnFoto.pressed.connect(_disparar)
 
-	var ruta_fondo := "res://dataset/fondos/%s.svg" % tipo_fondo
-	if ResourceLoader.exists(ruta_fondo):
-		fondo.texture = load(ruta_fondo)
+	_establecer_fondo_simulado()
 
 	if especie:
 		if not _mostrar_en_3d():
@@ -69,7 +70,11 @@ func _ready() -> void:
 		$HUD/Cartel/VBox/Nombre.text = "Misión de foto"
 		$HUD/Cartel/VBox/Instruccion.text = texto_mision
 
-	await _camara.iniciar(fondo)   # si no hay cámara se queda el fondo simulado
+	_cambiando_camara = true
+	$HUD/BtnRA.text = "Iniciando..."
+	_camara_activa = await _camara.iniciar(fondo)
+	_cambiando_camara = false
+	_actualizar_boton_ra()
 
 
 func _process(delta: float) -> void:
@@ -200,6 +205,36 @@ func _disparar() -> void:
 	await huida.finished
 	await get_tree().create_timer(0.8).timeout
 	_terminar(false)
+
+
+func _alternar_camara() -> void:
+	if _bloqueado or _cambiando_camara:
+		return
+	FeedbackTactil.interaccion()
+	if _camara_activa:
+		_camara.detener()
+		_camara_activa = false
+		_establecer_fondo_simulado()
+	else:
+		_cambiando_camara = true
+		$HUD/BtnRA.text = "Iniciando..."
+		_camara_activa = await _camara.iniciar(fondo)
+		_cambiando_camara = false
+		if not _camara_activa:
+			_establecer_fondo_simulado()
+			Aviso.mostrar(self, "No se pudo acceder a la cámara.")
+	_actualizar_boton_ra()
+
+
+func _establecer_fondo_simulado() -> void:
+	var ruta_fondo := "res://dataset/fondos/%s.svg" % tipo_fondo
+	if ResourceLoader.exists(ruta_fondo):
+		fondo.texture = load(ruta_fondo)
+	fondo.material = null
+
+
+func _actualizar_boton_ra() -> void:
+	$HUD/BtnRA.text = "Desactivar RA" if _camara_activa else "Activar RA"
 
 
 ## Toma la foto de lo que se ve (sin los botones), recortada en un cuadrado alrededor del visor.

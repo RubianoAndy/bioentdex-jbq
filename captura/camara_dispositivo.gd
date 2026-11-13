@@ -20,12 +20,10 @@ var _destino: TextureRect
 var _tipo := -1   # formato que se está mostrando (CameraFeed.FEED_*), -1 = aún no llega imagen
 
 
-func iniciar(destino: TextureRect) -> bool:
-	if OS.get_name() == "Android" and not OS.get_granted_permissions().has("android.permission.CAMERA"):
-		# Se pide el permiso y se espera la respuesta: así la cámara funciona desde la primera vez
-		OS.request_permission("CAMERA")
-		var respuesta: Array = await get_tree().on_request_permissions_result
-		if not respuesta[1] and not OS.get_granted_permissions().has("android.permission.CAMERA"):
+func iniciar(destino: TextureRect = null) -> bool:
+	if OS.has_feature("android"):
+		var permiso_concedido := await solicitar_permiso_android("android.permission.CAMERA")
+		if not permiso_concedido:
 			return false
 	CameraServer.monitoring_feeds = true
 	for intento in 30:   # la lista de cámaras tarda unos instantes en llegar
@@ -42,6 +40,7 @@ func iniciar(destino: TextureRect) -> bool:
 	if not _feed.get_formats().is_empty():
 		_feed.set_format(0, {})
 	_destino = destino
+	_tipo = -1
 	_feed.frame_changed.connect(_on_cuadro)
 	_feed.feed_is_active = true
 	# Ojo: antes del primer cuadro get_datatype() dice FEED_RGB aunque la cámara mande YCbCr
@@ -60,6 +59,8 @@ func _on_cuadro() -> void:
 	if tipo == _tipo:
 		return
 	_tipo = tipo
+	if not _destino:
+		return
 	match tipo:
 		CameraFeed.FEED_RGB:
 			_destino.material = null
@@ -72,6 +73,22 @@ func _on_cuadro() -> void:
 			mat.set_shader_parameter("textura_cbcr", _textura(CameraServer.FEED_CBCR_IMAGE))
 			_destino.texture = _textura(CameraServer.FEED_Y_IMAGE)
 			_destino.material = mat
+
+
+func identificador_feed() -> int:
+	return _feed.get_id() if _feed else -1
+
+
+func solicitar_permiso_android(permiso: String) -> bool:
+	if OS.get_granted_permissions().has(permiso):
+		return true
+	if not OS.request_permission(permiso):
+		return OS.get_granted_permissions().has(permiso)
+	while true:
+		var respuesta: Array = await get_tree().on_request_permissions_result
+		if respuesta.size() >= 2 and respuesta[0] == permiso:
+			return bool(respuesta[1])
+	return false
 
 
 func detener() -> void:
