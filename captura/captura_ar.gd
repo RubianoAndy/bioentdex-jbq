@@ -1,6 +1,7 @@
 extends Control
-## Vista de captura con la cámara (realidad aumentada sencilla): el insecto, tomado del dataset de
-## imágenes (res://dataset/insectos/<id>/), aparece sobre la imagen de la cámara y revolotea.
+## Vista de captura con la cámara (realidad aumentada sencilla): el insecto aparece en 3D sobre la
+## imagen de la cámara y revolotea (su modelo de ModelosEspecies; si no tuviera, se usa una imagen
+## del dataset res://dataset/insectos/<id>/).
 ## Hay que encuadrarlo en el visor y tomar la foto; mover el teléfono (giroscopio), arrastrar el dedo
 ## o, en el PC, mover el mouse cambia hacia dónde apunta la cámara.
 ## Sin insecto (especie = null) sirve para las misiones de foto.
@@ -33,6 +34,7 @@ var _apuntar := Vector2.ZERO    # desplazamiento de la escena al mover la cámar
 var _apuntar_objetivo := Vector2.ZERO
 var _bloqueado := false
 var _camara := CamaraDispositivo.new()
+var _modelo_3d: Node3D          # el insecto en 3D (null si se usa la imagen del dataset)
 
 @onready var fondo: TextureRect = $Fondo
 @onready var insecto: TextureRect = $Insecto
@@ -55,8 +57,9 @@ func _ready() -> void:
 		fondo.texture = load(ruta_fondo)
 
 	if especie:
-		var imagenes := especie.imagenes_dataset()
-		insecto.texture = imagenes.pick_random() if not imagenes.is_empty() else especie.obtener_imagen()
+		if not _mostrar_en_3d():
+			var imagenes := especie.imagenes_dataset()
+			insecto.texture = imagenes.pick_random() if not imagenes.is_empty() else especie.obtener_imagen()
 		FeedbackTactil.aparicion_sorpresa()
 		$HUD/Cartel/VBox/Nombre.text = especie.nombre_comun
 		_actualizar_intentos()
@@ -79,7 +82,43 @@ func _process(delta: float) -> void:
 			cos(t * 0.5 + _semilla * 1.3) * 0.25 + sin(t * 2.3) * 0.05) * size
 		insecto.position = size / 2.0 + vuelo + _apuntar - insecto.size / 2.0
 		insecto.rotation = sin(t * 3.0) * 0.12
+		if _modelo_3d:   # gira despacio para que se vea en 3D desde varios lados
+			_modelo_3d.rotation.y = sin(t * 0.6 + _semilla) * 1.1
+			_modelo_3d.rotation.x = sin(t * 1.3) * 0.12
 	visor.queue_redraw()
+
+
+## Dibuja el insecto en 3D en un SubViewport transparente y lo muestra en el TextureRect "Insecto",
+## así el resto (vuelo, visor, foto) sigue igual. Devuelve false si la especie no tiene modelo.
+func _mostrar_en_3d() -> bool:
+	var modelo := ModelosEspecies.crear(especie, 1.0)
+	if modelo == null:
+		return false
+	var vista := SubViewport.new()
+	vista.size = Vector2i(512, 512)
+	vista.transparent_bg = true
+	vista.own_world_3d = true
+	vista.msaa_3d = Viewport.MSAA_2X
+	add_child(vista)
+	var ambiente := WorldEnvironment.new()
+	ambiente.environment = Environment.new()
+	ambiente.environment.background_mode = Environment.BG_CLEAR_COLOR
+	ambiente.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	ambiente.environment.ambient_light_color = Color(0.75, 0.75, 0.8)
+	ambiente.environment.ambient_light_energy = 0.8
+	vista.add_child(ambiente)
+	var luz := DirectionalLight3D.new()
+	luz.rotation = Vector3(-0.9, 0.5, 0)
+	vista.add_child(luz)
+	var camara := Camera3D.new()
+	camara.fov = 32.0
+	camara.position = Vector3(0, 1.0, 2.3)
+	vista.add_child(camara)
+	camara.look_at(Vector3(0, 0.22, 0))
+	_modelo_3d = modelo
+	vista.add_child(modelo)
+	insecto.texture = vista.get_texture()
+	return true
 
 
 func _gui_input(event: InputEvent) -> void:

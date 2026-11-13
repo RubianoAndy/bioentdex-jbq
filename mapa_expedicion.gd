@@ -20,6 +20,15 @@ func _ready() -> void:
 	$PanelZona/Margen/HBox/BtnEntrar.pressed.connect(_on_entrar_pressed)
 	$BotonesDerecha/BtnBioentdex.pressed.connect(_ir_a.bind("res://Bioentdex.tscn"))
 	$BotonesDerecha/BtnExplorador.pressed.connect(_ir_a.bind("res://Personalizar.tscn"))
+	# Sonido: debajo de los botones de la derecha (en la fila no cabe sin tapar "← Menú")
+	var sonido := BotonSonido.new()
+	sonido.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	sonido.offset_left = -72
+	sonido.offset_right = -16
+	sonido.offset_top = 86
+	sonido.offset_bottom = 142
+	add_child(sonido)
+	move_child(sonido, $BotonesDerecha.get_index() + 1)
 	$BotonesDerecha/BtnTarjeta.pressed.connect(_ir_a.bind("res://comunidad/tarjeta_hallazgo.tscn"))
 	fauna.insecto_seleccionado.connect(_on_insecto_seleccionado)
 	fauna.npc_seleccionado.connect(_on_npc_seleccionado)

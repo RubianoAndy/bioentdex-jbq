@@ -26,6 +26,7 @@ func _ready() -> void:
 	$Margen/VBox/Descripcion.text = zona.descripcion
 	$Margen/VBox/CompaneroColibri.establecer_contexto(zona.id)
 	$Margen/VBox/Encabezado/BtnVolver.pressed.connect(Expedicion.volver_al_mapa)
+	$Margen/VBox/Encabezado.add_child(BotonSonido.new())
 	RegistroEspecies.especie_descubierta.connect(_on_especie_descubierta)
 	_construir()
 	AudioManager.conectar_botones(self)

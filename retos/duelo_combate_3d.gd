@@ -1,11 +1,15 @@
 class_name DueloCombate3D
 extends Control
-## Duelo educativo, no letal, con modelos geométricos de reemplazo.
+## Duelo educativo, no letal. Cada especie se ve con su modelo 3D (ModelosEspecies: el hecho a
+## mano en animales/modelos/<id>.glb o, si no hay, el generado); el prototipo geométrico queda
+## solo para especies sin modelo.
 
 signal resultado(gano: bool, aciertos: int, errores: int, equipo_final: int)
 
 const MODELO_PROTOTIPO := preload("res://retos/modelo_duelo_prototipo.tscn")
 const MAX_VIDA_JUGADOR := 2
+const TAMANO_INSECTO := 1.7      # medida mayor del modelo en la arena
+const TAMANO_DEPREDADOR := 2.5
 const VENTANA_ESQUIVA := 2.4
 const HABILIDADES := ["polen", "control"]
 const NOMBRES_HABILIDAD := ["Pulso de Polen", "Control Biológico"]
@@ -88,8 +92,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _configurar_actores() -> void:
 	var punto_jugador: Marker3D = _arena.get_node("PlayerSpawn")
 	var punto_oponente: Marker3D = _arena.get_node("OpponentSpawn")
-	_actor_jugador = _instanciar_actor(modelo_jugador, punto_jugador, Color.WHITE)
-	_actor_oponente = _instanciar_actor(modelo_oponente, punto_oponente, Color(1.0, 0.72, 0.62))
+	_actor_jugador = _instanciar_actor(equipo[equipo_actual], modelo_jugador, punto_jugador, TAMANO_INSECTO)
+	_actor_oponente = _instanciar_actor(depredador, modelo_oponente, punto_oponente, TAMANO_DEPREDADOR)
+	_mirarse()
 	_modelo_jugador = _actor_jugador.get_node("MovimientoSuave")
 	_modelo_oponente = _actor_oponente.get_node("MovimientoSuave")
 	_actualizar_tinte_ecologico()
@@ -103,7 +108,7 @@ func _animar_reposo(modelo: Node3D, fase: float) -> void:
 	modelo.rotation.y = sin(_tiempo_reposo * 0.65 + fase) * 0.06
 
 
-func _instanciar_actor(escena: PackedScene, punto: Marker3D, tinte: Color) -> Node3D:
+func _instanciar_actor(especie: Especie, escena: PackedScene, punto: Marker3D, tamano: float) -> Node3D:
 	var actor := Node3D.new()
 	actor.name = "ActorDuelo"
 	punto.add_child(actor)
@@ -126,19 +131,25 @@ func _instanciar_actor(escena: PackedScene, punto: Marker3D, tinte: Color) -> No
 	movimiento.name = "MovimientoSuave"
 	actor.add_child(movimiento)
 
-	var actor_modelo := (escena if escena else MODELO_PROTOTIPO).instantiate() as Node3D
+	# Modelo de la especie; el prototipo solo si se asignó otra escena a mano o no hay modelo
+	var actor_modelo: Node3D = null
+	if escena and escena != MODELO_PROTOTIPO:
+		actor_modelo = escena.instantiate() as Node3D
 	if actor_modelo == null:
-		push_error("El modelo del duelo debe tener una raíz Node3D.")
-		return actor
+		actor_modelo = ModelosEspecies.crear(especie, tamano)
+	if actor_modelo == null:
+		actor_modelo = MODELO_PROTOTIPO.instantiate() as Node3D
 	actor_modelo.position = Vector3.ZERO
 	movimiento.add_child(actor_modelo)
-	for nodo in actor_modelo.find_children("*", "MeshInstance3D", true, false):
-		var malla := nodo as MeshInstance3D
-		var material := StandardMaterial3D.new()
-		material.albedo_color = tinte
-		material.roughness = 0.7
-		malla.material_override = material
 	return actor
+
+
+## Los dos animales se miran, girados un poco hacia la cámara para que se vean de tres cuartos.
+func _mirarse() -> void:
+	for par in [[_actor_jugador, _actor_oponente], [_actor_oponente, _actor_jugador]]:
+		var hacia: Vector3 = par[1].global_position - par[0].global_position
+		var angulo := atan2(hacia.x, hacia.z)   # los modelos miran a +Z
+		par[0].rotation.y = lerp_angle(angulo, 0.0, 0.35)
 
 
 func _configurar_barras() -> void:
@@ -514,8 +525,9 @@ func _resolver_esquiva(esquivo: bool) -> void:
 		_vida_jugador = MAX_VIDA_JUGADOR
 		_actor_jugador.queue_free()
 		var punto: Marker3D = _arena.get_node("PlayerSpawn")
-		_actor_jugador = _instanciar_actor(modelo_jugador, punto, Color.WHITE)
+		_actor_jugador = _instanciar_actor(equipo[equipo_actual], modelo_jugador, punto, TAMANO_INSECTO)
 		_modelo_jugador = _actor_jugador.get_node("MovimientoSuave")
+		_mirarse()
 		_actualizar_tinte_ecologico()
 		_etiqueta_jugador.text = equipo[equipo_actual].nombre_comun
 		_atributos_jugador.text = "IA %d · RH %d · VP %d" % [
@@ -551,11 +563,25 @@ func _actualizar_tinte_ecologico() -> void:
 		especie.impacto_ecologico / 100.0,
 		especie.resistencia_habitat / 100.0,
 		especie.vitalidad_poblacional / 100.0)
+	# El color ecológico va en un anillo en el suelo: así el modelo conserva sus colores reales
 	var color := base.lerp(Color.WHITE, 0.35)
-	for malla in _modelo_jugador.find_children("*", "MeshInstance3D", true, false):
-		var material := StandardMaterial3D.new()
-		material.albedo_color = color
-		malla.material_override = material
+	var anillo := _actor_jugador.get_node_or_null("AnilloEcologico") as MeshInstance3D
+	if anillo == null:
+		anillo = MeshInstance3D.new()
+		anillo.name = "AnilloEcologico"
+		var toro := TorusMesh.new()
+		toro.inner_radius = 0.62
+		toro.outer_radius = 0.74
+		toro.rings = 32
+		toro.ring_segments = 6
+		anillo.mesh = toro
+		anillo.position.y = 0.09
+		anillo.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_actor_jugador.add_child(anillo)
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = color
+	anillo.material_override = material
 
 
 func _actualizar_hud() -> void:

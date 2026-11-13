@@ -22,6 +22,15 @@ func _ready() -> void:
 	insignia.tocada.connect(_ir_a.bind("res://Tienda.tscn"))
 	add_child(insignia)
 
+	# Botón para quitar el sonido, arriba a la derecha
+	var sonido := BotonSonido.new()
+	sonido.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	sonido.offset_left = -72
+	sonido.offset_right = -16
+	sonido.offset_top = 16
+	sonido.offset_bottom = 72
+	add_child(sonido)
+
 	# El fondo se acerca y se aleja muy despacio
 	var fondo: TextureRect = $Fondo
 	var vaiven := create_tween().set_loops().set_trans(Tween.TRANS_SINE)

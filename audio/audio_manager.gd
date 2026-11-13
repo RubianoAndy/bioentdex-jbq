@@ -1,11 +1,15 @@
 extends Node
 ## Autoload central para buses, musica, ambiente y efectos.
+## También guarda si el jugador quitó el sonido (botón BotonSonido) en user://audio.cfg.
+
+signal silencio_cambiado(silenciado: bool)
 
 const BUS_MASTER := "Master"
 const BUS_MUSICA := "BGM"
 const BUS_AMBIENTE := "AMB"
 const BUS_SFX := "SFX"
 const CAPACIDAD_SFX := 8
+const ARCHIVO_PREFERENCIAS := "user://audio.cfg"
 const CLAVES_AMBIENTE := [
 	"humedal_aves",
 	"humedal_insectos",
@@ -35,10 +39,31 @@ var _indice_sfx := 0
 var _pista_actual := ""
 
 
+var silenciado := false   # todo el sonido apagado (lo cambia el botón de sonido)
+
+
 func _ready() -> void:
 	_asegurar_buses()
 	_crear_reproductores()
 	_conectar_senales_de_juego()
+	var preferencias := ConfigFile.new()
+	if preferencias.load(ARCHIVO_PREFERENCIAS) == OK:
+		set_silenciado(preferencias.get_value("audio", "silenciado", false), false)
+
+
+## Quita o devuelve todo el sonido de la app y lo recuerda para la próxima vez.
+func set_silenciado(valor: bool, guardar := true) -> void:
+	silenciado = valor
+	AudioServer.set_bus_mute(AudioServer.get_bus_index(BUS_MASTER), valor)
+	if guardar:
+		var preferencias := ConfigFile.new()
+		preferencias.set_value("audio", "silenciado", valor)
+		preferencias.save(ARCHIVO_PREFERENCIAS)
+	silencio_cambiado.emit(valor)
+
+
+func alternar_silencio() -> void:
+	set_silenciado(not silenciado)
 
 
 func reproducir_musica(pista: String) -> bool:

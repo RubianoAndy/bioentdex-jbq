@@ -17,7 +17,7 @@ Biología y Diversidad Cultural), que viene incluida en la app.
   <tr>
     <td align="center"><img src="docs/capturas/01_menu.jpg" width="230" alt="Pantalla de inicio"><br><sub>Pantalla de inicio</sub></td>
     <td align="center"><img src="docs/capturas/02_mapa.jpg" width="230" alt="Mapa 3D del humedal"><br><sub>Mapa 3D del humedal</sub></td>
-    <td align="center"><img src="docs/capturas/03_captura.jpg" width="230" alt="Captura con cámara"><br><sub>Captura con cámara</sub></td>
+    <td align="center"><img src="docs/capturas/03_captura.jpg" width="230" alt="Captura con cámara (insecto en 3D)"><br><sub>Captura con cámara (insecto en 3D)</sub></td>
   </tr>
   <tr>
     <td align="center"><img src="docs/capturas/04_ficha.jpg" width="230" alt="Ficha de la especie"><br><sub>Ficha de la especie</sub></td>
@@ -28,6 +28,9 @@ Biología y Diversidad Cultural), que viene incluida en la app.
     <td align="center"><img src="docs/capturas/07_guia.jpg" width="230" alt="Guía macrofotográfica"><br><sub>Guía macrofotográfica</sub></td>
     <td align="center"><img src="docs/capturas/08_tienda.jpg" width="230" alt="Tienda del humedal"><br><sub>Tienda del humedal</sub></td>
     <td align="center"><img src="docs/capturas/09_personalizar.jpg" width="230" alt="Personalizar explorador"><br><sub>Personalizar explorador</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/capturas/10_batalla.jpg" width="230" alt="Batalla en 3D"><br><sub>Batalla en 3D</sub></td>
   </tr>
 </table>
 
@@ -41,13 +44,15 @@ Biología y Diversidad Cultural), que viene incluida en la app.
 | **11 zonas** | Agua abierta, transición, neófita, terrestre, ronda hídrica, avistamiento de aves, materia orgánica, basuras excesivas, monolitos históricos, urbana y corredor ambiental. |
 | **Insectos capturables** | 20 insectos, uno por familia o suborden de la guía (10 órdenes). Aparecen cerca del jugador por poco tiempo, no siempre, y en el tipo de suelo donde viven. Los ya capturados solo vuelven a aparecer en sus zonas. Se distinguen por un anillo dorado y un ícono de cámara. |
 | **Fauna NPC** | Aves, ranas, mamíferos y lombrices que viven en sus zonas y se mueven según su especie (nadan, caminan, saltan). No se capturan, se observan. Algunos tienen horario (la chucha solo sale de noche). |
-| **Captura con cámara** | Realidad aumentada sencilla: el insecto aparece sobre la imagen de la cámara y hay que encuadrarlo en el visor. Se apunta con el giroscopio, el dedo o el mouse. Sin cámara se usa un fondo simulado. |
+| **Captura con cámara** | Realidad aumentada sencilla: el insecto aparece **en 3D** sobre la imagen de la cámara y hay que encuadrarlo en el visor. Se apunta con el giroscopio, el dedo o el mouse. Sin cámara se usa un fondo simulado. |
 | **Ficha de la especie** | Al estilo de la pantalla de detalle de Pokémon GO: hábitat, arco de riesgo de extinción (UICN), taxonomía, importancia, descripción, consejo de fotografía y botones que abren la guía en la página de su familia y de su orden. |
 | **Fotos reales** | Después de capturar un insecto, el botón de cámara de su ficha abre sus **fotografías reales del humedal**, a pantalla completa, con zoom (doble toque, pellizco o rueda) y para pasar de una a otra. |
 | **Misiones** | 37 misiones (preguntas, identificar especies, tomar fotos y escribir propuestas). 5 son **misiones especiales**, marcadas con bandera en la zona y en el mapa. |
 | **Guía macrofotográfica** | La guía completa (121 páginas) dentro de la app, con zoom, índice y saltos a cada orden y familia. |
 | **Recompensas** | Experiencia y niveles (sobre todo por capturar), **semillas** como moneda (por misiones y por subir de nivel) y una **tienda** con *néctar atrayente* y 4 **organismos Plus**: especies raras que no aparecen en el mapa. |
 | **Personalización** | Nombre, género (explorador o exploradora), piel, color de cabello, camisa, pantalón, sombrero o gorra y mochila del explorador. |
+| **Modelos 3D** | Cada animal tiene modelo 3D en la cámara y en las batallas. Los modelos hechos a mano van en `animales/modelos/<id>.glb` (ver el `LEEME.md` de esa carpeta); mientras falten, la app usa uno generado con figuras y los colores de la especie. |
+| **Sonido** | Botón de parlante en el inicio, el mapa y las zonas para quitar o devolver el sonido; la app lo recuerda. |
 | **Bioentdex** | Fichas consultables de todas las especies, con el estado de captura u observación, tus fotos y el historial de misiones. |
 | **Tarjeta de exploración** | Disponible desde un botón compacto del mapa; exporta localmente una imagen PNG con insignia, nivel, especies conocidas y una foto que elijas entre las guardadas en tu Bioentdex. |
 | **Analítica docente local** | Contadores agregados de aprendizaje con acceso por PIN local; la exportación JSON es manual y no usa red. |
